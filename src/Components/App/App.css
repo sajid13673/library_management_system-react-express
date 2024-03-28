@@ -1,0 +1,41 @@
+.App {
+  text-align: center;
+  background-color: aquamarine;
+  min-height:100vh;
+}
+.grid{
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  margin-top: 10px;
+}
+.input-form{
+  background-color: white;
+  padding:30px;
+}
+.email-input{
+  width: 16rem;
+}
+.form-input{
+  width: 12rem;;
+}
+.error{
+  color: red;
+  max-width: 16rem;
+  text-align: left;
+}
+.memberImage{
+  height: 60px;
+}
+/* @keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+} */
+.typography{
+  text-align: center;
+}
