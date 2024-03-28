@@ -7,6 +7,9 @@ import axios from "axios";
 export default function MemberList(props){
     const data = Array.from(props.members);
     const navigate = useNavigate();
+    function handleBorrowings(id){
+        navigate("/borrowing-list",{state:{memberId: id}});
+    }
     function handleAddMember(){
         navigate("/add-member");
     }
@@ -44,7 +47,7 @@ export default function MemberList(props){
                   defaultImage={props.defaultImage}
                   handleEditMember={(id)=>handleEditMember(id)}
                   handleDeleteMember={(id)=>handleDeleteMember(id)}
-
+                  handleBorrowings={(id)=>handleBorrowings(id)}
                 />
                   ))}
               </Grid>

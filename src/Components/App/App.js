@@ -11,6 +11,7 @@ import axios from 'axios';
 import EditBook from '../editBook';
 import EditMember from '../editMember';
 import AddBorrowing from '../addBorrowing';
+import BorrowingList from '../borrowingList';
 
 function App() {
   const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829';
@@ -64,6 +65,7 @@ function App() {
         />
         <Route path='/edit-book' element={<div><NavBar/><EditBook getBooks={()=>getBooks()} validateOnlyNumbers={(str)=>validateOnlyNumbers(str)}/></div>} />
         <Route path='/add-borrowing' element={<div><NavBar/><AddBorrowing /></div>} />
+        <Route path='/borrowing-list' element={<div><NavBar/><BorrowingList /></div>} />
       </Routes>
     </div>
   );

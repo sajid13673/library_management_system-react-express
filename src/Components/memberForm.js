@@ -1,4 +1,4 @@
-import { Button, Container, FormControl, Grid, Input, InputLabel } from '@material-ui/core';
+import { Button, Container, FormControl, Grid, Input, InputLabel, Typography } from '@material-ui/core';
 import axios from 'axios';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
@@ -89,7 +89,7 @@ export default function MemberForm(props){
     return (
         <Container className="input-form" maxWidth="sm">
             <Grid item xs={12} >
-                <h1>ADD MEMBER</h1>
+            <Typography variant='h3'>ADD MEMBER</Typography>
             </Grid>
           {/* <h1>Add Member</h1> */}
           <form onSubmit={formik.handleSubmit}>

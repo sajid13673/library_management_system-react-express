@@ -1,4 +1,4 @@
-import { Button, Container, FormControl, Grid, Input, InputLabel } from '@material-ui/core';
+import { Button, Container, FormControl, Grid, Input, InputLabel, Typography } from '@material-ui/core';
 import { isInteger, useFormik } from 'formik';
 import './addBook.css';
 import React from 'react';
@@ -74,7 +74,7 @@ export default function BookForm(props){
     return (
         <Container className="input-form" maxWidth="sm">
             <Grid item xs={12} >
-                <h1>{props.title}</h1>
+                <Typography variant='h3'>{props.title}</Typography>
             </Grid>
           {/* <h1>Add Member</h1> */}
           <form onSubmit={formik.handleSubmit}>

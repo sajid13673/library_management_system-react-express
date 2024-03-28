@@ -33,7 +33,7 @@ export default function MembersCard(props) {
               <Button onClick={()=>props.handleDeleteMember(props.id)} size="small" variant="contained" color="secondary">
                 Delete
               </Button>
-              <Button size="small" variant="contained" color="primary">
+              <Button onClick={()=>props.handleBorrowings(props.id)} size="small" variant="contained" color="primary">
                 borrowings
               </Button>
             </CardActions>
