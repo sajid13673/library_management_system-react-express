@@ -25,9 +25,6 @@ export default function BookList(props){
     return (
         <Grid className="grid">
             <Container >
-                <Grid container sm={12} spacing={2}>
-                    <Grid item xs={12}>
-                        
                     <Grid container xs={12} spacing={2} maxWidth="xl">
                         {data.map((row) => (
                             <BookCard
@@ -45,9 +42,6 @@ export default function BookList(props){
                             />
                         ))}
                         </Grid>
-                        
-                    </Grid>
-                </Grid>
             </Container>
         </Grid>
     );

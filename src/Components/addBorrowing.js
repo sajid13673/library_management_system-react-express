@@ -95,7 +95,7 @@ function AddBorrowing() {
                   />
                 )}
               />
-              {error && (<div className="error" style={{ display: error ? "block" : "hidden" }}>Please select a member</div>)}
+              {error && (<div className="error" >Please select a member</div>)}
             </FormControl>
           </Grid>
           <Grid item xs={12}>
