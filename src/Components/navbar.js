@@ -51,7 +51,21 @@ function NavBar() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AutoStoriesRoundedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          
+          <AutoStoriesRoundedIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+            {pages.map((page) => (
+              <Button
+                key={page}
+                onClick={()=>handleCloseNavMenu(page)}
+                sx={{ my: 2, color: 'white', display: 'block' }}
+                style={{ color: 'white', fontSize: '20px', marginLeft: "30px" }}
+              >
+                {page}
+              </Button>
+            ))}
+          </Box>
+          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }} style={{ marginLeft: "auto" }}>
             <IconButton
               size="medium"
               aria-label="account of current user"
@@ -67,13 +81,13 @@ function NavBar() {
               anchorEl={anchorElNav}
               anchorOrigin={{
                 vertical: 'bottom',
-                horizontal: 'left',
+                horizontal: 'right',
               }}
               getContentAnchorEl={null}
               keepMounted
               transformOrigin={{
                 vertical: 'top',
-                horizontal: 'left',
+                horizontal: 'right',
               }}
               open={Boolean(anchorElNav)}
               onClose={()=>handleCloseNavMenu(null)}
@@ -90,19 +104,6 @@ function NavBar() {
                   <Typography className='typography' onClick={()=>handleLogout()}>Logout</Typography>
                 </MenuItem>
             </Menu>
-          </Box>
-          <AutoStoriesRoundedIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
-              <Button
-                key={page}
-                onClick={()=>handleCloseNavMenu(page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
-                style={{ color: 'white', fontSize: '20px', marginLeft: "30px" }}
-              >
-                {page}
-              </Button>
-            ))}
           </Box>
         </Toolbar>
       </Container>
