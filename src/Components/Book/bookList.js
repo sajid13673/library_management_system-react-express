@@ -35,6 +35,7 @@ export default function BookList(props){
                             publisher={row.publisher}
                             year={row.year}
                             path={row.path}
+                            status={row.status}
                             defaultImage={props.defaultImage}
                             handleBookEdit={(id)=>handleBookEdit(id)}
                             handleBookDelete={(id)=>handleBookDelete(id)}

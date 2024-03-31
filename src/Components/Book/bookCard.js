@@ -29,9 +29,13 @@ export default function BookCard(props){
           <Button size="small" onClick={()=>props.handleBookDelete(props.id)} variant="contained" color="secondary">
             Delete
           </Button>
-          <Button onClick={()=>props.handleAddBrowing(props.id)} size="small" variant="contained" color="primary">
+          {props.status ? (<Button onClick={()=>props.handleAddBrowing(props.id)} size="small" variant="contained" color="primary">
             Add Borrowing
-          </Button>
+          </Button>):
+          (<Button disabled size="small" variant="contained" color="primary">
+          Not Available
+        </Button>)}
+          
         </CardActions>
       </Card>
     </Grid>

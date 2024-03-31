@@ -24,11 +24,12 @@ function AddMember(props) {
             })
     }
   return (
-    <Grid className="grid">
+    <Grid className="grid" style={{ alignItems: "center" }}>
         <MemberForm
         validateEmail ={(str)=>props.validateEmail(str)}
         validateOnlyNumbers={(str)=>props.validateOnlyNumbers(str)}
         handleSubmit ={(formData, formik)=>handleSubmit(formData, formik)}
+        title={"Add Member"}
         />
     </Grid>
 

@@ -33,7 +33,7 @@ function BorrowingCard(props) {
         props.setCurrentId(id);
         setFormData(prevFormData=>{return{...prevFormData, return_date : null}})
     }
-    function handleSubmit(id, formData) {
+    function handleSubmit(id, formData, book) {
       if (formData.return_date === null) {
         setError(true);
         setErrorMsg("Required");
@@ -41,7 +41,7 @@ function BorrowingCard(props) {
         setError(true);
         setErrorMsg("Enter Valid Date");
       } else {
-        props.handleConfirmReturn(id, formData);
+        props.handleConfirmReturn(id, formData, book);
       }
     }
     useEffect(()=>{
@@ -49,7 +49,7 @@ function BorrowingCard(props) {
     },[formData])
   return (
     <Grid item xs={6}>
-      <Card  style={{ minWidth: "400px" }}>
+      <Card  style={{ minWidth: "400px", height: "220px" }}>
         <CardContent>
           <Grid container spacing={1} xs={12}>
           <Grid item xs={12}>
@@ -57,11 +57,21 @@ function BorrowingCard(props) {
                 {props.member}
               </Typography>
               </Grid>
-            <Grid item xs={7} style={{ paddingRight: "30px" }}>
-              <Grid container style={{ marginBottom: "10px" }}>
+            <Grid item xs={7} style={{ paddingRight: "30px", alignContent: "center" }}>
+              <Grid container spacing={1} style={{ marginBottom: "10px" }}>
+              <Grid item xs={6}>
+                  <Typography align="left" variant="body1" component="p">
+                    Borrowed Date: 
+                  </Typography>
+                </Grid>
                 <Grid item xs={6}>
                   <Typography align="left" variant="body1" component="p">
-                    Due date:
+                      {moment(props.borrowed_date).format("YYYY-MM-DD")}
+                  </Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography align="left" variant="body1" component="p">
+                    Due date: 
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
@@ -77,10 +87,10 @@ function BorrowingCard(props) {
                 </Grid>
               </Grid>
               {!props.status ? (
-              <Grid container style={{ marginBottom: "10px" }}>
+              <Grid container >
                 <Grid item xs={6}>
                 <Typography
-                  variant="body2"
+                  variant="body1"
                   color="text.secondary"
                   component="p"
                   align='left'
@@ -90,7 +100,7 @@ function BorrowingCard(props) {
                 </Grid>
                 <Grid item xs={6}>
                 <Typography
-                  variant="body2"
+                  variant="body1"
                   color="text.secondary"
                   component="p"
                   align='left'
@@ -120,13 +130,13 @@ function BorrowingCard(props) {
                     </FormControl>
                   </Grid>) : 
                   (<Grid item xs={8}><Button onClick={()=>handleSetReturnDate(props.id)} size="small" variant='contained' color='primary'>set return date</Button></Grid>)}
-                  <Grid item xs={2}>
+                  {props.currentId === props.id && (<Grid item xs={2}>
                     <Tooltip title="CONFIRM RETURNED" placement="top-start" TransitionComponent={Zoom}>
-                        <Button onClick={()=>handleSubmit(props.id, formData)} variant="contained" color="primary" size='small' >
+                        <Button onClick={()=>handleSubmit(props.id, formData, props.book)} variant="contained" color="primary" size='small' >
                         <DoneOutlineIcon />
                         </Button>
                     </Tooltip>
-                  </Grid>
+                  </Grid>)}
                 </Grid>
               )}
             </Grid>

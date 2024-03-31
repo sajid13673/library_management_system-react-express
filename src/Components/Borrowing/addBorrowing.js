@@ -5,7 +5,7 @@ import moment from 'moment'
 import React, { useEffect } from 'react'
 import { useLocation } from 'react-router-dom'
 import { useNavigate } from 'react-router-dom'
-function AddBorrowing() {
+function AddBorrowing(props) {
     const location = useLocation();
     const navigate = useNavigate();
     const bookId = location.state.bookId;
@@ -48,11 +48,21 @@ function AddBorrowing() {
       }
       async function handleSubmit(){
         if(formData.member_id){
+            const form = new FormData();
+            Object.keys(book).map((key) => form.append(key, book[key]));
+            form.append("_method","put");
+            form.set("status",0)
         await axios.post('http://127.0.0.1:8000/api/borrowing',formData).then((res)=>{
             if(res.data.status){
-                navigate('/book-list')
+                axios.post('http://127.0.0.1:8000/api/book/'+bookId,form).then((res)=>{
+            if(res.data.status){
+                props.getBooks();
+                navigate('/');
             }
-        }).catch(err => console.log(err))}
+        }).catch(err => console.log(err))
+            }
+        }).catch(err => console.log(err))
+        }
         else{
           setError(true)
         }
@@ -69,10 +79,10 @@ function AddBorrowing() {
       useEffect(()=>{
         console.log("formData");
         console.log(formData);
-      },[formData])
+      },[formData, book])
       
   return (
-    <Grid className="grid">
+    <Grid className="grid" style={{ alignItems: "center" }}>
       <Container className="input-form" maxWidth="sm">
         <Grid item xs={12}>
           <Typography variant='h3'>ADD BORROWING</Typography>

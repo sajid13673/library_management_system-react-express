@@ -16,7 +16,7 @@ function AddBook(props) {
         }).catch(err => console.log(err))
     }
   return (
-    <Grid className="grid">
+    <Grid className='grid' style={{ alignItems: "center"}}>
         <BookForm handleSubmit={(values)=>handleSubmit(values)} validateOnlyNumbers={(str)=>props.validateOnlyNumbers(str)} title="ADD BOOK"/>
     </Grid>
   )

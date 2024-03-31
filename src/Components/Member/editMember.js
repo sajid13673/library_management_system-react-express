@@ -32,12 +32,13 @@ function EditMember(props) {
     console.log(member);
   },[])
   return (
-    <Grid className="grid">
+    <Grid className="grid" style={{ alignItems: "center" }}>
         <MemberForm
         validateEmail ={(str)=>props.validateEmail(str)}
         validateOnlyNumbers={(str)=>props.validateOnlyNumbers(str)}
         member={member}
         handleSubmit={(formData)=>handleSubmit(formData)}
+        title={"Edit Member"}
         />
     </Grid>
   )

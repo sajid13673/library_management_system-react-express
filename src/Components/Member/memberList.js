@@ -27,7 +27,7 @@ export default function MemberList(props){
     return (
       <Grid className="grid">
         <Container>
-          <Grid container sm={12} spacing={2}>
+          <Grid container sm={12} spacing={2} >
             <Grid item xs={2}>
               <Button variant="contained" color="primary" onClick={handleAddMember}>
                 ADD MEMBER

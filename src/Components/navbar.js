@@ -3,10 +3,13 @@ import * as React from 'react';
 import MenuIcon from '@mui/icons-material/Menu';
 import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
 import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../utils/authProvider';
+import axios from 'axios';
 const pages = ['home','member list', 'add book'];
 
 function NavBar() {
-    const navigate = useNavigate();
+  const { setToken } = useAuth();
+  const navigate = useNavigate();
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   // const [anchorElUser, setAnchorElUser] = React.useState(null);
 
@@ -33,8 +36,17 @@ function NavBar() {
     navigate('/'+page.split(' ').join('-'));
     }
   }
+  async function handleLogout(){
+    await axios.get("http://127.0.0.1:8000/api/logout").then((res)=>{
+      if(res.data.status){
+        setToken();
+      }
+    }).catch((err)=>{
+      console.log(err.response.data.message);
+    })
+  }
   return (
-    <AppBar position="static" style={{ background: "red" }}>
+    <AppBar position="static" style={{ background: "rgb(12, 33, 82)" }}>
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <AutoStoriesRoundedIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
@@ -68,11 +80,14 @@ function NavBar() {
                 display: { xs: 'block', md: 'none' },
               }}
             >
-              {pages.map((page) => (
+              {/* {pages.map((page) => (
                 <MenuItem key={page} onClick={handleCloseNavMenu}>
                   <Typography className='typography' onClick={()=>navigateToPage(page)}>{page}</Typography>
                 </MenuItem>
-              ))}
+              ))} */}
+              <MenuItem >
+                  <Typography className='typography' onClick={()=>handleLogout()}>Logout</Typography>
+                </MenuItem>
             </Menu>
           </Box>
           <AutoStoriesRoundedIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />

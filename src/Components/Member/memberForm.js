@@ -1,11 +1,9 @@
 import { Button, Container, FormControl, Grid, Input, InputLabel, Typography } from '@material-ui/core';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { useNavigate } from 'react-router-dom';
 import React from 'react';
 
 export default function MemberForm(props){
-    const navigate = useNavigate();
     const [currentPhoneNumber,setCurrentPhoneNumber] = React.useState("")
     function handleUpload(e){
         e.preventDefault();
@@ -89,7 +87,7 @@ export default function MemberForm(props){
     return (
         <Container className="input-form" maxWidth="sm">
             <Grid item xs={12} >
-            <Typography variant='h3'>ADD MEMBER</Typography>
+            <Typography variant='h3'>{props.title}</Typography>
             </Grid>
           {/* <h1>Add Member</h1> */}
           <form onSubmit={formik.handleSubmit}>

@@ -2,8 +2,13 @@ import React from 'react';
 import {Button, Container, FormControl, Grid, IconButton, Input, InputAdornment, InputLabel } from '@material-ui/core';
 import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useFormik } from 'formik';
+import axios from 'axios';
+import { useNavigate } from 'react-router-dom';
+import { useAuth } from '../utils/authProvider';
 
 export default function Login(props){
+    const { setToken } = useAuth();
+    const navigate = useNavigate();
     const [showPassword, setShowPassword] = React.useState(false);
     const handleClickShowPassword = () => setShowPassword((show) => !show);
     const handleMouseDownPassword = (event) => {
@@ -29,12 +34,18 @@ export default function Login(props){
         },
         validate: validate,
         onSubmit: (values) => {
-        console.log(values);
+            axios.post("http://127.0.0.1:8000/api/login",values).then(res=>{
+            if(res.data.status){
+                setToken(res.data.access_token);
+                props.setLogin(true)
+                navigate('/');
+            }
+        }).catch(err => console.log(err))
         }
     })
 
     return (
-        <Grid className="grid">
+        <Grid className="grid" style={{ alignItems: "center", minHeight: "100vh" }} >
         <Container className="input-form" maxWidth="sm">
             <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
