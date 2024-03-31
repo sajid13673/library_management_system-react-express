@@ -22,7 +22,8 @@ function NavBar() {
 
   const handleCloseNavMenu = (page) => {
     setAnchorElNav(null);
-    navigateToPage(page);
+    if(page){
+    navigateToPage(page);}
   };
 
   // const handleCloseUserMenu = () => {
@@ -75,7 +76,7 @@ function NavBar() {
                 horizontal: 'left',
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={()=>handleCloseNavMenu(null)}
               sx={{
                 display: { xs: 'block', md: 'none' },
               }}
