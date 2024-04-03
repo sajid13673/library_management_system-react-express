@@ -28,7 +28,7 @@ function AddBorrowing(props) {
       const [value, setValue] = React.useState(null);
       const [error,setError] = React.useState(false);
       const defaultProps = {
-        options: Array.from(members),
+        options: Array.from(members.data ? members.data : []),
         getOptionLabel: (option) => option.id+'. '+option.name,
       };
       async function getMembers(){

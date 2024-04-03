@@ -150,7 +150,7 @@ export default function BookForm(props){
                 </FormControl>
               </Grid>
               <Grid item xs={12} >
-                    <Button type='submit' variant='contained' color='primary'>Add Member</Button>
+                    <Button type='submit' variant='contained' color='primary'>Add Book</Button>
                 </Grid>
             </Grid>
           </form>

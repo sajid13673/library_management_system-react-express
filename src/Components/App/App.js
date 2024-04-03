@@ -27,16 +27,20 @@ function App() {
   function validateOnlyNumbers(str) {
     return /^[0-9]*$/.test(str);
   }
+  const [bookPage, setBookPage] = React.useState(1);
+  const [booksPerPage, setBooksPerPage] = React.useState(9)
+  const [memberPage, setMemberPage] = React.useState(1);
+  const [membersPerPage, setMembersPerPage] = React.useState(9)
   const getMembers = async ()=>{
-    await axios.get("http://127.0.0.1:8000/api/member").then((res)=>{
+    await axios.get(`http://127.0.0.1:8000/api/member?page=${memberPage}&per_page=${membersPerPage}`).then((res)=>{
       console.log(res.data.data);
       setMembers(res.data.data);
     }).catch((err)=>{
       console.log(err.response.data.message);
     })
   }
-  const getBooks = async ()=>{
-    await axios.get("http://127.0.0.1:8000/api/book").then((res)=>{
+  const getBooks = async ( )=>{
+    await axios.get(`http://127.0.0.1:8000/api/book?page=${bookPage}&per_page=${booksPerPage}`).then((res)=>{
       console.log(res.data.data);
       setBooks(res.data.data);
     }).catch((err)=>{
@@ -44,38 +48,134 @@ function App() {
     })
   }
   React.useEffect(()=>{
-    getMembers();
+    getMembers("",9);
     getBooks();
   },[login])
+  React.useEffect(()=>{
+    getBooks();
+  },[bookPage])
+  React.useEffect(()=>{
+    getMembers();
+  },[memberPage])
   return (
     <div className="App">
-    <AuthProvider>
-      <BrowserRouter>
-      <Routes>
-        <Route element={<ProtectedRoute />}>
-        <Route path="/" element={<div><NavBar/><BookList 
-        books={books}
-        defaultImage={defaultImage}
-        getBooks={()=>getBooks()}
-        /></div>} />
-        <Route path="/add-member" 
-        element={<div><NavBar/><AddMember getMembers={()=>getMembers()} validateEmail ={(str)=>validateEmail(str)} validateOnlyNumbers={(str)=>validateOnlyNumbers(str)}/></div>} 
-        />
-        <Route path="/edit-member" 
-        element={<div><NavBar/><EditMember getMembers={()=>getMembers()} validateEmail ={(str)=>validateEmail(str)} validateOnlyNumbers={(str)=>validateOnlyNumbers(str)}/></div>} 
-        />
-        <Route path="/add-book" exact element={<div><NavBar/><AddBook getBooks={()=>getBooks()} validateOnlyNumbers={(str)=>validateOnlyNumbers(str)}/></div>} />
-        <Route 
-        path="/member-list" 
-        element={<div><NavBar/><MemberList members={members} defaultImage={defaultImage} getMembers={()=>getMembers()}/></div>} 
-        />
-        <Route path='/edit-book' element={<div><NavBar/><EditBook getBooks={()=>getBooks()} validateOnlyNumbers={(str)=>validateOnlyNumbers(str)}/></div>} />
-        <Route path='/add-borrowing' element={<div><NavBar/><AddBorrowing getBooks={()=>getBooks()}/></div>} />
-        <Route path='/borrowing-list' element={<div><NavBar/><BorrowingList getBooks={()=>getBooks()}/></div>} />
-        </Route>
-        <Route path="/login" element={<Login validateEmail ={(str)=>validateEmail(str)} setLogin={()=>setLogin()}/>} />
-      </Routes>
-      </BrowserRouter>
+      <AuthProvider>
+        <BrowserRouter>
+          <Routes>
+            <Route element={<ProtectedRoute />}>
+              <Route
+                path="/"
+                element={
+                  <div>
+                    <NavBar />
+                    <BookList
+                      books={books.data ? books.data : []}
+                      totalPages={books.last_page ? books.last_page : 1}
+                      bookPage={bookPage}
+                      setBookPage={(page) => setBookPage(page)}
+                      defaultImage={defaultImage}
+                      getBooks={() => getBooks()}
+                    />
+                  </div>
+                }
+              />
+              <Route
+                path="/add-member"
+                element={
+                  <div>
+                    <NavBar />
+                    <AddMember
+                      getMembers={() =>getMembers()}
+                      validateEmail={(str) => validateEmail(str)}
+                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                    />
+                  </div>
+                }
+              />
+              <Route
+                path="/edit-member"
+                element={
+                  <div>
+                    <NavBar />
+                    <EditMember
+                      getMembers={() =>getMembers()}
+                      validateEmail={(str) => validateEmail(str)}
+                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                    />
+                  </div>
+                }
+              />
+              <Route
+                path="/add-book"
+                exact
+                element={
+                  <div>
+                    <NavBar />
+                    <AddBook
+                      getBooks={() => getBooks()}
+                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                    />
+                  </div>
+                }
+              />
+              <Route
+                path="/member-list"
+                element={
+                  <div>
+                    <NavBar />
+                    <MemberList
+                      members={members.data ? members.data : []}
+                      defaultImage={defaultImage}
+                      getMembers={() =>getMembers()}
+                      totalPages={members.last_page ? members.last_page : 1}
+                      memberPage={memberPage}
+                      setMemberPage={(page)=>setMemberPage(page)}
+                    />
+                  </div>
+                }
+              />
+              <Route
+                path="/edit-book"
+                element={
+                  <div>
+                    <NavBar />
+                    <EditBook
+                      getBooks={() => getBooks()}
+                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                    />
+                  </div>
+                }
+              />
+              <Route
+                path="/add-borrowing"
+                element={
+                  <div>
+                    <NavBar />
+                    <AddBorrowing getBooks={() => getBooks()} />
+                  </div>
+                }
+              />
+              <Route
+                path="/borrowing-list"
+                element={
+                  <div>
+                    <NavBar />
+                    <BorrowingList getBooks={() => getBooks()} />
+                  </div>
+                }
+              />
+            </Route>
+            <Route
+              path="/login"
+              element={
+                <Login
+                  validateEmail={(str) => validateEmail(str)}
+                  setLogin={() => setLogin()}
+                />
+              }
+            />
+          </Routes>
+        </BrowserRouter>
       </AuthProvider>
     </div>
   );

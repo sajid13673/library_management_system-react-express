@@ -3,25 +3,24 @@ import axios from 'axios';
 import React from 'react'
 import BorrowingCard from './borrowingCard';
 import { useLocation } from 'react-router-dom'
+import { Pagination, Stack } from '@mui/material';
 function BorrowingList(props) {
     const location = useLocation()
     const memberId = location.state.memberId
     const [member, setMember] = React.useState([])
-    const borrwings = member.borrowing ? Array.from(member.borrowing) : []
+    const [totalPages, setTotalPages] = React.useState(1)
+    const [borrowingPage, setBorrowingPage] = React.useState(1)
+    const [borrowingsPerPage, setBorrowingsPerPage] = React.useState(10)
+    const borrwings = member.borrowing ? Array.from(member.borrowing.data) : []
     async function getMemberWithBorrowings(){
-        await axios.get(`http://127.0.0.1:8000/api/member/${memberId}?borrowing=1`).then(res => {
+        await axios.get(`http://127.0.0.1:8000/api/member/${memberId}?borrowing=1&page=${borrowingPage}&per_page=${borrowingsPerPage}`).then(res => {
             if(res.data.status){
             setMember(res.data.data)
+            setTotalPages(res.data.data.borrowing.last_page)
         }
         }).catch(err=>console.log(err));
     }
     async function handleConfirmReturn(id, formData, book){
-        // axios.post("http://127.0.0.1:8000/api/borrowing/"+id,formData).then(res=>{
-        //     if(res.data.status){
-        //         console.log("borrowing updated");
-        //         getMemberWithBorrowings()
-        //     }
-        // }).catch(err => console.log(err))
         const form = new FormData();
             Object.keys(book).map((key) => form.append(key, book[key]));
             form.append("_method","put");
@@ -37,14 +36,17 @@ function BorrowingList(props) {
             }
         }).catch(err => console.log(err))
     }
+    function handleChange(e, value){
+      setBorrowingPage(value)
+    }
     const [currentId,setCurrentId] = React.useState()
     React.useEffect(() => {
         getMemberWithBorrowings()
-    }, [])
+    }, [borrowingPage])
   return (
     <Grid className="grid" >
       <Container>
-        <Grid container xs={12} spacing={2} maxWidth="xl">
+        <Grid container xs={12} spacing={2} maxWidth="xl" style={{  minHeight:"38rem" }}>
           {borrwings.map((row) => (
             <BorrowingCard
               key={row.id}
@@ -61,6 +63,9 @@ function BorrowingList(props) {
             />
           ))}
         </Grid>
+        <Stack spacing={2} sx={{ marginTop:"20px" }}>
+                <Pagination count={totalPages} page={borrowingPage} color="primary" onChange={handleChange}/>
+        </Stack>
       </Container>
     </Grid>
   );

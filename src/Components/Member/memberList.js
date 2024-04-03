@@ -3,11 +3,15 @@ import MembersCard from "./MembersCard";
 import { Button, Container, Grid } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { Pagination, Stack } from "@mui/material";
 
 export default function MemberList(props){
-    const data = Array.from(props.members);
-    const navigate = useNavigate();
-    function handleBorrowings(id){
+  const totalPages = props.totalPages 
+  const [perPage, setPerPage] = React.useState(9)
+  const [page, setPage] = React.useState(1)
+  const data = Array.from(props.members);
+  const navigate = useNavigate();
+  function handleBorrowings(id){
         navigate("/borrowing-list",{state:{memberId: id}});
     }
     function handleAddMember(){
@@ -24,6 +28,9 @@ export default function MemberList(props){
             }
         }).catch(err => console.log(err))
     }
+    function handleChange(e, value){
+      props.setMemberPage(value)
+  }
     return (
       <Grid className="grid">
         <Container>
@@ -34,7 +41,7 @@ export default function MemberList(props){
               </Button>
             </Grid>
             <Grid item xs={12}>
-              <Grid container xs={12} spacing={2} maxWidth="xl">
+              <Grid container xs={12} spacing={2} maxWidth="xl" style={{  minHeight:"38rem" }}>
                 {data.map((row) => (
                 <MembersCard
                  key={row.id}
@@ -53,6 +60,9 @@ export default function MemberList(props){
               </Grid>
             </Grid>
           </Grid>
+          <Stack spacing={2} sx={{ marginTop:"20px" }}>
+                <Pagination count={totalPages} page={props.memberPage} color="primary" onChange={handleChange}/>
+          </Stack>
         </Container>
       </Grid>
     );
