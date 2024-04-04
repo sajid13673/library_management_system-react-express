@@ -1,6 +1,8 @@
 import * as React from 'react';
-import { Button, Card, CardActions, CardContent, Grid, Typography } from '@material-ui/core';
-
+import { Button, Card, CardActions, CardContent, Grid, Toolbar, Tooltip, Typography } from '@material-ui/core';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
+import EditIcon from '@mui/icons-material/Edit';
+import ListIcon from '@mui/icons-material/List';
 export default function MembersCard(props) {
   return (
         <Grid item xs={4}>
@@ -27,14 +29,19 @@ export default function MembersCard(props) {
               <Typography variant="body2">{props.address}</Typography>
             </CardContent>
             <CardActions style={{ justifyContent: "center" }}>
+              <Tooltip title="EDIT" placement='top-start'>
               <Button onClick={()=>props.handleEditMember(props.id)} size="small" variant="contained" color="primary" style={{ backgroundColor: "rgb(0, 172, 14)", color: "white" }}>
-                Edit
+              <EditIcon/>
               </Button>
-              <Button onClick={()=>props.handleDeleteMember(props.id)} size="small" variant="contained" color="secondary">
-                Delete
+              </Tooltip>
+              <Tooltip title="DELETE" placement='top-start'>
+              <Button onClick={()=>props.handleDeleteMember(props.id)} size="small" variant="contained" color="secondary" style={{ background: "#E71919" }}>
+                <DeleteForeverIcon/>
               </Button>
+              </Tooltip>
               <Button onClick={()=>props.handleBorrowings(props.id)} size="small" variant="contained" color="primary">
-                borrowings
+                Borrowings
+                <ListIcon style={{ marginLeft: "5px" }}/>
               </Button>
             </CardActions>
           </Card>

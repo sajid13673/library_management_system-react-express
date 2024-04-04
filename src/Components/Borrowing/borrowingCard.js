@@ -1,9 +1,10 @@
-import { Button, Card, CardContent, FormControl, Grid, Tooltip, Typography, Zoom, makeStyles } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, FormControl, Grid, Tooltip, Typography, Zoom, makeStyles } from '@material-ui/core';
 import {  DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
 import React, { useEffect } from 'react'
 import moment from 'moment';
+import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 
 const useStyles = makeStyles({
     root: {
@@ -49,7 +50,7 @@ function BorrowingCard(props) {
     },[formData])
   return (
     <Grid item xs={6}>
-      <Card  style={{ minWidth: "400px", height: "220px" }}>
+      <Card  style={{ minWidth: "400px", minHeight:"15rem"}}>
         <CardContent>
           <Grid container spacing={1} xs={12}>
           <Grid item xs={12}>
@@ -148,42 +149,42 @@ function BorrowingCard(props) {
                                 Book Details
                             </Typography>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={4}>
                             <Typography variant="body2" color="text.secondary" component="p"align="left">
                                 Title:
                             </Typography>
                         </Grid>
-                        <Grid item xs={7}>
+                        <Grid item xs={8}>
                             <Typography variant="body2" color="text.secondary" component="p"align="left">
                                {props.book.title}
                             </Typography>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={4}>
                             <Typography variant="body2" color="text.secondary" component="p"align="left">
                                 Author: 
                             </Typography>
                         </Grid>
-                        <Grid item xs={7}>
+                        <Grid item xs={8}>
                             <Typography variant="body2" color="text.secondary" component="p"align="left">
                                 {props.book.author}
                             </Typography>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={4}>
                             <Typography variant="body2" color="text.secondary" component="p"align="left">
                                 Publisher:
                             </Typography>
                         </Grid>
-                        <Grid item xs={7}>
+                        <Grid item xs={8}>
                             <Typography variant="body2" color="text.secondary" component="p"align="left">
                                 {props.book.publisher}
                             </Typography>
                         </Grid>
-                        <Grid item xs={5}>
+                        <Grid item xs={4}>
                             <Typography variant="body2" color="text.secondary" component="p"align="left">
                                 Year: 
                             </Typography>
                         </Grid>
-                        <Grid item xs={7}>
+                        <Grid item xs={8}>
                             <Typography variant="body2" color="text.secondary" component="p"align="left">
                                  {props.book.year}
                             </Typography>
@@ -193,6 +194,12 @@ function BorrowingCard(props) {
             </Grid>
           </Grid>
         </CardContent>
+        <CardActions style={{ justifyContent: "right" }}>
+          {!props.status && (<Button onClick={()=>props.handleDelete(props.id)} size="small" variant="contained" color="secondary" >
+            Delete
+            <DeleteForeverIcon style={{ marginLeft: "5px" }}/>
+          </Button>)}
+        </CardActions>
       </Card>
     </Grid>
   );

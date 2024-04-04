@@ -39,6 +39,15 @@ function BorrowingList(props) {
     function handleChange(e, value){
       setBorrowingPage(value)
     }
+    function handleDelete(id){
+      axios.delete("http://127.0.0.1:8000/api/borrowing/"+id).then(res=>{
+        if(res.data.status){
+          console.log("borrowing deleted");
+          getMemberWithBorrowings()
+        }
+      }).catch(err => console.log(err))
+    }
+  
     const [currentId,setCurrentId] = React.useState()
     React.useEffect(() => {
         getMemberWithBorrowings()
@@ -60,6 +69,7 @@ function BorrowingList(props) {
               handleConfirmReturn={(id,formData, book)=>handleConfirmReturn(id,formData, book)}
               currentId={currentId}
               setCurrentId={(id)=>setCurrentId(id)}
+              handleDelete={(id)=>handleDelete(id)}
             />
           ))}
         </Grid>

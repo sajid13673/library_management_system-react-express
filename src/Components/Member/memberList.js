@@ -4,11 +4,10 @@ import { Button, Container, Grid } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Pagination, Stack } from "@mui/material";
+import AddCircleIcon from '@mui/icons-material/AddCircle';
 
 export default function MemberList(props){
   const totalPages = props.totalPages 
-  const [perPage, setPerPage] = React.useState(9)
-  const [page, setPage] = React.useState(1)
   const data = Array.from(props.members);
   const navigate = useNavigate();
   function handleBorrowings(id){
@@ -33,11 +32,12 @@ export default function MemberList(props){
   }
     return (
       <Grid className="grid">
-        <Container>
+        <Container style={{ padding: "15px" }}>
           <Grid container sm={12} spacing={2} >
             <Grid item xs={2}>
               <Button variant="contained" color="primary" onClick={handleAddMember}>
                 ADD MEMBER
+                <AddCircleIcon style={{ marginLeft: "5px" }}/>
               </Button>
             </Grid>
             <Grid item xs={12}>
