@@ -35,7 +35,7 @@ export default function MembersCard(props) {
               </Button>
               </Tooltip>
               <Tooltip title="DELETE" placement='top-start'>
-              <Button onClick={()=>props.handleDeleteMember(props.id)} size="small" variant="contained" color="secondary" style={{ background: "#E71919" }}>
+              <Button onClick={()=>props.handleDeleteMember(props.id)} size="small" disabled={props.activeBorrowings} variant="contained" color="secondary" style={{ background: "#E71919" }}>
                 <DeleteForeverIcon/>
               </Button>
               </Tooltip>

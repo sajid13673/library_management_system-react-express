@@ -30,6 +30,7 @@ function BorrowingList(props) {
                 axios.post('http://127.0.0.1:8000/api/book/'+book.id,form).then((res)=>{
             if(res.data.status){
                 props.getBooks();
+                props.getMembers();
                 getMemberWithBorrowings()
             }
         }).catch(err => console.log(err))

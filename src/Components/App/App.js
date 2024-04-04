@@ -151,7 +151,7 @@ function App() {
                 element={
                   <div>
                     <NavBar />
-                    <AddBorrowing getBooks={() => getBooks()} />
+                    <AddBorrowing getBooks={() => getBooks()} getMembers={()=>getMembers()}/>
                   </div>
                 }
               />
@@ -160,7 +160,7 @@ function App() {
                 element={
                   <div>
                     <NavBar />
-                    <BorrowingList getBooks={() => getBooks()} />
+                    <BorrowingList getBooks={() => getBooks()} getMembers={()=>getMembers()}/>
                   </div>
                 }
               />
