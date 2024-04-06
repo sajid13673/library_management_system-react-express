@@ -1,10 +1,11 @@
 import React from "react";
 import MembersCard from "./MembersCard";
-import { Button, Container, Grid } from "@material-ui/core";
+import { Button, Container, Grid, Typography } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 import { Pagination, Stack } from "@mui/material";
 import AddCircleIcon from '@mui/icons-material/AddCircle';
+import Loading from "../loading";
 
 export default function MemberList(props){
   const totalPages = props.totalPages 
@@ -41,8 +42,8 @@ export default function MemberList(props){
               </Button>
             </Grid>
             <Grid item xs={12}>
-              <Grid container xs={12} spacing={2} maxWidth="xl" style={{  minHeight:"38rem" }}>
-                {data.map((row) => (
+              <Grid container xs={12} spacing={2} style={{  minHeight:"38rem" }}>
+                {data.length > 0 ? (data.map((row) => (
                 <MembersCard
                  key={row.id}
                  id={row.id}
@@ -57,13 +58,23 @@ export default function MemberList(props){
                   handleBorrowings={(id)=>handleBorrowings(id)}
                   activeBorrowings={row.activeBorrowings}
                 />
-                  ))}
+                  ))) :
+                  <Container className='keyMessage'>
+                  {!props.loading ? (
+                  <Typography variant="h3" >
+                    Nothing to show
+                  </Typography>
+                ) : (
+                  <Loading />
+                )}
+                </Container>
+                  }
               </Grid>
             </Grid>
           </Grid>
-          <Stack spacing={2} sx={{ marginTop:"20px" }}>
+          {data.length > 0 && !props.loading && (<Stack spacing={2} sx={{ marginTop:"20px" }}>
                 <Pagination count={totalPages} page={props.memberPage} color="primary" onChange={handleChange}/>
-          </Stack>
+          </Stack>)}
         </Container>
       </Grid>
     );

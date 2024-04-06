@@ -49,7 +49,7 @@ function BorrowingCard(props) {
         console.log(formData);
     },[formData])
   return (
-    <Grid item xs={6}>
+    <Grid item xs={12} md={6}>
       <Card  style={{ minWidth: "400px", minHeight:"15rem"}}>
         <CardContent>
           <Grid container spacing={1} xs={12}>
@@ -92,7 +92,7 @@ function BorrowingCard(props) {
                 <Grid item xs={6}>
                 <Typography
                   variant="body1"
-                  color="text.secondary"
+                  color="textSecondary"
                   component="p"
                   align='left'
                 >
@@ -102,7 +102,7 @@ function BorrowingCard(props) {
                 <Grid item xs={6}>
                 <Typography
                   variant="body1"
-                  color="text.secondary"
+                  color="textSecondary"
                   component="p"
                   align='left'
                 >
@@ -114,7 +114,7 @@ function BorrowingCard(props) {
               : (
                 <Grid container xs={12} spacing={1} style={{ alignItems: "center" }} >
                   <Grid item xs={2}>
-                    <Typography  variant="caption" align="left" color="text.secondary" component="p" >
+                    <Typography  variant="caption" align="left" color="textSecondary" component="p" >
                       Return Date:
                     </Typography>
                   </Grid>
@@ -145,47 +145,47 @@ function BorrowingCard(props) {
               {props.book !== null && (
                     <Grid container xs={12}>
                         <Grid item xs={12}>
-                            <Typography variant="h6" color="text.secondary" component="p"align="left">
+                            <Typography variant="h6" color="textSecondary" component="p"align="left">
                                 Book Details
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography variant="body2" color="text.secondary" component="p"align="left">
+                            <Typography variant="body2" color="textSecondary" component="p"align="left">
                                 Title:
                             </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <Typography variant="body2" color="text.secondary" component="p"align="left">
+                            <Typography variant="body2" color="textSecondary" component="p"align="left">
                                {props.book.title}
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography variant="body2" color="text.secondary" component="p"align="left">
+                            <Typography variant="body2" color="textSecondary" component="p"align="left">
                                 Author: 
                             </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <Typography variant="body2" color="text.secondary" component="p"align="left">
+                            <Typography variant="body2" color="textSecondary" component="p"align="left">
                                 {props.book.author}
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography variant="body2" color="text.secondary" component="p"align="left">
+                            <Typography variant="body2" color="textSecondary" component="p"align="left">
                                 Publisher:
                             </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <Typography variant="body2" color="text.secondary" component="p"align="left">
+                            <Typography variant="body2" color="textSecondary" component="p"align="left">
                                 {props.book.publisher}
                             </Typography>
                         </Grid>
                         <Grid item xs={4}>
-                            <Typography variant="body2" color="text.secondary" component="p"align="left">
+                            <Typography variant="body2" color="textSecondary" component="p"align="left">
                                 Year: 
                             </Typography>
                         </Grid>
                         <Grid item xs={8}>
-                            <Typography variant="body2" color="text.secondary" component="p"align="left">
+                            <Typography variant="body2" color="textSecondary" component="p"align="left">
                                  {props.book.year}
                             </Typography>
                         </Grid>
@@ -195,7 +195,7 @@ function BorrowingCard(props) {
           </Grid>
         </CardContent>
         <CardActions style={{ justifyContent: "right" }}>
-          {!props.status && (<Button onClick={()=>props.handleDelete(props.id)} size="small" variant="contained" color="secondary" >
+          {!props.status && (<Button onClick={()=>props.handleDelete(props.id)} size="small" variant="contained" color="secondary" style={{ background: "#E71919" }}>
             Delete
             <DeleteForeverIcon style={{ marginLeft: "5px" }}/>
           </Button>)}

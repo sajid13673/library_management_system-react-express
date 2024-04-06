@@ -73,13 +73,13 @@ export default function BookForm(props){
     },[props.book])
     return (
         <Container className="input-form" maxWidth="sm">
-            <Grid item xs={12} >
+            <Grid item={true} xs={12} >
                 <Typography variant='h3'>{props.title}</Typography>
             </Grid>
           {/* <h1>Add Member</h1> */}
           <form onSubmit={formik.handleSubmit}>
             <Grid container spacing={2}>
-              <Grid item xs={12} >
+              <Grid item={true} xs={12} >
                 <FormControl>
                   <InputLabel htmlFor="my-input">Title</InputLabel>
                   <Input
@@ -93,7 +93,7 @@ export default function BookForm(props){
                   {formik.errors.title ? ( <div className="error">{formik.errors.title}</div> ) : null}
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item={true} xs={12}>
               <FormControl>
                   <InputLabel htmlFor="my-input">Author</InputLabel>
                   <Input
@@ -107,7 +107,7 @@ export default function BookForm(props){
                   {formik.errors.author ? ( <div className="error">{formik.errors.author}</div> ) : null}
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item={true} xs={12}>
               <FormControl>
                   <InputLabel htmlFor="my-input">Publisher</InputLabel>
                   <Input
@@ -121,7 +121,7 @@ export default function BookForm(props){
                   {formik.errors.publisher ? ( <div className="error">{formik.errors.publisher}</div> ) : null}
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item={true} xs={12}>
               <FormControl>
                   <InputLabel htmlFor="my-input">Year</InputLabel>
                   <Input
@@ -135,7 +135,7 @@ export default function BookForm(props){
                   {formik.errors.year ? ( <div className="error">{formik.errors.year}</div> ) : null}
                 </FormControl>
               </Grid>
-              <Grid item xs={12}>
+              <Grid item={true} xs={12}>
               <FormControl>
                   <InputLabel htmlFor="my-input">Image</InputLabel>
                   <Input
@@ -149,7 +149,7 @@ export default function BookForm(props){
                   {formik.errors.image ? ( <div className="error">{formik.errors.image}</div> ) : null}
                 </FormControl>
               </Grid>
-              <Grid item xs={12} >
+              <Grid item={true} xs={12} >
                     <Button type='submit' variant='contained' color='primary'>Add Book</Button>
                 </Grid>
             </Grid>

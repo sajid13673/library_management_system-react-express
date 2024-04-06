@@ -54,13 +54,9 @@ function AddBorrowing(props) {
             form.set("status",0)
         await axios.post('http://127.0.0.1:8000/api/borrowing',formData).then((res)=>{
             if(res.data.status){
-                axios.post('http://127.0.0.1:8000/api/book/'+bookId,form).then((res)=>{
-            if(res.data.status){
-                props.getBooks();
-                props.getMembers();
-                navigate('/');
-            }
-        }).catch(err => console.log(err))
+              props.getBooks();
+              props.getMembers();
+              navigate('/');
             }
         }).catch(err => console.log(err))
         }

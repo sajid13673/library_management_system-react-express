@@ -3,9 +3,10 @@ import { Button, Card, CardActions, CardContent, Grid, Toolbar, Tooltip, Typogra
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import ListIcon from '@mui/icons-material/List';
+
 export default function MembersCard(props) {
   return (
-        <Grid item xs={4}>
+        <Grid item xs={12} sm={12} md={6} lg={4}>
           <Card sx={{ minWidth: 275 }} style={{ width: "200" }}>
             <CardContent>
               <img
@@ -18,12 +19,12 @@ export default function MembersCard(props) {
               </Typography>
               <Typography
                 sx={{ fontSize: 14 }}
-                color="text.secondary"
+                color="textSecondary"
                 gutterBottom
               >
                 {props.phone_number}
               </Typography>
-              <Typography sx={{ mb: 1.5 }} color="text.secondary">
+              <Typography sx={{ mb: 1.5 }} color="textSecondary">
                 {props.email}
               </Typography>
               <Typography variant="body2">{props.address}</Typography>
@@ -34,15 +35,19 @@ export default function MembersCard(props) {
               <EditIcon/>
               </Button>
               </Tooltip>
-              <Tooltip title="DELETE" placement='top-start'>
-              <Button onClick={()=>props.handleDeleteMember(props.id)} size="small" disabled={props.activeBorrowings} variant="contained" color="secondary" style={{ background: "#E71919" }}>
-                <DeleteForeverIcon/>
-              </Button>
+              <Tooltip title={!props.activeBorrowings ? "Delete" : "Has active borrowings"} placement='top-start'>
+                <div>
+                  <Button onClick={()=>props.handleDeleteMember(props.id)} size="small" disabled={props.activeBorrowings} variant="contained" color="secondary" style={{ background: props.activeBorrowings ? "#FFC0C0 ":"#E71919" }}>
+                    <DeleteForeverIcon/>
+                  </Button>
+                </div>
               </Tooltip>
+              <div>
               <Button onClick={()=>props.handleBorrowings(props.id)} size="small" variant="contained" color="primary">
                 Borrowings
                 <ListIcon style={{ marginLeft: "5px" }}/>
               </Button>
+              </div>
             </CardActions>
           </Card>
         </Grid>

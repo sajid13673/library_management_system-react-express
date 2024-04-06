@@ -21,6 +21,7 @@ function App() {
   const [members, setMembers] = React.useState({});
   const [books, setBooks] = React.useState({});
   const [login, setLogin] = React.useState({});
+  const [loading, setLoading] = React.useState(false);
   function validateEmail(str) {
     return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(str)
   }
@@ -32,17 +33,21 @@ function App() {
   const [memberPage, setMemberPage] = React.useState(1);
   const [membersPerPage, setMembersPerPage] = React.useState(9)
   const getMembers = async ()=>{
+    setLoading(true);
     await axios.get(`http://127.0.0.1:8000/api/member?page=${memberPage}&per_page=${membersPerPage}`).then((res)=>{
       console.log(res.data.data);
       setMembers(res.data.data);
+      setLoading(false);
     }).catch((err)=>{
       console.log(err.response.data.message);
     })
   }
   const getBooks = async ( )=>{
+    setLoading(true);
     await axios.get(`http://127.0.0.1:8000/api/book?page=${bookPage}&per_page=${booksPerPage}`).then((res)=>{
       console.log(res.data.data);
       setBooks(res.data.data);
+      setLoading(false);
     }).catch((err)=>{
       console.log(err.response.data.message);
     })
@@ -75,6 +80,7 @@ function App() {
                       setBookPage={(page) => setBookPage(page)}
                       defaultImage={defaultImage}
                       getBooks={() => getBooks()}
+                      loading={loading}
                     />
                   </div>
                 }
@@ -130,6 +136,7 @@ function App() {
                       totalPages={members.last_page ? members.last_page : 1}
                       memberPage={memberPage}
                       setMemberPage={(page)=>setMemberPage(page)}
+                      loading={loading}
                     />
                   </div>
                 }

@@ -1,9 +1,10 @@
 import React from "react";
-import {  Container, Grid } from "@material-ui/core";
+import {  Container, Grid, Typography } from "@material-ui/core";
 import { useNavigate } from "react-router-dom";
 import BookCard from "./bookCard";
 import axios from "axios";
 import { Pagination, Stack } from "@mui/material";
+import Loading from "../loading";
 
 export default function BookList(props){
     const totalPages = props.totalPages 
@@ -31,8 +32,8 @@ export default function BookList(props){
     return (
       <Grid container className="grid" style={{ padding: "20px" }}>
             <Container>
-              <Grid container xs={12} spacing={2} maxWidth="xl" style={{  minHeight:"38rem" }}>
-                {data.map((row) => (
+              <Grid container xs={12} spacing={2} style={{  minHeight:"38rem" }}>
+                {data.length > 0 ? (data.map((row) => (
                   <BookCard
                     key={row.id}
                     id={row.id}
@@ -42,12 +43,22 @@ export default function BookList(props){
                     year={row.year}
                     path={row.path}
                     status={row.status}
+                    activeBorrowings={row.activeBorrowings}
                     defaultImage={props.defaultImage}
                     handleBookEdit={(id) => handleBookEdit(id)}
                     handleBookDelete={(id) => handleBookDelete(id)}
                     handleAddBrowing={(bookId) => handleAddBrowing(bookId)}
                   />
-                ))}
+                )))
+            : <Container className='keyMessage'>
+            {!props.loading ? (
+            <Typography variant="h3" >
+              Nothing to show
+            </Typography>
+          ) : (
+            <Loading />
+          )}
+          </Container>}
               </Grid>
               <Stack spacing={2} sx={{ marginTop:"20px" }}>
                 <Pagination count={totalPages} page={props.bookPage} color="primary" onChange={handleChange}/>
