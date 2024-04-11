@@ -43,7 +43,11 @@ export default function Login(props){
         }).catch(err => console.log(err))
         }
     })
-
+    React.useEffect(()=>{
+        if(localStorage.getItem("token")){
+            navigate('/')
+        }
+    },[])
     return (
         <Grid className="grid" style={{ alignItems: "center", minHeight: "100vh" }} >
         <Container className="input-form" maxWidth="sm">
