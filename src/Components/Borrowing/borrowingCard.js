@@ -1,4 +1,4 @@
-import { Button, Card, CardActions, CardContent, FormControl, Grid, Tooltip, Typography, Zoom, makeStyles } from '@material-ui/core';
+import { Button, Card, CardActions, CardContent, Container, FormControl, Grid, Tooltip, Typography, Zoom, makeStyles } from '@material-ui/core';
 import {  DateTimePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import DoneOutlineIcon from '@mui/icons-material/DoneOutline';
@@ -25,7 +25,7 @@ function BorrowingCard(props) {
     })
 
     function handleChange(value) {
-        const return_date =value === null ? null : moment(value.toDate()).format("YYYY-MM-DD hh:mm:ss");
+        const return_date =value === null ? null : moment(value.toDate()).format("YYYY-MM-DD HH:mm:ss");
         console.log("date :"+return_date);
         setError(false)
         setFormData(prevFormData=>{return{...prevFormData, return_date : return_date}})
@@ -41,7 +41,13 @@ function BorrowingCard(props) {
       } else if (formData.return_date === "Invalid date") {
         setError(true);
         setErrorMsg("Enter Valid Date");
-      } else {
+      }
+      else if(!moment(props.borrowed_date).isBefore(moment(formData.return_date))){
+        setError(true);
+        setErrorMsg("Entered date is before the borrowed date");
+      } 
+      else 
+      {
         props.handleConfirmReturn(id, formData, book);
       }
     }
@@ -66,12 +72,13 @@ function BorrowingCard(props) {
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography align="left" variant="body1" component="p">
-                      {moment(props.borrowed_date).format("YYYY-MM-DD")}
+                  <Typography align="left" variant="body1" component="p" color="textSecondary">
+                      {moment(props.borrowed_date).format("DD MMMM YYYY")}<br/>
+                      {moment(props.borrowed_date).format("hh:mm:ss A")}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography align="left" variant="body1" component="p">
+                  <Typography align="left" variant="body1" component="p" >
                     Due date: 
                   </Typography>
                 </Grid>
@@ -83,7 +90,8 @@ function BorrowingCard(props) {
                     component="p"
                     style={{ color: "red" }}
                   >
-                    {props.due_date}
+                    {moment(props.due_date).format("DD MMMM YYYY")}<br/>
+                    {moment(props.due_date).format("hh:mm:ss A")}
                   </Typography>
                 </Grid>
               </Grid>
@@ -92,7 +100,6 @@ function BorrowingCard(props) {
                 <Grid item xs={6}>
                 <Typography
                   variant="body1"
-                  color="textSecondary"
                   component="p"
                   align='left'
                 >
@@ -106,7 +113,8 @@ function BorrowingCard(props) {
                   component="p"
                   align='left'
                 >
-                  {props.return_date}
+                  {moment(props.return_date).format("DD MMMM YYYY")}<br/>
+                    {moment(props.return_date).format("hh:mm:ss A")}
                 </Typography>
                 </Grid>
                 </Grid>
@@ -141,14 +149,13 @@ function BorrowingCard(props) {
                 </Grid>
               )}
             </Grid>
-            <Grid item xs={5} style={{ alignContent: "center" }}>
+            <Grid item xs={5} >
               {props.book !== null && (
-                    <Grid container xs={12}>
-                        <Grid item xs={12}>
-                            <Typography variant="h6" color="textSecondary" component="p"align="left">
-                                Book Details
-                            </Typography>
-                        </Grid>
+                <Grid>
+                  <Typography variant="h6" component="p"align="left" style={{ marginBottom: "5px" }}>
+                    Book Details
+                    </Typography>
+                    <Grid container xs={12} style={{ display:"flex", alignContent: "center" }}>
                         <Grid item xs={4}>
                             <Typography variant="body2" color="textSecondary" component="p"align="left">
                                 Title:
@@ -189,6 +196,7 @@ function BorrowingCard(props) {
                                  {props.book.year}
                             </Typography>
                         </Grid>
+                  </Grid>
                   </Grid>
               )}
             </Grid>
