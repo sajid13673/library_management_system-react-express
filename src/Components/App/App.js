@@ -14,7 +14,6 @@ import AddBorrowing from '../Borrowing/addBorrowing';
 import BorrowingList from '../Borrowing/borrowingList';
 import AuthProvider from '../../utils/authProvider';
 import { ProtectedRoute } from '../../utils/protectedRoute';
-// import Routes from '../../utils/routes';
 
 function App() {
   const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829';
