@@ -174,24 +174,6 @@ function AddBorrowing(props) {
                 Not Selected
               </Typography>)}
             </Grid>
-            {/* <Grid item xs={6}>
-              <Typography variant="h6">Member Details</Typography>
-              <Typography align="left">
-                Name: {value !== null ? value.name : "Not Available"}
-                <br />
-                Phone Number:{" "}
-                {value !== null ? value.phone_number : "Not Available"}
-                <br />
-                Email: {value !== null ? value.email : "Not Available"}
-                <br />
-                Status:{" "}
-                {value !== null
-                  ? value.status
-                    ? "Active"
-                    : "Inactive"
-                  : "Not Available"}
-              </Typography>
-            </Grid> */}
             <Grid item xs={12}>
               <Button
                 onClick={handleSubmit}
