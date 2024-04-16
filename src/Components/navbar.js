@@ -5,7 +5,7 @@ import AutoStoriesRoundedIcon from '@mui/icons-material/AutoStoriesRounded';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../utils/authProvider';
 import axios from 'axios';
-const pages = ['home','member list', 'add book'];
+const pages = ['home','member list', 'add book', 'borrowing list'];
 
 function NavBar() {
   const { setToken } = useAuth();

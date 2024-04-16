@@ -56,7 +56,7 @@ function BorrowingCard(props) {
     },[formData])
   return (
     <Grid item xs={12} md={6}>
-      <Card  style={{ minWidth: "400px", minHeight:"15rem"}}>
+      <Card  style={{ minWidth: "400px", height:"100%", maxHeight: "25rem"}}>
         <CardContent>
           <Grid container spacing={1} xs={12}>
           <Grid item xs={12}>

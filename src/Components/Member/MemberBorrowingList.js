@@ -1,27 +1,27 @@
-import { Container, Grid, Typography } from '@material-ui/core';
+import { CircularProgress, Container, Grid, Typography } from '@material-ui/core';
 import axios from 'axios';
 import React from 'react'
-import BorrowingCard from './borrowingCard';
+import BorrowingCard from '../Borrowing/borrowingCard';
 import { useLocation } from 'react-router-dom'
 import { Pagination, Stack } from '@mui/material';
 import Loading from '../loading';
-function BorrowingList(props) {
+function MemberBorrowingList(props) {
     const location = useLocation()
-    const [borrowings, setBorrowings] = React.useState([])
+    const memberId = location.state.memberId
+    const [member, setMember] = React.useState([])
     const [totalPages, setTotalPages] = React.useState(1)
     const [borrowingPage, setBorrowingPage] = React.useState(1)
     const [borrowingsPerPage, setBorrowingsPerPage] = React.useState(10)
     const [loading, setLoading] = React.useState(false)
-    const borrowingsArray = borrowings.data ? Array.from(borrowings.data) : []
-    async function getBorrowings(){
+    const borrwings = member.borrowing ? Array.from(member.borrowing.data) : []
+    async function getMemberWithBorrowings(){
       setLoading(true)
-        await axios.get(`http://127.0.0.1:8000/api/borrowing?per_page=${borrowingsPerPage}&page=${borrowingPage}`).then(res => {
+        await axios.get(`http://127.0.0.1:8000/api/member/${memberId}?borrowing=1&page=${borrowingPage}&per_page=${borrowingsPerPage}`).then(res => {
             if(res.data.status){
-              console.log(res.data.data);
-            setBorrowings(res.data.data)
-            setTotalPages(res.data.data.last_page)
-            setLoading(false)
-         }
+              setLoading(false)
+            setMember(res.data.data)
+            setTotalPages(res.data.data.borrowing.last_page)
+        }
         }).catch(err=>console.log(err));
     }
     async function handleConfirmReturn(id, formData, book) {
@@ -29,7 +29,7 @@ function BorrowingList(props) {
         if (res) {
           props.getBooks();
           props.getMembers();
-          getBorrowings();
+          getMemberWithBorrowings();
         }
       });
     }
@@ -37,23 +37,21 @@ function BorrowingList(props) {
       setBorrowingPage(value)
     }
     async function handleDelete(id){
-     await props.handleDeleteBorrowing(id).then((res) => {
-    if(res){
-      getBorrowings()
-    }
-    })
+      await props.handleDeleteBorrowing(id).then((res) =>{
+        res && getMemberWithBorrowings();
+      }).catch(err => console.log(err));
     }
   
     const [currentId,setCurrentId] = React.useState()
     React.useEffect(() => {
-        getBorrowings()
+        getMemberWithBorrowings()
     }, [borrowingPage])
   return (
     <Grid className="grid">
       <Container>
         <Grid container xs={12} spacing={2} style={{ minHeight: "38rem" }}>
-          {borrowingsArray.length > 0 ? (
-            borrowingsArray.map((row) => (
+          {borrwings.length > 0 ? (
+            borrwings.map((row) => (
               <BorrowingCard
                 key={row.id}
                 id={row.id}
@@ -62,7 +60,7 @@ function BorrowingList(props) {
                 status={row.status}
                 return_date={row.return_date}
                 borrowed_date={row.created_at}
-                member={row.member.id + ". " + row.member.name}
+                member={member.id + ". " + member.name}
                 handleConfirmReturn={(id, formData, book) => handleConfirmReturn(id, formData, book)}
                 currentId={currentId}
                 setCurrentId={(id) => setCurrentId(id)}
@@ -82,7 +80,7 @@ function BorrowingList(props) {
           </Container>
           }
         </Grid>
-        {!loading && borrowingsArray.length > 0 && (<Stack spacing={2} sx={{ marginTop: "20px" }}>
+        {!loading && borrwings.length > 0 && (<Stack spacing={2} sx={{ marginTop: "20px" }}>
           <Pagination
             count={totalPages}
             page={borrowingPage}
@@ -95,4 +93,4 @@ function BorrowingList(props) {
   );
 }
 
-export default BorrowingList
+export default MemberBorrowingList

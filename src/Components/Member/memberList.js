@@ -12,7 +12,7 @@ export default function MemberList(props){
   const data = Array.from(props.members);
   const navigate = useNavigate();
   function handleBorrowings(id){
-        navigate("/borrowing-list",{state:{memberId: id}});
+        navigate("/member-borrowing-list",{state:{memberId: id}});
     }
     function handleAddMember(){
         navigate("/add-member");

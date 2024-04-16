@@ -11,6 +11,7 @@ import axios from 'axios';
 import EditBook from '../Book/editBook';
 import EditMember from '../Member/editMember';
 import AddBorrowing from '../Borrowing/addBorrowing';
+import MemberBorrowingList from '../Member/MemberBorrowingList';
 import BorrowingList from '../Borrowing/borrowingList';
 import AuthProvider from '../../utils/authProvider';
 import { ProtectedRoute } from '../../utils/protectedRoute';
@@ -49,6 +50,31 @@ function App() {
       setLoading(false);
     }).catch((err)=>{
       console.log(err.response.data.message);
+    })
+  }
+  function handleDeleteBorrowing(id){
+    return new Promise(function(resolve, reject){
+      axios.delete("http://127.0.0.1:8000/api/borrowing/"+id).then(res=>{
+      if(res.data.status){
+        console.log("borrowing deleted");
+        resolve(true);
+      }
+    }).catch(err => reject(err))
+    })
+  }
+  async function handleConfirmReturn(id, formData, book) {
+    const form = new FormData();
+    Object.keys(book).map((key) => form.append(key, book[key]));
+    form.append("_method", "put");
+    return new Promise((resolve, reject) => {
+      axios
+      .post("http://127.0.0.1:8000/api/borrowing/" + id, formData)
+      .then((res) => {
+        if (res.data.status) {
+          resolve(true);
+        }
+      })
+      .catch((err) => reject(err));
     })
   }
   React.useEffect(()=>{
@@ -162,11 +188,16 @@ function App() {
                 }
               />
               <Route
-                path="/borrowing-list"
+                path="/member-borrowing-list"
                 element={
                   <div>
                     <NavBar />
-                    <BorrowingList getBooks={() => getBooks()} getMembers={()=>getMembers()}/>
+                    <MemberBorrowingList 
+                    handleConfirmReturn = {(id, formData, book)=>handleConfirmReturn(id, formData, book)}
+                    getBooks={() => getBooks()} 
+                    getMembers={()=>getMembers()}
+                    handleDeleteBorrowing={(id)=>handleDeleteBorrowing(id)}
+                    />
                   </div>
                 }
               />
@@ -178,6 +209,20 @@ function App() {
                   validateEmail={(str) => validateEmail(str)}
                   setLogin={() => setLogin()}
                 />
+              }
+            />
+            <Route
+              path="/borrowing-list"
+              element={
+                <div>
+                  <NavBar />
+                  <BorrowingList
+                    getBooks={() => getBooks()} 
+                    getMembers={()=>getMembers()}
+                    handleDeleteBorrowing={(id)=>handleDeleteBorrowing(id)}
+                    handleConfirmReturn = {(id, formData, book)=>handleConfirmReturn(id, formData, book)}
+                  />
+                </div>
               }
             />
           </Routes>
