@@ -1,5 +1,5 @@
 import React from "react";
-import MemberForm from "../../Components/Member/memberForm";
+import MemberForm from "../../Components/Member/MemberForm";
 import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";

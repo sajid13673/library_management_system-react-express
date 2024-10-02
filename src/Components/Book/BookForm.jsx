@@ -6,7 +6,7 @@ import {
   InputLabel,
   Typography,
 } from "@mui/material";
-import { isInteger, useFormik } from "formik";
+import { useFormik } from "formik";
 import React from "react";
 
 export default function BookForm(props) {

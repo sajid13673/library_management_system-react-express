@@ -13,7 +13,7 @@ import moment from "moment";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
-import Loading from "../../Components/loading";
+import Loading from "../../Components/Loading";
 function AddBorrowing(props) {
   const location = useLocation();
   const navigate = useNavigate();

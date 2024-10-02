@@ -1,7 +1,6 @@
 import axios from "axios";
 import React from "react";
-import BorrowingCard from "../../Components/Borrowing/borrowingCard";
-import { useLocation } from "react-router-dom";
+import BorrowingCard from "../../Components/Borrowing/BorrowingCard";
 import {
   Pagination,
   Stack,
@@ -10,9 +9,8 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import Loading from "../../Components/loading";
+import Loading from "../../Components/Loading";
 function BorrowingList(props) {
-  const location = useLocation();
   const [borrowings, setBorrowings] = React.useState([]);
   const [totalPages, setTotalPages] = React.useState(1);
   const [borrowingPage, setBorrowingPage] = React.useState(1);

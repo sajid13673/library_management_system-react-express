@@ -12,7 +12,7 @@ import {
   Box,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Loading from "../../Components/loading";
+import Loading from "../../Components/Loading";
 
 export default function MemberList(props) {
   const totalPages = props.totalPages;

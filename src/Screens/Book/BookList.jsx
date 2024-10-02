@@ -1,6 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
-import BookCard from "../../Components/Book/bookCard";
+import BookCard from "../../Components/Book/BookCard";
 import axios from "axios";
 import {
   Box,
@@ -10,7 +10,7 @@ import {
   Grid,
   Typography,
 } from "@mui/material";
-import Loading from "../../Components/loading";
+import Loading from "../../Components/Loading";
 
 export default function BookList(props) {
   const totalPages = props.totalPages;
