@@ -1,10 +1,10 @@
 import { CircularProgress, Container, Grid, Typography } from '@material-ui/core';
 import axios from 'axios';
 import React from 'react'
-import BorrowingCard from '../Borrowing/borrowingCard';
+import BorrowingCard from '../../Components/Borrowing/borrowingCard';
 import { useLocation } from 'react-router-dom'
 import { Pagination, Stack } from '@mui/material';
-import Loading from '../loading';
+import Loading from '../../Components/loading';
 function MemberBorrowingList(props) {
     const location = useLocation()
     const memberId = location.state.memberId

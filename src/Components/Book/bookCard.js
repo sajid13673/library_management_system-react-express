@@ -1,17 +1,25 @@
-import { Button, Card, CardActions, CardContent, Grid, Tooltip, Typography } from "@material-ui/core";
+import {
+  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Tooltip,
+  Typography,
+} from "@material-ui/core";
 import React from "react";
-import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
-import EditIcon from '@mui/icons-material/Edit';
-import AddCircleIcon from '@mui/icons-material/AddCircle';
-import BlockIcon from '@mui/icons-material/Block';
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import EditIcon from "@mui/icons-material/Edit";
+import AddCircleIcon from "@mui/icons-material/AddCircle";
+import BlockIcon from "@mui/icons-material/Block";
 
-export default function BookCard(props){
+export default function BookCard(props) {
   return (
     <Grid item xs={12} sm={12} md={6} lg={4}>
       <Card sx={{ minWidth: 200 }} style={{ width: "200" }}>
         <CardContent>
           <img
-            className="memberImage"
+            style={{ height: "60px" }}
             src={props.path !== null ? props.path : props.defaultImage}
             alt="productImage"
           />
@@ -43,7 +51,7 @@ export default function BookCard(props){
             title={!props.activeBorrowings ? "Delete" : "Has active borrowings"}
             placement="top-start"
           >
-            <div>
+            <>
               <Button
                 disabled={props.activeBorrowings}
                 size="small"
@@ -56,17 +64,22 @@ export default function BookCard(props){
               >
                 <DeleteForeverIcon />
               </Button>
-            </div>
+            </>
           </Tooltip>
           {!props.activeBorrowings ? (
-            <Button onClick={() => props.handleAddBrowing(props.id)} size="small" variant="contained" color="primary" >
+            <Button
+              onClick={() => props.handleAddBrowing(props.id)}
+              size="small"
+              variant="contained"
+              color="primary"
+            >
               Add Borrowing
               <AddCircleIcon style={{ marginLeft: "5px" }} />
             </Button>
           ) : (
             <Button disabled size="small" variant="contained" color="primary">
               Not Available
-              <BlockIcon style={{ marginLeft: "5px" }}/>
+              <BlockIcon style={{ marginLeft: "5px" }} />
             </Button>
           )}
         </CardActions>

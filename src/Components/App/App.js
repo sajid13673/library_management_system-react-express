@@ -1,67 +1,81 @@
-import './App.css'
-import React from 'react';
-import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Login from '../login';
-import AddMember from '../Member/addMember'
-import AddBook from '../Book/addBook';
-import NavBar from '../navbar';
-import MemberList from '../Member/memberList';
-import BookList from '../Book/bookList';
-import axios from 'axios';
-import EditBook from '../Book/editBook';
-import EditMember from '../Member/editMember';
-import AddBorrowing from '../Borrowing/addBorrowing';
-import MemberBorrowingList from '../Member/MemberBorrowingList';
-import BorrowingList from '../Borrowing/borrowingList';
-import AuthProvider from '../../Utils/authProvider';
-import { ProtectedRoute } from '../../Utils/protectedRoute';
-import SignUp from '../../Screens/SignUp';
+import "./App.css";
+import React from "react";
+import { BrowserRouter, Route, Routes } from "react-router-dom";
+import Login from "../../Screens/login";
+import AddMember from "../../Screens/Member/addMember";
+import AddBook from "../../Screens/Book/addBook";
+import NavBar from "../navbar";
+import MemberList from "../../Screens/Member/memberList";
+import BookList from "../../Screens/Book/bookList";
+import axios from "axios";
+import EditBook from "../Book/editBook";
+import EditMember from "../../Screens/Member/editMember";
+import AddBorrowing from "../../Screens/Borrowing/addBorrowing";
+import MemberBorrowingList from "../../Screens/Member/MemberBorrowingList";
+import BorrowingList from "../../Screens/Borrowing/borrowingList";
+import AuthProvider from "../../Utils/authProvider";
+import { ProtectedRoute } from "../../Utils/protectedRoute";
+import SignUp from "../../Screens/SignUp";
 
 function App() {
-  const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829';
+  const defaultImage =
+    "https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829";
   const [members, setMembers] = React.useState({});
   const [books, setBooks] = React.useState({});
   const [login, setLogin] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   function validateEmail(str) {
-    return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(str)
+    return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(str);
   }
   function validateOnlyNumbers(str) {
     return /^[0-9]*$/.test(str);
   }
   const [bookPage, setBookPage] = React.useState(1);
-  const [booksPerPage, setBooksPerPage] = React.useState(9)
+  const [booksPerPage, setBooksPerPage] = React.useState(9);
   const [memberPage, setMemberPage] = React.useState(1);
-  const [membersPerPage, setMembersPerPage] = React.useState(9)
-  const getMembers = async ()=>{
+  const [membersPerPage, setMembersPerPage] = React.useState(9);
+  const getMembers = async () => {
     setLoading(true);
-    await axios.get(`http://127.0.0.1:8000/api/member?page=${memberPage}&per_page=${membersPerPage}`).then((res)=>{
-      console.log(res.data.data);
-      setMembers(res.data.data);
-      setLoading(false);
-    }).catch((err)=>{
-      console.log(err.response.data.message);
-    })
-  }
-  const getBooks = async ( )=>{
+    await axios
+      .get(
+        `http://127.0.0.1:8000/api/member?page=${memberPage}&per_page=${membersPerPage}`
+      )
+      .then((res) => {
+        console.log(res.data.data);
+        setMembers(res.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+      });
+  };
+  const getBooks = async () => {
     setLoading(true);
-    await axios.get(`http://127.0.0.1:8000/api/book?page=${bookPage}&per_page=${booksPerPage}`).then((res)=>{
-      console.log(res.data.data);
-      setBooks(res.data.data);
-      setLoading(false);
-    }).catch((err)=>{
-      console.log(err.response.data.message);
-    })
-  }
-  function handleDeleteBorrowing(id){
-    return new Promise(function(resolve, reject){
-      axios.delete("http://127.0.0.1:8000/api/borrowing/"+id).then(res=>{
-      if(res.data.status){
-        console.log("borrowing deleted");
-        resolve(true);
-      }
-    }).catch(err => reject(err))
-    })
+    await axios
+      .get(
+        `http://127.0.0.1:8000/api/book?page=${bookPage}&per_page=${booksPerPage}`
+      )
+      .then((res) => {
+        console.log(res.data.data);
+        setBooks(res.data.data);
+        setLoading(false);
+      })
+      .catch((err) => {
+        console.log(err.response.data.message);
+      });
+  };
+  function handleDeleteBorrowing(id) {
+    return new Promise(function (resolve, reject) {
+      axios
+        .delete("http://127.0.0.1:8000/api/borrowing/" + id)
+        .then((res) => {
+          if (res.data.status) {
+            console.log("borrowing deleted");
+            resolve(true);
+          }
+        })
+        .catch((err) => reject(err));
+    });
   }
   async function handleConfirmReturn(id, formData, book) {
     const form = new FormData();
@@ -69,25 +83,25 @@ function App() {
     form.append("_method", "put");
     return new Promise((resolve, reject) => {
       axios
-      .post("http://127.0.0.1:8000/api/borrowing/" + id, formData)
-      .then((res) => {
-        if (res.data.status) {
-          resolve(true);
-        }
-      })
-      .catch((err) => reject(err));
-    })
+        .post("http://127.0.0.1:8000/api/borrowing/" + id, formData)
+        .then((res) => {
+          if (res.data.status) {
+            resolve(true);
+          }
+        })
+        .catch((err) => reject(err));
+    });
   }
-  React.useEffect(()=>{
-    getMembers("",9);
+  React.useEffect(() => {
+    getMembers("", 9);
     getBooks();
-  },[login])
-  React.useEffect(()=>{
+  }, [login]);
+  React.useEffect(() => {
     getBooks();
-  },[bookPage])
-  React.useEffect(()=>{
+  }, [bookPage]);
+  React.useEffect(() => {
     getMembers();
-  },[memberPage])
+  }, [memberPage]);
   return (
     <div className="App">
       <AuthProvider>
@@ -117,7 +131,7 @@ function App() {
                   <div>
                     <NavBar />
                     <AddMember
-                      getMembers={() =>getMembers()}
+                      getMembers={() => getMembers()}
                       validateEmail={(str) => validateEmail(str)}
                       validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                     />
@@ -130,7 +144,7 @@ function App() {
                   <div>
                     <NavBar />
                     <EditMember
-                      getMembers={() =>getMembers()}
+                      getMembers={() => getMembers()}
                       validateEmail={(str) => validateEmail(str)}
                       validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                     />
@@ -158,10 +172,10 @@ function App() {
                     <MemberList
                       members={members.data ? members.data : []}
                       defaultImage={defaultImage}
-                      getMembers={() =>getMembers()}
+                      getMembers={() => getMembers()}
                       totalPages={members.last_page ? members.last_page : 1}
                       memberPage={memberPage}
-                      setMemberPage={(page)=>setMemberPage(page)}
+                      setMemberPage={(page) => setMemberPage(page)}
                       loading={loading}
                     />
                   </div>
@@ -184,7 +198,10 @@ function App() {
                 element={
                   <div>
                     <NavBar />
-                    <AddBorrowing getBooks={() => getBooks()} getMembers={()=>getMembers()}/>
+                    <AddBorrowing
+                      getBooks={() => getBooks()}
+                      getMembers={() => getMembers()}
+                    />
                   </div>
                 }
               />
@@ -193,11 +210,13 @@ function App() {
                 element={
                   <div>
                     <NavBar />
-                    <MemberBorrowingList 
-                    handleConfirmReturn = {(id, formData, book)=>handleConfirmReturn(id, formData, book)}
-                    getBooks={() => getBooks()} 
-                    getMembers={()=>getMembers()}
-                    handleDeleteBorrowing={(id)=>handleDeleteBorrowing(id)}
+                    <MemberBorrowingList
+                      handleConfirmReturn={(id, formData, book) =>
+                        handleConfirmReturn(id, formData, book)
+                      }
+                      getBooks={() => getBooks()}
+                      getMembers={() => getMembers()}
+                      handleDeleteBorrowing={(id) => handleDeleteBorrowing(id)}
                     />
                   </div>
                 }
@@ -212,22 +231,19 @@ function App() {
                 />
               }
             />
-            <Route
-              path="/signup"
-              element={
-                <SignUp/>
-              }
-            />
+            <Route path="/signup" element={<SignUp />} />
             <Route
               path="/borrowing-list"
               element={
                 <div>
                   <NavBar />
                   <BorrowingList
-                    getBooks={() => getBooks()} 
-                    getMembers={()=>getMembers()}
-                    handleDeleteBorrowing={(id)=>handleDeleteBorrowing(id)}
-                    handleConfirmReturn = {(id, formData, book)=>handleConfirmReturn(id, formData, book)}
+                    getBooks={() => getBooks()}
+                    getMembers={() => getMembers()}
+                    handleDeleteBorrowing={(id) => handleDeleteBorrowing(id)}
+                    handleConfirmReturn={(id, formData, book) =>
+                      handleConfirmReturn(id, formData, book)
+                    }
                   />
                 </div>
               }

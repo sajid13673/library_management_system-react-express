@@ -10,7 +10,7 @@ export default function MembersCard(props) {
           <Card sx={{ minWidth: 275 }} style={{ width: "200" }}>
             <CardContent>
               <img
-                className="memberImage"
+                style={{ height: "60px" }}
                 src={props.path !== null ? props.path : props.defaultImage}
                 alt="productImage"
               />

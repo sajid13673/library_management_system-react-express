@@ -1,17 +1,11 @@
-import {
-  Box,
-  Button,
-  FormControl,
-  Input,
-  InputLabel,
-} from "@mui/material";
+import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
 import React from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 
 function SignUp() {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -24,16 +18,39 @@ function SignUp() {
     onSubmit: (values) => {
       console.log(values);
 
-      axios.post(`http://127.0.0.1:8000/api/register`, values).then((res) => {
-        res.status && navigate('/login')
-      }).catch((err) => {console.log(err);});
+      axios
+        .post(`http://127.0.0.1:8000/api/register`, values)
+        .then((res) => {
+          res.status && navigate("/login");
+        })
+        .catch((err) => {
+          console.log(err);
+        });
     },
   });
   return (
     <form onSubmit={formik.handleSubmit}>
-
-    <Box sx={{ height: '100vh', display: "flex", alignItems: "center", justifyContent: "center"}}>
-        <Box sx={{height: "max-content", minWidth: "20rem", bgcolor: "white", display: "flex", flexDirection: "column", p: 2, gap: 3, borderRadius: 4, boxShadow: 4 }}>
+      <Box
+        sx={{
+          height: "100vh",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+        }}
+      >
+        <Box
+          sx={{
+            height: "max-content",
+            minWidth: "20rem",
+            bgcolor: "white",
+            display: "flex",
+            flexDirection: "column",
+            p: 2,
+            gap: 3,
+            borderRadius: 4,
+            boxShadow: 4,
+          }}
+        >
           <FormControl>
             <InputLabel>email</InputLabel>
             <Input
@@ -102,12 +119,19 @@ function SignUp() {
               onChange={formik.handleChange}
             />
           </FormControl>
-          <Button sx={{ width: {sm: "80%"}, mx: "auto" }} type="submit" variant="contained">Register</Button>
-          <Button variant="text" size="small" sx={{ fontSize: 10 }}>already have an account</Button>
+          <Button
+            sx={{ width: { sm: "80%" }, mx: "auto" }}
+            type="submit"
+            variant="contained"
+          >
+            Register
+          </Button>
+          <Button variant="text" size="small" sx={{ fontSize: 10 }}>
+            already have an account
+          </Button>
+        </Box>
       </Box>
-      </Box>
-      </form>
-
+    </form>
   );
 }
 
