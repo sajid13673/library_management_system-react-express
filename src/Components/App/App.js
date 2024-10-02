@@ -13,8 +13,9 @@ import EditMember from '../Member/editMember';
 import AddBorrowing from '../Borrowing/addBorrowing';
 import MemberBorrowingList from '../Member/MemberBorrowingList';
 import BorrowingList from '../Borrowing/borrowingList';
-import AuthProvider from '../../utils/authProvider';
-import { ProtectedRoute } from '../../utils/protectedRoute';
+import AuthProvider from '../../Utils/authProvider';
+import { ProtectedRoute } from '../../Utils/protectedRoute';
+import SignUp from '../../Screens/SignUp';
 
 function App() {
   const defaultImage = 'https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829';
@@ -209,6 +210,12 @@ function App() {
                   validateEmail={(str) => validateEmail(str)}
                   setLogin={() => setLogin()}
                 />
+              }
+            />
+            <Route
+              path="/signup"
+              element={
+                <SignUp/>
               }
             />
             <Route

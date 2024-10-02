@@ -4,7 +4,7 @@ import { Visibility, VisibilityOff } from '@material-ui/icons';
 import { useFormik } from 'formik';
 import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../utils/authProvider';
+import { useAuth } from '../Utils/authProvider';
 
 export default function Login(props){
     const { setToken } = useAuth();
