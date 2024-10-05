@@ -121,11 +121,12 @@ export default function Login(props) {
             Login
           </Button>
           <Button
-            variant="contained"
+            variant="text"
+            size="small"
             onClick={() => navigate("/signup")}
-            sx={{ width: "60%", mx: "auto" }}
+            sx={{ fontSize: 10, textTransform: "inherit" }}
           >
-            SignUp
+            Don't have an account? Signup here
           </Button>
         </Card>
       </form>
