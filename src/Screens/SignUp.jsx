@@ -52,7 +52,7 @@ function SignUp() {
           }}
         >
           <FormControl>
-            <InputLabel>email</InputLabel>
+            <InputLabel>Email</InputLabel>
             <Input
               error={formik.errors.email}
               name="email"
@@ -126,8 +126,8 @@ function SignUp() {
           >
             Register
           </Button>
-          <Button variant="text" size="small" sx={{ fontSize: 10 }}>
-            already have an account
+          <Button onClick={()=>navigate('/login')} variant="text" size="small" sx={{ fontSize: 10, textTransform: "inherit", width: { sm: "80%" }, mx: "auto" }}>
+            Back to Login
           </Button>
         </Box>
       </Box>
