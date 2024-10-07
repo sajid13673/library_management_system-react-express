@@ -17,6 +17,7 @@ import AuthProvider from "../../Utils/authProvider";
 import { ProtectedRoute } from "../../Utils/protectedRoute";
 import SignUp from "../../Screens/SignUp";
 import { createTheme, Paper, ThemeProvider } from "@mui/material";
+import Home from "../../Screens/Home";
 
 function App() {
   const defaultImage =
@@ -140,6 +141,15 @@ function App() {
                         darkMode={darkMode}
                         setDarkMode={(bool) => setDarkMode(bool)}
                       />
+                      <Home />
+                    </>
+                  }
+                />
+                <Route
+                  path="/book-list"
+                  element={
+                    <>
+                      <NavBar />
                       <BookList
                         books={books.data ? books.data : []}
                         totalPages={books.last_page ? books.last_page : 1}
@@ -152,26 +162,9 @@ function App() {
                     </>
                   }
                 />
-                <Route
-                  path="/add-member"
-                  element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
-                      <AddMember
-                        getMembers={() => getMembers()}
-                        validateEmail={(str) => validateEmail(str)}
-                        validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                      />
-                    </>
-                  }
-                />
-                
               </Route>
-            <Route element={<ProtectedRoute roles={["admin"]} />}>
-            <Route
+              <Route element={<ProtectedRoute roles={["admin"]} />}>
+                <Route
                   path="/add-book"
                   exact
                   element={
@@ -274,26 +267,44 @@ function App() {
                     </>
                   }
                 />
-                   <Route
-                path="/borrowing-list"
-                element={
-                  <>
-                    <NavBar
-                      darkMode={darkMode}
-                      setDarkMode={(bool) => setDarkMode(bool)}
-                    />
-                    <BorrowingList
-                      getBooks={() => getBooks()}
-                      getMembers={() => getMembers()}
-                      handleDeleteBorrowing={(id) => handleDeleteBorrowing(id)}
-                      handleConfirmReturn={(id, formData, book) =>
-                        handleConfirmReturn(id, formData, book)
-                      }
-                    />
-                  </>
-                }
-              />
-            </Route>
+                <Route
+                  path="/borrowing-list"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <BorrowingList
+                        getBooks={() => getBooks()}
+                        getMembers={() => getMembers()}
+                        handleDeleteBorrowing={(id) =>
+                          handleDeleteBorrowing(id)
+                        }
+                        handleConfirmReturn={(id, formData, book) =>
+                          handleConfirmReturn(id, formData, book)
+                        }
+                      />
+                    </>
+                  }
+                />
+                <Route
+                  path="/add-member"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <AddMember
+                        getMembers={() => getMembers()}
+                        validateEmail={(str) => validateEmail(str)}
+                        validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                      />
+                    </>
+                  }
+                />
+              </Route>
               <Route
                 path="/login"
                 element={
