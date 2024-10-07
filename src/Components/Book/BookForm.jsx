@@ -4,10 +4,24 @@ import {
   FormControl,
   Input,
   InputLabel,
+  styled,
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
+import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+
+const VisuallyHiddenInput = styled('input')({
+  clip: 'rect(0 0 0 0)',
+  clipPath: 'inset(50%)',
+  height: 1,
+  overflow: 'hidden',
+  position: 'absolute',
+  bottom: 0,
+  left: 0,
+  whiteSpace: 'nowrap',
+  width: 1,
+});
 
 export default function BookForm(props) {
   var mimeSet = new Set(["image/png", "image/jpeg", "image/jpg"]);
@@ -139,14 +153,28 @@ export default function BookForm(props) {
           ) : null}
         </FormControl>
         <FormControl>
-          <Input
+          {/* <Input
             error={formik.errors.image}
             className="form-input"
             name="image"
             type="file"
             aria-describedby="my-helper-text"
             onChange={handleUpload}
-          />
+          /> */}
+          <Button
+            component="label"
+            role={undefined}
+            variant="contained"
+            tabIndex={-1}
+            startIcon={<CloudUploadIcon />}
+          >
+            Upload files
+            <VisuallyHiddenInput
+              type="file"
+              onChange={handleUpload}
+              multiple
+            />
+          </Button>
           {formik.errors.image ? (
             <div className="error">{formik.errors.image}</div>
           ) : null}
