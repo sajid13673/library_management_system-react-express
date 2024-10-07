@@ -17,7 +17,6 @@ import axios from 'axios';
 import { useAuth } from '../Utils/authProvider';
 import { FormControlLabel, styled, Switch } from '@mui/material';
 
-const pages = ["member list", "add book", "borrowing list"];
 const settings = ['profile', 'account', 'dashboard', 'logout'];
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
@@ -79,9 +78,10 @@ function Navbar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
-  const { setToken } = useAuth();
+  const { setToken, token } = useAuth();
 
-  const navigateToPage = (page) => {
+const pages = token.role == "admin" ? ["book list", "member list", "add book", "borrowing list"] : ["book list"];
+const navigateToPage = (page) => {
       navigate("/" + page.split(" ").join("-"));
   };
   const handleOpenNavMenu = (event) => {
