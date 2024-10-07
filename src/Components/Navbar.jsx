@@ -107,7 +107,7 @@ function Navbar(props) {
       .get("http://127.0.0.1:8000/api/logout")
       .then((res) => {
         if (res.data.status) {
-          setToken();
+          setToken(null);
         }
       })
       .catch((err) => {

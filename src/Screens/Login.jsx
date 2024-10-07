@@ -46,7 +46,10 @@ export default function Login(props) {
         .post("http://127.0.0.1:8000/api/login", values)
         .then((res) => {
           if (res.data.status) {
-            setToken(res.data.access_token);
+            setToken({
+              token: res.data.access_token,
+              role: res.data.role
+            });
             props.setLogin(true);
             navigate("/");
           }

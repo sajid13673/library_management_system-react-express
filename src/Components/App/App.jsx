@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "../../Screens/Login";
 import AddMember from "../../Screens/Member/AddMember";
@@ -168,23 +168,10 @@ function App() {
                     </>
                   }
                 />
-                <Route
-                  path="/edit-member"
-                  element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
-                      <EditMember
-                        getMembers={() => getMembers()}
-                        validateEmail={(str) => validateEmail(str)}
-                        validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                      />
-                    </>
-                  }
-                />
-                <Route
+                
+              </Route>
+            <Route element={<ProtectedRoute roles={["admin"]} />}>
+            <Route
                   path="/add-book"
                   exact
                   element={
@@ -236,6 +223,22 @@ function App() {
                   }
                 />
                 <Route
+                  path="/edit-member"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <EditMember
+                        getMembers={() => getMembers()}
+                        validateEmail={(str) => validateEmail(str)}
+                        validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                      />
+                    </>
+                  }
+                />
+                <Route
                   path="/add-borrowing"
                   element={
                     <>
@@ -271,18 +274,7 @@ function App() {
                     </>
                   }
                 />
-              </Route>
-              <Route
-                path="/login"
-                element={
-                  <Login
-                    validateEmail={(str) => validateEmail(str)}
-                    setLogin={() => setLogin()}
-                  />
-                }
-              />
-              <Route path="/signup" element={<SignUp />} />
-              <Route
+                   <Route
                 path="/borrowing-list"
                 element={
                   <>
@@ -301,6 +293,17 @@ function App() {
                   </>
                 }
               />
+            </Route>
+              <Route
+                path="/login"
+                element={
+                  <Login
+                    validateEmail={(str) => validateEmail(str)}
+                    setLogin={() => setLogin()}
+                  />
+                }
+              />
+              <Route path="/signup" element={<SignUp />} />
             </Routes>
           </BrowserRouter>
         </AuthProvider>
