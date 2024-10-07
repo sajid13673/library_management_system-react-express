@@ -2,9 +2,13 @@ import {
   Autocomplete,
   Box,
   Button,
-  Container,
+  Card,
+  CardActions,
+  CardContent,
+  Divider,
   FormControl,
   Grid,
+  styled,
   TextField,
   Typography,
 } from "@mui/material";
@@ -14,6 +18,7 @@ import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../Components/Loading";
+
 function AddBorrowing(props) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -106,18 +111,14 @@ function AddBorrowing(props) {
       {loading ? (
         <Loading />
       ) : (
-        <Container
-          maxWidth="sm"
-          sx={{ bgcolor: "#fff", boxShadow: 2, borderRadius: 2, p: 2 }}
-        >
-          <Grid item xs={12}>
-            <Typography variant="h3">ADD BORROWING</Typography>
-          </Grid>
-          <Grid container spacing={2}>
-            <Grid item xs={12}>
-              <FormControl>
+        <Card maxWidth="sm" sx={{ boxShadow: 2, borderRadius: 2, p: 2, maxWidth: '60rem' }}>
+          <CardContent>
+          <Typography variant="h3">ADD BORROWING</Typography>
+          <Divider flexItem/>
+          <Grid container spacing={3}>
+            <Grid item xs={12} display='flex' mt={1}>
+              <FormControl sx={{ mx: 'auto',width: {xs:'100%', sm: '80%'} }}>
                 <Autocomplete
-                  style={{ maxWidth: "24rem", width: "24rem" }}
                   {...defaultProps}
                   id="controlled-demo"
                   value={value}
@@ -134,99 +135,139 @@ function AddBorrowing(props) {
               </FormControl>
             </Grid>
             <Grid item xs={12}>
-              <Typography variant="h5">
-                DUE DATE: {moment(formData.due_date).format("MMMM DD YYYY")}
+              <Typography variant="h5" align="center">
+                DUE DATE: {moment(formData.due_date).format("DD MMMM YYYY")}
+              </Typography>
+              <Divider sx={{ mt: 1 }}/>
+              </Grid>
+            <Grid
+              item
+              xs={12}
+              sm={5}
+              display="grid"
+              gridTemplateColumns="repeat(12, 1fr)"
+            >
+              <Typography variant="h6" gridColumn="span 12">
+                Book Details
+              </Typography>
+              <Typography
+                gridColumn="span 4"
+                variant="body1"
+                color="textSecondary"
+              >
+                Title:
+              </Typography>
+              <Typography
+                gridColumn="span 8"
+                variant="body1"
+                color="textSecondary"
+              >
+                {book.title}
+              </Typography>
+              <Typography
+                gridColumn="span 4"
+                variant="body1"
+                color="textSecondary"
+              >
+                Author:
+              </Typography>
+              <Typography
+                gridColumn="span 8"
+                variant="body1"
+                color="textSecondary"
+              >
+                {book.author}
+              </Typography>
+              <Typography
+                gridColumn="span 4"
+                variant="body1"
+                color="textSecondary"
+              >
+                Publisher:
+              </Typography>
+              <Typography
+                variant="body1"
+                gridColumn="span 8"
+                color="textSecondary"
+              >
+                {book.publisher}
+              </Typography>
+              <Typography
+                gridColumn="span 4"
+                variant="body1"
+                color="textSecondary"
+              >
+                Year:
+              </Typography>
+              <Typography
+                gridColumn="span 8"
+                variant="body1"
+                color="textSecondary"
+              >
+                {book.year}
               </Typography>
             </Grid>
-            <Grid item xs={6}>
-              <Typography variant="h6">Book Details</Typography>
-              <Grid container xs={12} style={{ textAlign: "left" }}>
-                <Grid item xs={4}>
-                  <Typography variant="body1" color="textSecondary">
-                    Title:
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography variant="body1" color="textSecondary">
-                    {book.title}
-                  </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="body1" color="textSecondary">
-                    Author:
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography variant="body1" color="textSecondary">
-                    {book.author}
-                  </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="body1" color="textSecondary">
-                    Publisher:
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography variant="body1" color="textSecondary">
-                    {book.publisher}
-                  </Typography>
-                </Grid>
-                <Grid item xs={4}>
-                  <Typography variant="body1" color="textSecondary">
-                    Year:
-                  </Typography>
-                </Grid>
-                <Grid item xs={8}>
-                  <Typography variant="body1" color="textSecondary">
-                    {book.year}
-                  </Typography>
-                </Grid>
-              </Grid>
-            </Grid>
-            <Grid item xs={6}>
-              <Typography variant="h6">Book Details</Typography>
+            <Divider orientation="vertical" flexItem sx={{ mx: 'auto', mt: 2, display: {xs: 'none', sm: 'block'} }}/>
+            <Grid item xs={12} sm={5}>
+            <Typography variant="h6">Member Details</Typography>
               {value !== null ? (
-                <Grid container xs={12} style={{ textAlign: "left" }}>
-                  <Grid item xs={4}>
-                    <Typography variant="body1" color="textSecondary">
-                      Name:
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography variant="body1" color="textSecondary">
-                      {value.name}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Typography variant="body1" color="textSecondary">
-                      Number:
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography variant="body1" color="textSecondary">
-                      {value.phone_number}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Typography variant="body1" color="textSecondary">
-                      Email:
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography variant="body1" color="textSecondary">
-                      {value.email}
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={4}>
-                    <Typography variant="body1" color="textSecondary">
-                      Status:
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={8}>
-                    <Typography variant="body1" color="textSecondary">
-                      {value.status ? "Active" : "Inactive"}
-                    </Typography>
-                  </Grid>
+                <Grid display="grid" gridTemplateColumns="repeat(12, 1fr)">
+                  <Typography
+                    gridColumn="span 4"
+                    variant="body1"
+                    color="textSecondary"
+                  >
+                    Name:
+                  </Typography>
+                  <Typography
+                    gridColumn="span 8"
+                    variant="body1"
+                    color="textSecondary"
+                  >
+                    {value.name}
+                  </Typography>
+                  <Typography
+                    gridColumn="span 4"
+                    variant="body1"
+                    color="textSecondary"
+                  >
+                    Number:
+                  </Typography>
+                  <Typography
+                    gridColumn="span 8"
+                    variant="body1"
+                    color="textSecondary"
+                  >
+                    {value.phone_number}
+                  </Typography>
+                  <Typography
+                    gridColumn="span 4"
+                    variant="body1"
+                    color="textSecondary"
+                  >
+                    Email:
+                  </Typography>
+                  <Typography
+                    gridColumn="span 8"
+                    variant="body1"
+                    color="textSecondary"
+                  >
+                    {value.user.email}
+                  </Typography>
+                  <Typography
+                    gridColumn="span 4"
+                    variant="body1"
+                    color="textSecondary"
+                  >
+                    Status:
+                  </Typography>
+                  <Typography
+                    gridColumn="span 8"
+                    variant="body1"
+                    color="textSecondary"
+                  >
+                    {value.status ? "Active" : "Inactive"}
+                  </Typography>
                 </Grid>
               ) : (
                 <Typography variant="body1" color="textSecondary">
@@ -234,17 +275,19 @@ function AddBorrowing(props) {
                 </Typography>
               )}
             </Grid>
-            <Grid item xs={12}>
-              <Button
+          </Grid>
+          </CardContent>
+          <CardActions>
+          <Button
                 onClick={handleSubmit}
                 variant="contained"
                 color="primary"
+                sx={{ mx: 'auto' }}
               >
                 Add Borrowing
               </Button>
-            </Grid>
-          </Grid>
-        </Container>
+          </CardActions>
+        </Card>
       )}
     </Box>
   );

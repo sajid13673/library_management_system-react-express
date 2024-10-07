@@ -42,13 +42,11 @@ export default function MemberList(props) {
     props.setMemberPage(value);
   }
   return (
-    <Box display="flex" flexDirection="column" p={2}>
-      <Grid container sm={12} spacing={2}>
-        <Button variant="contained" color="primary" onClick={handleAddMember}>
+    <Box display="flex" flexDirection="column" p={2} gap={2}>
+        <Button variant="contained" sx={{ maxWidth: '15rem' }} color="primary" onClick={handleAddMember}>
           ADD MEMBER
           <AddCircleIcon style={{ marginLeft: "5px" }} />
         </Button>
-        <Grid item xs={12}>
           <Grid container xs={12} spacing={2} style={{ minHeight: "38rem" }}>
             {data.length > 0 ? (
               data.map((row) => (
@@ -77,8 +75,6 @@ export default function MemberList(props) {
               </Container>
             )}
           </Grid>
-        </Grid>
-      </Grid>
       {data.length > 0 && !props.loading && (
         <Stack spacing={2} sx={{ marginTop: "20px" }}>
           <Pagination

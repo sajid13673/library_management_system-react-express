@@ -1,25 +1,22 @@
-import {
-  Button,
-  Card,
-  CardActions,
-  CardContent,
-  Grid,
-  Tooltip,
-  Typography,
-} from "@material-ui/core";
 import React from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BlockIcon from "@mui/icons-material/Block";
+import {  Button,
+  Card,
+  CardActions,
+  CardContent,
+  Grid,
+  Typography, Tooltip } from "@mui/material";
 
 export default function BookCard(props) {
   return (
     <Grid item xs={12} sm={12} md={6} lg={4}>
-      <Card sx={{ minWidth: 200 }} style={{ width: "200" }}>
-        <CardContent>
+      <Card sx={{ minWidth: 200 }}>
+        <CardContent sx={{ display: 'flex', flexDirection: 'column' ,justifyContent: 'center', alignItems: 'center' }}>
           <img
-            style={{ height: "60px" }}
+            style={{ maxWidth: '100px' }}
             src={props.path !== null ? props.path : props.defaultImage}
             alt="productImage"
           />
