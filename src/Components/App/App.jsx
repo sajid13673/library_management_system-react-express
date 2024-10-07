@@ -1,5 +1,5 @@
 import "./App.css";
-import React from "react";
+import React, { useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "../../Screens/Login";
 import AddMember from "../../Screens/Member/AddMember";
@@ -16,6 +16,7 @@ import BorrowingList from "../../Screens/Borrowing/BorrowingList";
 import AuthProvider from "../../Utils/authProvider";
 import { ProtectedRoute } from "../../Utils/protectedRoute";
 import SignUp from "../../Screens/SignUp";
+import { createTheme, Paper, ThemeProvider } from "@mui/material";
 
 function App() {
   const defaultImage =
@@ -34,6 +35,28 @@ function App() {
   const [booksPerPage, setBooksPerPage] = React.useState(9);
   const [memberPage, setMemberPage] = React.useState(1);
   const [membersPerPage, setMembersPerPage] = React.useState(9);
+  const [darkMode, setDarkMode] = useState(false);
+  const theme = createTheme({
+    palette: {
+      mode: darkMode ? "dark" : "light",
+    },
+    typography: {
+      h4: {
+        color: "#7393B3",
+      },
+    },
+    components: {
+      MuiCardContent: {
+        defaultProps: {
+          style: {
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+          },
+        },
+      },
+    },
+  });
   const getMembers = async () => {
     setLoading(true);
     await axios
@@ -103,155 +126,186 @@ function App() {
     getMembers();
   }, [memberPage]);
   return (
-    <div className="App">
-      <AuthProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route element={<ProtectedRoute />}>
+    <ThemeProvider theme={theme}>
+      <Paper sx={{ minHeight: "100vh", minWidth: "18rem" }}>
+        <AuthProvider>
+          <BrowserRouter>
+            <Routes>
+              <Route element={<ProtectedRoute />}>
+                <Route
+                  path="/"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <BookList
+                        books={books.data ? books.data : []}
+                        totalPages={books.last_page ? books.last_page : 1}
+                        bookPage={bookPage}
+                        setBookPage={(page) => setBookPage(page)}
+                        defaultImage={defaultImage}
+                        getBooks={() => getBooks()}
+                        loading={loading}
+                      />
+                    </>
+                  }
+                />
+                <Route
+                  path="/add-member"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <AddMember
+                        getMembers={() => getMembers()}
+                        validateEmail={(str) => validateEmail(str)}
+                        validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                      />
+                    </>
+                  }
+                />
+                <Route
+                  path="/edit-member"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <EditMember
+                        getMembers={() => getMembers()}
+                        validateEmail={(str) => validateEmail(str)}
+                        validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                      />
+                    </>
+                  }
+                />
+                <Route
+                  path="/add-book"
+                  exact
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <AddBook
+                        getBooks={() => getBooks()}
+                        validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                      />
+                    </>
+                  }
+                />
+                <Route
+                  path="/member-list"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <MemberList
+                        members={members.data ? members.data : []}
+                        defaultImage={defaultImage}
+                        getMembers={() => getMembers()}
+                        totalPages={members.last_page ? members.last_page : 1}
+                        memberPage={memberPage}
+                        setMemberPage={(page) => setMemberPage(page)}
+                        loading={loading}
+                      />
+                    </>
+                  }
+                />
+                <Route
+                  path="/edit-book"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <EditBook
+                        getBooks={() => getBooks()}
+                        validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                      />
+                    </>
+                  }
+                />
+                <Route
+                  path="/add-borrowing"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <AddBorrowing
+                        getBooks={() => getBooks()}
+                        getMembers={() => getMembers()}
+                      />
+                    </>
+                  }
+                />
+                <Route
+                  path="/member-borrowing-list"
+                  element={
+                    <>
+                      <NavBar
+                        darkMode={darkMode}
+                        setDarkMode={(bool) => setDarkMode(bool)}
+                      />
+                      <MemberBorrowingList
+                        handleConfirmReturn={(id, formData, book) =>
+                          handleConfirmReturn(id, formData, book)
+                        }
+                        getBooks={() => getBooks()}
+                        getMembers={() => getMembers()}
+                        handleDeleteBorrowing={(id) =>
+                          handleDeleteBorrowing(id)
+                        }
+                      />
+                    </>
+                  }
+                />
+              </Route>
               <Route
-                path="/"
+                path="/login"
                 element={
-                  <div>
-                    <NavBar />
-                    <BookList
-                      books={books.data ? books.data : []}
-                      totalPages={books.last_page ? books.last_page : 1}
-                      bookPage={bookPage}
-                      setBookPage={(page) => setBookPage(page)}
-                      defaultImage={defaultImage}
-                      getBooks={() => getBooks()}
-                      loading={loading}
-                    />
-                  </div>
+                  <Login
+                    validateEmail={(str) => validateEmail(str)}
+                    setLogin={() => setLogin()}
+                  />
                 }
               />
+              <Route path="/signup" element={<SignUp />} />
               <Route
-                path="/add-member"
+                path="/borrowing-list"
                 element={
-                  <div>
-                    <NavBar />
-                    <AddMember
-                      getMembers={() => getMembers()}
-                      validateEmail={(str) => validateEmail(str)}
-                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
+                  <>
+                    <NavBar
+                      darkMode={darkMode}
+                      setDarkMode={(bool) => setDarkMode(bool)}
                     />
-                  </div>
-                }
-              />
-              <Route
-                path="/edit-member"
-                element={
-                  <div>
-                    <NavBar />
-                    <EditMember
-                      getMembers={() => getMembers()}
-                      validateEmail={(str) => validateEmail(str)}
-                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                    />
-                  </div>
-                }
-              />
-              <Route
-                path="/add-book"
-                exact
-                element={
-                  <div>
-                    <NavBar />
-                    <AddBook
-                      getBooks={() => getBooks()}
-                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                    />
-                  </div>
-                }
-              />
-              <Route
-                path="/member-list"
-                element={
-                  <div>
-                    <NavBar />
-                    <MemberList
-                      members={members.data ? members.data : []}
-                      defaultImage={defaultImage}
-                      getMembers={() => getMembers()}
-                      totalPages={members.last_page ? members.last_page : 1}
-                      memberPage={memberPage}
-                      setMemberPage={(page) => setMemberPage(page)}
-                      loading={loading}
-                    />
-                  </div>
-                }
-              />
-              <Route
-                path="/edit-book"
-                element={
-                  <div>
-                    <NavBar />
-                    <EditBook
-                      getBooks={() => getBooks()}
-                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                    />
-                  </div>
-                }
-              />
-              <Route
-                path="/add-borrowing"
-                element={
-                  <div>
-                    <NavBar />
-                    <AddBorrowing
-                      getBooks={() => getBooks()}
-                      getMembers={() => getMembers()}
-                    />
-                  </div>
-                }
-              />
-              <Route
-                path="/member-borrowing-list"
-                element={
-                  <div>
-                    <NavBar />
-                    <MemberBorrowingList
-                      handleConfirmReturn={(id, formData, book) =>
-                        handleConfirmReturn(id, formData, book)
-                      }
+                    <BorrowingList
                       getBooks={() => getBooks()}
                       getMembers={() => getMembers()}
                       handleDeleteBorrowing={(id) => handleDeleteBorrowing(id)}
+                      handleConfirmReturn={(id, formData, book) =>
+                        handleConfirmReturn(id, formData, book)
+                      }
                     />
-                  </div>
+                  </>
                 }
               />
-            </Route>
-            <Route
-              path="/login"
-              element={
-                <Login
-                  validateEmail={(str) => validateEmail(str)}
-                  setLogin={() => setLogin()}
-                />
-              }
-            />
-            <Route path="/signup" element={<SignUp />} />
-            <Route
-              path="/borrowing-list"
-              element={
-                <div>
-                  <NavBar />
-                  <BorrowingList
-                    getBooks={() => getBooks()}
-                    getMembers={() => getMembers()}
-                    handleDeleteBorrowing={(id) => handleDeleteBorrowing(id)}
-                    handleConfirmReturn={(id, formData, book) =>
-                      handleConfirmReturn(id, formData, book)
-                    }
-                  />
-                </div>
-              }
-            />
-          </Routes>
-        </BrowserRouter>
-      </AuthProvider>
-    </div>
+            </Routes>
+          </BrowserRouter>
+        </AuthProvider>
+      </Paper>
+    </ThemeProvider>
   );
 }
 
