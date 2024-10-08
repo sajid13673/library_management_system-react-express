@@ -47,7 +47,7 @@ export default function MemberList(props) {
           ADD MEMBER
           <AddCircleIcon style={{ marginLeft: "5px" }} />
         </Button>
-          <Grid container xs={12} spacing={2} style={{ minHeight: "38rem" }}>
+          <Grid container spacing={2} style={{ minHeight: "38rem" }}>
             {data.length > 0 ? (
               data.map((row) => (
                 <MembersCard

@@ -40,7 +40,7 @@ export default function BookList(props) {
   React.useEffect(() => {}, []);
   return (
     <Box p={3}>
-      <Grid container xs={12} spacing={2} style={{ minHeight: "38rem" }}>
+      <Grid container spacing={2} style={{ minHeight: "38rem" }}>
         {data.length > 0 ? (
           data.map((row) => (
             <BookCard
