@@ -19,14 +19,7 @@ function AddBook(props) {
       .catch((err) => console.log(err));
   }
   return (
-    <Box
-      sx={{
-        display: "flex",
-        alignItems: "center",
-        justifyContent: "center",
-        height: "90vh",
-      }}
-    >
+    <Box display="flex" alignItems="center" justifyContent="center" flex={1}>
       <BookForm
         handleSubmit={(values) => handleSubmit(values)}
         validateOnlyNumbers={(str) => props.validateOnlyNumbers(str)}

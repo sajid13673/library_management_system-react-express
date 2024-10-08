@@ -58,8 +58,8 @@ function BorrowingList(props) {
     getBorrowings();
   }, [borrowingPage]);
   return (
-    <Box display="flex" flexDirection="column" p={3}>
-      <Grid container xs={12} spacing={2} style={{ minHeight: "38rem" }}>
+    <Box display="flex" flexDirection="column" p={3} flex={1} gap={2}>
+      <Grid container xs={12} spacing={2}>
         {borrowingsArray.length > 0 ? (
           borrowingsArray.map((row) => (
             <BorrowingCard
@@ -80,17 +80,17 @@ function BorrowingList(props) {
             />
           ))
         ) : (
-          <Container className="keyMessage">
+          <Box>
             {!loading ? (
               <Typography variant="h3">Nothing to show</Typography>
             ) : (
               <Loading />
             )}
-          </Container>
+          </Box>
         )}
       </Grid>
       {!loading && borrowingsArray.length > 0 && (
-        <Stack spacing={2} sx={{ marginTop: "20px" }}>
+        <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
             count={totalPages}
             page={borrowingPage}

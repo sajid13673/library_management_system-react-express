@@ -1,10 +1,14 @@
-import { CircularProgress, Typography } from '@material-ui/core'
-import React from 'react'
+import { Box, CircularProgress, Typography } from "@mui/material";
+import React from "react";
 
 function Loading() {
   return (
-    <Typography variant='h3' >Loading...  <CircularProgress /></Typography>
-  )
+    <Box>
+      <Typography variant="h3">
+        Loading... <CircularProgress />
+      </Typography>
+    </Box>
+  );
 }
 
-export default Loading
+export default Loading;

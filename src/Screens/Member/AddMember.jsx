@@ -29,9 +29,9 @@ function AddMember(props) {
   return (
     <Box
       display="flex"
-      height="90vh"
       justifyContent="center"
       alignItems="center"
+      flex={1}
     >
       <MemberForm
         validateEmail={(str) => props.validateEmail(str)}

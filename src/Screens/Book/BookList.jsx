@@ -39,8 +39,8 @@ export default function BookList(props) {
   }
   React.useEffect(() => {}, []);
   return (
-    <Box p={3}>
-      <Grid container spacing={2} style={{ minHeight: "38rem" }}>
+    <Box p={3} flex={1} display="flex" flexDirection="column" gap={2}>
+      <Grid container spacing={2}>
         {data.length > 0 ? (
           data.map((row) => (
             <BookCard
@@ -69,7 +69,7 @@ export default function BookList(props) {
           </Container>
         )}
       </Grid>
-      <Stack spacing={2} sx={{ marginTop: "20px" }}>
+      <Stack spacing={2} sx={{ mt: "auto" }}>
         <Pagination
           count={totalPages}
           page={props.bookPage}

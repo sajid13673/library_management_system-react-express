@@ -102,190 +102,194 @@ function AddBorrowing(props) {
   }, []);
 
   return (
-    <Box
-      display="flex"
-      justifyContent="center"
-      alignItems="center"
-      minHeight="90vh"
-    >
+    <Box display="flex" justifyContent="center" alignItems="center" flex={1} p={1.5}>
       {loading ? (
         <Loading />
       ) : (
-        <Card maxWidth="sm" sx={{ boxShadow: 2, borderRadius: 2, p: 2, maxWidth: '60rem' }}>
+        <Card
+          maxWidth="sm"
+          sx={{ boxShadow: 2, borderRadius: 2, p: 2, maxWidth: "60rem" }}
+        >
           <CardContent>
-          <Typography variant="h3">ADD BORROWING</Typography>
-          <Divider flexItem/>
-          <Grid container spacing={3}>
-            <Grid item xs={12} display='flex' mt={1}>
-              <FormControl sx={{ mx: 'auto',width: {xs:'100%', sm: '80%'} }}>
-                <Autocomplete
-                  {...defaultProps}
-                  id="controlled-demo"
-                  value={value}
-                  onChange={(event, newValue) => handleChange(newValue)}
-                  renderInput={(params) => (
-                    <TextField
-                      {...params}
-                      label="Select Member"
-                      variant="standard"
-                    />
-                  )}
-                />
-                {error && <div className="error">Please select a member</div>}
-              </FormControl>
-            </Grid>
-            <Grid item xs={12}>
-              <Typography variant="h5" align="center">
-                DUE DATE: {moment(formData.due_date).format("DD MMMM YYYY")}
-              </Typography>
-              <Divider sx={{ mt: 1 }}/>
+            <Typography variant="h3">ADD BORROWING</Typography>
+            <Divider flexItem />
+            <Grid container spacing={3}>
+              <Grid item xs={12} display="flex" mt={1}>
+                <FormControl
+                  sx={{ mx: "auto", width: { xs: "100%", sm: "80%" } }}
+                >
+                  <Autocomplete
+                    {...defaultProps}
+                    id="controlled-demo"
+                    value={value}
+                    onChange={(event, newValue) => handleChange(newValue)}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        label="Select Member"
+                        variant="standard"
+                      />
+                    )}
+                  />
+                  {error && <div className="error">Please select a member</div>}
+                </FormControl>
               </Grid>
-            <Grid
-              item
-              xs={12}
-              sm={5}
-              display="grid"
-              gridTemplateColumns="repeat(12, 1fr)"
-            >
-              <Typography variant="h6" gridColumn="span 12">
-                Book Details
-              </Typography>
-              <Typography
-                gridColumn="span 4"
-                variant="body1"
-                color="textSecondary"
-              >
-                Title:
-              </Typography>
-              <Typography
-                gridColumn="span 8"
-                variant="body1"
-                color="textSecondary"
-              >
-                {book.title}
-              </Typography>
-              <Typography
-                gridColumn="span 4"
-                variant="body1"
-                color="textSecondary"
-              >
-                Author:
-              </Typography>
-              <Typography
-                gridColumn="span 8"
-                variant="body1"
-                color="textSecondary"
-              >
-                {book.author}
-              </Typography>
-              <Typography
-                gridColumn="span 4"
-                variant="body1"
-                color="textSecondary"
-              >
-                Publisher:
-              </Typography>
-              <Typography
-                variant="body1"
-                gridColumn="span 8"
-                color="textSecondary"
-              >
-                {book.publisher}
-              </Typography>
-              <Typography
-                gridColumn="span 4"
-                variant="body1"
-                color="textSecondary"
-              >
-                Year:
-              </Typography>
-              <Typography
-                gridColumn="span 8"
-                variant="body1"
-                color="textSecondary"
-              >
-                {book.year}
-              </Typography>
-            </Grid>
-            <Divider orientation="vertical" flexItem sx={{ mx: 'auto', mt: 2, display: {xs: 'none', sm: 'block'} }}/>
-            <Grid item xs={12} sm={5}>
-            <Typography variant="h6">Member Details</Typography>
-              {value !== null ? (
-                <Grid display="grid" gridTemplateColumns="repeat(12, 1fr)">
-                  <Typography
-                    gridColumn="span 4"
-                    variant="body1"
-                    color="textSecondary"
-                  >
-                    Name:
-                  </Typography>
-                  <Typography
-                    gridColumn="span 8"
-                    variant="body1"
-                    color="textSecondary"
-                  >
-                    {value.name}
-                  </Typography>
-                  <Typography
-                    gridColumn="span 4"
-                    variant="body1"
-                    color="textSecondary"
-                  >
-                    Number:
-                  </Typography>
-                  <Typography
-                    gridColumn="span 8"
-                    variant="body1"
-                    color="textSecondary"
-                  >
-                    {value.phone_number}
-                  </Typography>
-                  <Typography
-                    gridColumn="span 4"
-                    variant="body1"
-                    color="textSecondary"
-                  >
-                    Email:
-                  </Typography>
-                  <Typography
-                    gridColumn="span 8"
-                    variant="body1"
-                    color="textSecondary"
-                  >
-                    {value.user.email}
-                  </Typography>
-                  <Typography
-                    gridColumn="span 4"
-                    variant="body1"
-                    color="textSecondary"
-                  >
-                    Status:
-                  </Typography>
-                  <Typography
-                    gridColumn="span 8"
-                    variant="body1"
-                    color="textSecondary"
-                  >
-                    {value.status ? "Active" : "Inactive"}
-                  </Typography>
-                </Grid>
-              ) : (
-                <Typography variant="body1" color="textSecondary">
-                  Not Selected
+              <Grid item xs={12}>
+                <Typography variant="h5" align="center">
+                  DUE DATE: {moment(formData.due_date).format("DD MMMM YYYY")}
                 </Typography>
-              )}
+                <Divider sx={{ mt: 1 }} />
+              </Grid>
+              <Grid
+                item
+                xs={12}
+                sm={5}
+                display="grid"
+                gridTemplateColumns="repeat(12, 1fr)"
+              >
+                <Typography variant="h6" gridColumn="span 12">
+                  Book Details
+                </Typography>
+                <Typography
+                  gridColumn="span 4"
+                  variant="body1"
+                  color="textSecondary"
+                >
+                  Title:
+                </Typography>
+                <Typography
+                  gridColumn="span 8"
+                  variant="body1"
+                  color="textSecondary"
+                >
+                  {book.title}
+                </Typography>
+                <Typography
+                  gridColumn="span 4"
+                  variant="body1"
+                  color="textSecondary"
+                >
+                  Author:
+                </Typography>
+                <Typography
+                  gridColumn="span 8"
+                  variant="body1"
+                  color="textSecondary"
+                >
+                  {book.author}
+                </Typography>
+                <Typography
+                  gridColumn="span 4"
+                  variant="body1"
+                  color="textSecondary"
+                >
+                  Publisher:
+                </Typography>
+                <Typography
+                  variant="body1"
+                  gridColumn="span 8"
+                  color="textSecondary"
+                >
+                  {book.publisher}
+                </Typography>
+                <Typography
+                  gridColumn="span 4"
+                  variant="body1"
+                  color="textSecondary"
+                >
+                  Year:
+                </Typography>
+                <Typography
+                  gridColumn="span 8"
+                  variant="body1"
+                  color="textSecondary"
+                >
+                  {book.year}
+                </Typography>
+              </Grid>
+              <Divider
+                orientation="vertical"
+                flexItem
+                sx={{ mx: "auto", mt: 2, display: { xs: "none", sm: "block" } }}
+              />
+              <Grid item xs={12} sm={5}>
+                <Typography variant="h6">Member Details</Typography>
+                {value !== null ? (
+                  <Grid display="grid" gridTemplateColumns="repeat(12, 1fr)">
+                    <Typography
+                      gridColumn="span 4"
+                      variant="body1"
+                      color="textSecondary"
+                    >
+                      Name:
+                    </Typography>
+                    <Typography
+                      gridColumn="span 8"
+                      variant="body1"
+                      color="textSecondary"
+                    >
+                      {value.name}
+                    </Typography>
+                    <Typography
+                      gridColumn="span 4"
+                      variant="body1"
+                      color="textSecondary"
+                    >
+                      Number:
+                    </Typography>
+                    <Typography
+                      gridColumn="span 8"
+                      variant="body1"
+                      color="textSecondary"
+                    >
+                      {value.phone_number}
+                    </Typography>
+                    <Typography
+                      gridColumn="span 4"
+                      variant="body1"
+                      color="textSecondary"
+                    >
+                      Email:
+                    </Typography>
+                    <Typography
+                      gridColumn="span 8"
+                      variant="body1"
+                      color="textSecondary"
+                    >
+                      {value.user.email}
+                    </Typography>
+                    <Typography
+                      gridColumn="span 4"
+                      variant="body1"
+                      color="textSecondary"
+                    >
+                      Status:
+                    </Typography>
+                    <Typography
+                      gridColumn="span 8"
+                      variant="body1"
+                      color="textSecondary"
+                    >
+                      {value.status ? "Active" : "Inactive"}
+                    </Typography>
+                  </Grid>
+                ) : (
+                  <Typography variant="body1" color="textSecondary">
+                    Not Selected
+                  </Typography>
+                )}
+              </Grid>
             </Grid>
-          </Grid>
           </CardContent>
           <CardActions>
-          <Button
-                onClick={handleSubmit}
-                variant="contained"
-                color="primary"
-                sx={{ mx: 'auto' }}
-              >
-                Add Borrowing
-              </Button>
+            <Button
+              onClick={handleSubmit}
+              variant="contained"
+              color="primary"
+              sx={{ mx: "auto" }}
+            >
+              Add Borrowing
+            </Button>
           </CardActions>
         </Card>
       )}

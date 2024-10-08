@@ -42,41 +42,46 @@ export default function MemberList(props) {
     props.setMemberPage(value);
   }
   return (
-    <Box display="flex" flexDirection="column" p={2} gap={2}>
-        <Button variant="contained" sx={{ maxWidth: '15rem' }} color="primary" onClick={handleAddMember}>
-          ADD MEMBER
-          <AddCircleIcon style={{ marginLeft: "5px" }} />
-        </Button>
-          <Grid container spacing={2} style={{ minHeight: "38rem" }}>
-            {data.length > 0 ? (
-              data.map((row) => (
-                <MembersCard
-                  key={row.id}
-                  id={row.id}
-                  name={row.name}
-                  email={row.email}
-                  phone_number={row.phone_number}
-                  address={row.address}
-                  path={row.path}
-                  defaultImage={props.defaultImage}
-                  handleEditMember={(id) => handleEditMember(id)}
-                  handleDeleteMember={(id) => handleDeleteMember(id)}
-                  handleBorrowings={(id) => handleBorrowings(id)}
-                  activeBorrowings={row.activeBorrowings}
-                />
-              ))
+    <Box flex={1} display="flex" flexDirection="column" p={2} gap={2}>
+      <Button
+        variant="contained"
+        sx={{ maxWidth: "15rem" }}
+        color="primary"
+        onClick={handleAddMember}
+      >
+        ADD MEMBER
+        <AddCircleIcon style={{ marginLeft: "5px" }} />
+      </Button>
+      <Grid container spacing={2}>
+        {data.length > 0 ? (
+          data.map((row) => (
+            <MembersCard
+              key={row.id}
+              id={row.id}
+              name={row.name}
+              email={row.email}
+              phone_number={row.phone_number}
+              address={row.address}
+              path={row.path}
+              defaultImage={props.defaultImage}
+              handleEditMember={(id) => handleEditMember(id)}
+              handleDeleteMember={(id) => handleDeleteMember(id)}
+              handleBorrowings={(id) => handleBorrowings(id)}
+              activeBorrowings={row.activeBorrowings}
+            />
+          ))
+        ) : (
+          <Container className="keyMessage">
+            {!props.loading ? (
+              <Typography variant="h3">Nothing to show</Typography>
             ) : (
-              <Container className="keyMessage">
-                {!props.loading ? (
-                  <Typography variant="h3">Nothing to show</Typography>
-                ) : (
-                  <Loading />
-                )}
-              </Container>
+              <Loading />
             )}
-          </Grid>
+          </Container>
+        )}
+      </Grid>
       {data.length > 0 && !props.loading && (
-        <Stack spacing={2} sx={{ marginTop: "20px" }}>
+        <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
             count={totalPages}
             page={props.memberPage}

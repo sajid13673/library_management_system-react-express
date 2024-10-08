@@ -129,7 +129,7 @@ function App() {
   }, [memberPage]);
   return (
     <ThemeProvider theme={theme}>
-      <Paper sx={{ minHeight: "100vh", minWidth: "18rem" }}>
+      <Paper sx={{ minHeight: "100vh", minWidth: "18rem", display: 'flex', flexDirection: 'column' }}>
           <BrowserRouter>
             <Routes>
               <Route element={<ProtectedRoute />}>
