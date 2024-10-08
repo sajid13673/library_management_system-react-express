@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "../../Screens/Login";
 import AddMember from "../../Screens/Member/AddMember";
@@ -13,18 +13,17 @@ import EditMember from "../../Screens/Member/EditMember";
 import AddBorrowing from "../../Screens/Borrowing/AddBorrowing";
 import MemberBorrowingList from "../../Screens/Member/MemberBorrowingList";
 import BorrowingList from "../../Screens/Borrowing/BorrowingList";
-import AuthProvider from "../../Utils/authProvider";
 import { ProtectedRoute } from "../../Utils/protectedRoute";
 import SignUp from "../../Screens/SignUp";
 import { createTheme, Paper, ThemeProvider } from "@mui/material";
 import Home from "../../Screens/Home";
+import { useAuth } from "../../Utils/authProvider";
 
 function App() {
   const defaultImage =
     "https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829";
   const [members, setMembers] = React.useState({});
   const [books, setBooks] = React.useState({});
-  const [login, setLogin] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   function validateEmail(str) {
     return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(str);
@@ -58,6 +57,7 @@ function App() {
       },
     },
   });
+  const {token} = useAuth()
   const getMembers = async () => {
     setLoading(true);
     await axios
@@ -75,9 +75,10 @@ function App() {
   };
   const getBooks = async () => {
     setLoading(true);
+    const link = token?.role === "admin" ? `http://127.0.0.1:8000/api/book` : `http://127.0.0.1:8000/api/member_book`;
     await axios
       .get(
-        `http://127.0.0.1:8000/api/book?page=${bookPage}&per_page=${booksPerPage}`
+        `${link}?page=${bookPage}&per_page=${booksPerPage}`
       )
       .then((res) => {
         console.log(res.data.data);
@@ -117,19 +118,18 @@ function App() {
     });
   }
   React.useEffect(() => {
-    getMembers("", 9);
+    token?.role === "admin" && getMembers("", 9);
     getBooks();
-  }, [login]);
-  React.useEffect(() => {
+  }, [token]);
+  useEffect(() => {
     getBooks();
   }, [bookPage]);
-  React.useEffect(() => {
+  useEffect(() => {
     getMembers();
   }, [memberPage]);
   return (
     <ThemeProvider theme={theme}>
       <Paper sx={{ minHeight: "100vh", minWidth: "18rem" }}>
-        <AuthProvider>
           <BrowserRouter>
             <Routes>
               <Route element={<ProtectedRoute />}>
@@ -149,7 +149,10 @@ function App() {
                   path="/book-list"
                   element={
                     <>
-                      <NavBar />
+                      <NavBar 
+                      darkMode={darkMode}
+                      setDarkMode={(bool) => setDarkMode(bool)}
+                      />
                       <BookList
                         books={books.data ? books.data : []}
                         totalPages={books.last_page ? books.last_page : 1}
@@ -310,14 +313,12 @@ function App() {
                 element={
                   <Login
                     validateEmail={(str) => validateEmail(str)}
-                    setLogin={() => setLogin()}
                   />
                 }
               />
               <Route path="/signup" element={<SignUp />} />
             </Routes>
           </BrowserRouter>
-        </AuthProvider>
       </Paper>
     </ThemeProvider>
   );

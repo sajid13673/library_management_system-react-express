@@ -50,7 +50,6 @@ export default function Login(props) {
               token: res.data.access_token,
               role: res.data.role
             });
-            props.setLogin(true);
             navigate("/");
           }
         })
