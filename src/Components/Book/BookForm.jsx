@@ -94,7 +94,7 @@ export default function BookForm(props) {
         className="input-form"
         maxWidth="sm"
       >
-        <Typography variant="h3">{props.title}</Typography>
+        <Typography variant="h3" textTransform='uppercase'>{props.title}</Typography>
         {/* <h1>Add Member</h1> */}
         <FormControl>
           <InputLabel htmlFor="my-input">Title</InputLabel>
@@ -180,7 +180,7 @@ export default function BookForm(props) {
           ) : null}
         </FormControl>
         <Button type="submit" variant="contained" color="primary">
-          Add Book
+          {props.title}
         </Button>
       </Card>
     </form>
