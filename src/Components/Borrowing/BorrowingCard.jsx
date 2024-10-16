@@ -19,6 +19,7 @@ import {
   Zoom,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
+import { useAuth } from "../../Utils/authProvider";
 
 const useStyles = makeStyles({
   root: {
@@ -30,6 +31,7 @@ const useStyles = makeStyles({
 });
 function BorrowingCard(props) {
   const classes = useStyles();
+  const {token} = useAuth();
   const [error, setError] = React.useState(false);
   const [errorMsg, setErrorMsg] = React.useState(false);
   const [formData, setFormData] = React.useState({
@@ -110,9 +112,8 @@ function BorrowingCard(props) {
                   <Typography
                     align="left"
                     variant="body1"
-                    color="red"
+                    color="error"
                     component="p"
-                    style={{ color: "red" }}
                   >
                     {moment(props.due_date).format("DD MMMM YYYY")}
                     <br />
@@ -147,11 +148,10 @@ function BorrowingCard(props) {
                   spacing={1}
                   style={{ alignItems: "center" }}
                 >
-                  <Grid item xs={4}>
+                  <Grid item xs={props.currentId === props.id ? 4 : 6}>
                     <Typography
-                      variant="caption"
+                      variant="body1"
                       align="left"
-                      color="textSecondary"
                       component="p"
                     >
                       Return Date:
@@ -173,15 +173,18 @@ function BorrowingCard(props) {
                       </FormControl>
                     </Grid>
                   ) : (
-                    <Grid item xs={8}>
-                      <Button
+                    <Grid item xs={6}>
+                     {token.role === "admin" ? 
+                     (<Button
                         onClick={() => handleSetReturnDate(props.id)}
                         size="small"
                         variant="contained"
                         color="primary"
                       >
                         set return date
-                      </Button>
+                      </Button>): (
+                        <Typography textTransform='uppercase' variant="body2" color='error'>not returned</Typography>
+                      )}
                     </Grid>
                   )}
                   {props.currentId === props.id && (
@@ -297,7 +300,8 @@ function BorrowingCard(props) {
             </Grid>
           </Grid>
         </CardContent>
-        <CardActions style={{ justifyContent: "right" }}>
+        {token.role === "admin" &&	(
+          <CardActions style={{ justifyContent: "right" }}>
           {!props.status && (
             <Button
               onClick={() => props.handleDelete(props.id)}
@@ -311,6 +315,8 @@ function BorrowingCard(props) {
             </Button>
           )}
         </CardActions>
+        )}
+        
       </Card>
     </Grid>
   );

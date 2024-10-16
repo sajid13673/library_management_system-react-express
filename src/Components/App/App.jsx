@@ -18,6 +18,7 @@ import SignUp from "../../Screens/SignUp";
 import { createTheme, Paper, ThemeProvider } from "@mui/material";
 import Home from "../../Screens/Home";
 import { useAuth } from "../../Utils/authProvider";
+import UserBorrowings from "../../Screens/Borrowing/UserBorrowings";
 
 function App() {
   const defaultImage =
@@ -36,6 +37,7 @@ function App() {
   const [memberPage, setMemberPage] = React.useState(1);
   const [membersPerPage, setMembersPerPage] = React.useState(9);
   const [darkMode, setDarkMode] = useState(false);
+  const [user, setUser] = React.useState({})
   const theme = createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
@@ -55,6 +57,14 @@ function App() {
           },
         },
       },
+      MuiCardHeader: {
+        defaultProps: {
+          style: {
+            textAlign: "center",
+            textTransform: "uppercase",
+          },
+        },
+      }
     },
   });
   const {token} = useAuth()
@@ -117,9 +127,21 @@ function App() {
         .catch((err) => reject(err));
     });
   }
+  const getUser = async () => {
+    await axios
+     .get("http://127.0.0.1:8000/api/profile")
+     .then((res) => {
+        console.log(res.data.data);
+        setUser(res.data.data)
+      })
+     .catch((err) => {
+        console.log(err.response.data.message);
+      });
+  }
   React.useEffect(() => {
     token?.role === "admin" && getMembers("", 9);
     getBooks();
+    getUser();
   }, [token]);
   useEffect(() => {
     getBooks();
@@ -140,6 +162,7 @@ function App() {
                       <NavBar
                         darkMode={darkMode}
                         setDarkMode={(bool) => setDarkMode(bool)}
+                        
                       />
                       <Home />
                     </>
@@ -165,6 +188,20 @@ function App() {
                     </>
                   }
                 />
+              </Route>
+              <Route element={<ProtectedRoute roles={["user"]} />}>
+                  <Route
+                  path="my-borrowings"
+                  element={
+                    <>
+                    <NavBar
+                      darkMode={darkMode}
+                      setDarkMode={(bool) => setDarkMode(bool)}
+                    />
+                  <UserBorrowings borrowings={user?.member?.borrowing}/>
+                  </>
+                }
+                  />
               </Route>
               <Route element={<ProtectedRoute roles={["admin"]} />}>
                 <Route
