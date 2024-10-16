@@ -164,7 +164,7 @@ function App() {
                         setDarkMode={(bool) => setDarkMode(bool)}
                         
                       />
-                      <Home />
+                      <Home user={user}/>
                     </>
                   }
                 />
