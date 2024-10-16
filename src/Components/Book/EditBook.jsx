@@ -47,7 +47,7 @@ function EditBook(props) {
         handleSubmit={(values) => handleSubmit(values)}
         validateOnlyNumbers={(str) => props.validateOnlyNumbers(str)}
         book={book}
-        title="EDIT BOOK"
+        title="update book"
       />
     </Box>
   );
