@@ -67,7 +67,7 @@ export default function MemberList(props) {
               handleEditMember={(id) => handleEditMember(id)}
               handleDeleteMember={(id) => handleDeleteMember(id)}
               handleBorrowings={(id) => handleBorrowings(id)}
-              activeBorrowings={row.activeBorrowings}
+              activeBorrowings={row.activeBorrowingStatus}
             />
           ))
         ) : (
