@@ -48,7 +48,7 @@ function EditMember(props) {
         validateOnlyNumbers={(str) => props.validateOnlyNumbers(str)}
         member={member}
         handleSubmit={(formData) => handleSubmit(formData)}
-        title={"Edit Member"}
+        type={"update"}
       />
     </Box>
   );

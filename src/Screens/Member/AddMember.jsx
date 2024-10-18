@@ -32,12 +32,13 @@ function AddMember(props) {
       justifyContent="center"
       alignItems="center"
       flex={1}
+      p={2}
     >
       <MemberForm
         validateEmail={(str) => props.validateEmail(str)}
         validateOnlyNumbers={(str) => props.validateOnlyNumbers(str)}
         handleSubmit={(formData, formik) => handleSubmit(formData, formik)}
-        title={"Add Member"}
+        type={"add"}
       />
     </Box>
   );

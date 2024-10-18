@@ -59,7 +59,7 @@ export default function MemberList(props) {
               key={row.id}
               id={row.id}
               name={row.name}
-              email={row.email}
+              email={row.user.email}
               phone_number={row.phone_number}
               address={row.address}
               path={row.path}
