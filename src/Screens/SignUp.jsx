@@ -19,7 +19,7 @@ function SignUp() {
       console.log(values);
 
       axios
-        .post(`http://127.0.0.1:8000/api/register`, values)
+        .post(`http://localhost:5000/api/register`, values)
         .then((res) => {
           res.status && navigate("/login");
         })

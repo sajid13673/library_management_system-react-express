@@ -18,7 +18,7 @@ function MemberBorrowingList(props) {
     setLoading(true);
     await axios
       .get(
-        `http://127.0.0.1:8000/api/member/${memberId}?borrowing=1&page=${borrowingPage}&per_page=${borrowingsPerPage}`
+        `http://localhost:5000/api/member/${memberId}?borrowing=1&page=${borrowingPage}&per_page=${borrowingsPerPage}`
       )
       .then((res) => {
         if (res.data.status) {

@@ -73,17 +73,17 @@ export default function MemberForm(props) {
     if (!values.name) {
       errors.name = "Required";
     }
-    if (!values.phone_number) {
-      errors.phone_number = "Required";
-    } else if (!props.validateOnlyNumbers(values.phone_number)) {
-      errors.phone_number = "Invalid phone number";
-    } else if (values.phone_number.length !== 10) {
+    if (!values.phoneNumber) {
+      errors.phoneNumber = "Required";
+    } else if (!props.validateOnlyNumbers(values.phoneNumber)) {
+      errors.phoneNumber = "Invalid phone number";
+    } else if (values.phoneNumber.length !== 10) {
       if (currentPhoneNumber !== "") {
-        if (currentPhoneNumber !== values.phone_number) {
-          errors.phone_number = "Phone number must 10 digits long";
+        if (currentPhoneNumber !== values.phoneNumber) {
+          errors.phoneNumber = "Phone number must 10 digits long";
         }
       } else {
-        errors.phone_number = "Phone number must 10 digits long";
+        errors.phoneNumber = "Phone number must 10 digits long";
       }
     }
     if (!values.address) {
@@ -105,7 +105,7 @@ export default function MemberForm(props) {
       password: "",
       password_confirmation: "",
       name: "",
-      phone_number: "",
+      phoneNumber: "",
       address: "",
       image: "",
     },
@@ -122,10 +122,10 @@ export default function MemberForm(props) {
       formik.setValues({
         ...formik.values,
         name: member.name,
-        phone_number: member.phone_number,
+        phoneNumber: member.phoneNumber,
         address: member.address,
       });
-      setCurrentPhoneNumber(member.phone_number);
+      setCurrentPhoneNumber(member.phoneNumber);
     }
   }, [props.member]);
   return (
@@ -225,15 +225,15 @@ export default function MemberForm(props) {
         <FormControl>
           <InputLabel htmlFor="my-input">Phone Number</InputLabel>
           <Input
-            error={formik.errors.phone_number}
-            name="phone_number"
+            error={formik.errors.phoneNumber}
+            name="phoneNumber"
             type="text"
             aria-describedby="my-helper-text"
-            value={formik.values.phone_number}
+            value={formik.values.phoneNumber}
             onChange={formik.handleChange}
           />
-          {formik.errors.phone_number ? (
-            <div className="error">{formik.errors.phone_number}</div>
+          {formik.errors.phoneNumber ? (
+            <div className="error">{formik.errors.phoneNumber}</div>
           ) : null}
         </FormControl>
         <FormControl>

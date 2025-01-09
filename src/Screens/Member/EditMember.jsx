@@ -13,7 +13,7 @@ function EditMember(props) {
   const [member, setMember] = React.useState({});
   const getMember = async () => {
     await axios
-      .get("http://127.0.0.1:8000/api/member/" + memberId)
+      .get("http://localhost:5000/api/member/" + memberId)
       .then((res) => {
         if (res.data.status) {
           setMember(res.data.data);
@@ -24,7 +24,7 @@ function EditMember(props) {
   const handleSubmit = async (formData) => {
     formData.append("_method", "put");
     await axios
-      .post("http://127.0.0.1:8000/api/member/" + memberId, formData)
+      .post("http://localhost:5000/api/member/" + memberId, formData)
       .then((res) => {
         if (res.data.status) {
           navigate("/member-list");

@@ -11,7 +11,7 @@ export default function MembersCard(props) {
             <CardContent>
               <img
                 style={{ height: "60px" }}
-                src={props.path !== null ? props.path : props.defaultImage}
+                src={props.path !== null ? `http://localhost:5000${props.path}` : props.defaultImage}
                 alt="productImage"
               />
               <Typography variant="h5" component="div">

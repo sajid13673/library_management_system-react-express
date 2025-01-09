@@ -9,7 +9,7 @@ function AddBook(props) {
     const formData = new FormData();
     Object.keys(values).map((key) => formData.append(key, values[key]));
     await axios
-      .post("http://127.0.0.1:8000/api/book", formData)
+      .post("http://localhost:5000/api/books", formData)
       .then((res) => {
         if (res.data.status) {
           props.getBooks();

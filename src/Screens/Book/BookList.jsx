@@ -15,6 +15,9 @@ import Loading from "../../Components/Loading";
 export default function BookList(props) {
   const totalPages = props.totalPages;
   const data = Array.from(props.books);
+  console.log("data");
+  console.log(data);
+  
   const navigate = useNavigate();
   function handleBookEdit(id) {
     console.log(id);
@@ -22,7 +25,7 @@ export default function BookList(props) {
   }
   function handleBookDelete(id) {
     axios
-      .delete("http://127.0.0.1:8000/api/book/" + id)
+      .delete("http://localhost:5000/api/books/" + id)
       .then((res) => {
         if (res.data.status) {
           console.log("book deleted");
@@ -50,7 +53,7 @@ export default function BookList(props) {
               author={row.author}
               publisher={row.publisher}
               year={row.year}
-              path={row.path}
+              path={row.images[0]?.url}
               status={row.status}
               activeBorrowings={row.activeBorrowings}
               defaultImage={props.defaultImage}

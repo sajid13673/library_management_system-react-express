@@ -10,7 +10,7 @@ function EditBook(props) {
   const id = location.state.id;
   const [book, setBook] = React.useState({});
   const getBookById = async (id) => {
-    await axios.get("http://127.0.0.1:8000/api/book/" + id).then((res) => {
+    await axios.get("http://localhost:5000/api/books/" + id).then((res) => {
       console.log(res.data);
       if (res.data.status) {
         setBook(res.data.data);
@@ -20,9 +20,8 @@ function EditBook(props) {
   const handleSubmit = async (values) => {
     const formData = new FormData();
     Object.keys(values).map((key) => formData.append(key, values[key]));
-    formData.append("_method", "put");
     await axios
-      .post("http://127.0.0.1:8000/api/book/" + id, formData)
+      .put("http://localhost:5000/api/books/" + id, formData)
       .then((res) => {
         if (res.data.status) {
           navigate("/");

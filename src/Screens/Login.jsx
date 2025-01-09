@@ -3,7 +3,7 @@ import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useFormik } from "formik";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../Utils/authProvider";
+import { useAuth } from "../utils/AuthProvider";
 import {
   Box,
   Button,
@@ -43,7 +43,7 @@ export default function Login(props) {
     validate: validate,
     onSubmit: (values) => {
       axios
-        .post("http://127.0.0.1:8000/api/login", values)
+        .post("http://localhost:5000/api/login", values)
         .then((res) => {
           if (res.data.status) {
             setToken({

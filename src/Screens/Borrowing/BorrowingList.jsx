@@ -16,16 +16,16 @@ function BorrowingList(props) {
   const [borrowingPage, setBorrowingPage] = React.useState(1);
   const [borrowingsPerPage, setBorrowingsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
-  const borrowingsArray = borrowings.data ? Array.from(borrowings.data) : [];
+  const borrowingsArray = borrowings ? Array.from(borrowings) : [];
   async function getBorrowings() {
     setLoading(true);
     await axios
       .get(
-        `http://127.0.0.1:8000/api/borrowing?per_page=${borrowingsPerPage}&page=${borrowingPage}`
+        `http://localhost:5000/api/borrowings?per_page=${borrowingsPerPage}&page=${borrowingPage}`
       )
       .then((res) => {
         if (res.data.status) {
-          console.log(res.data.data);
+          console.log(res.data);
           setBorrowings(res.data.data);
           setTotalPages(res.data.data.last_page);
           setLoading(false);

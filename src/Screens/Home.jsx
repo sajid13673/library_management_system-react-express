@@ -1,7 +1,7 @@
 import { Box } from "@mui/material";
 import React from "react";
 import UserHome from "../Components/Home/UserHome";
-import { useAuth } from "../Utils/authProvider";
+import { useAuth } from "../utils/AuthProvider";
 import AdminHome from "../Components/Home/AdminHome";
 
 function Home({ user }) {

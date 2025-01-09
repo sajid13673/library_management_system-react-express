@@ -13,11 +13,11 @@ import EditMember from "../../Screens/Member/EditMember";
 import AddBorrowing from "../../Screens/Borrowing/AddBorrowing";
 import MemberBorrowingList from "../../Screens/Member/MemberBorrowingList";
 import BorrowingList from "../../Screens/Borrowing/BorrowingList";
-import { ProtectedRoute } from "../../Utils/protectedRoute";
+import { ProtectedRoute } from "../../utils/ProtectedRoute";
 import SignUp from "../../Screens/SignUp";
 import { createTheme, Paper, ThemeProvider } from "@mui/material";
 import Home from "../../Screens/Home";
-import { useAuth } from "../../Utils/authProvider";
+import { useAuth } from "../../utils/AuthProvider";
 import UserBorrowings from "../../Screens/Borrowing/UserBorrowings";
 
 function App() {
@@ -72,11 +72,11 @@ function App() {
     setLoading(true);
     await axios
       .get(
-        `http://127.0.0.1:8000/api/member?page=${memberPage}&per_page=${membersPerPage}`
+        `http://localhost:5000/api/members?page=${memberPage}&per_page=${membersPerPage}`
       )
       .then((res) => {
-        console.log(res.data.data);
-        setMembers(res.data.data);
+        console.log(res.data);
+        setMembers(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -85,14 +85,15 @@ function App() {
   };
   const getBooks = async () => {
     setLoading(true);
-    const link = token?.role === "admin" ? `http://127.0.0.1:8000/api/book` : `http://127.0.0.1:8000/api/member_book`;
+    const link = token?.role === "admin" ? `http://localhost:5000/api/books` : `http://localhost:5000/api/member_book`;
     await axios
       .get(
-        `${link}?page=${bookPage}&per_page=${booksPerPage}`
+        `${link}?page=${bookPage}&perPage=${booksPerPage}`
       )
       .then((res) => {
-        console.log(res.data.data);
-        setBooks(res.data.data);
+        console.log("books");
+        console.log(res.data);
+        setBooks(res.data);
         setLoading(false);
       })
       .catch((err) => {
@@ -102,7 +103,7 @@ function App() {
   function handleDeleteBorrowing(id) {
     return new Promise(function (resolve, reject) {
       axios
-        .delete("http://127.0.0.1:8000/api/borrowing/" + id)
+        .delete("http://localhost:5000/api/borrowing/" + id)
         .then((res) => {
           if (res.data.status) {
             console.log("borrowing deleted");
@@ -118,7 +119,7 @@ function App() {
     form.append("_method", "put");
     return new Promise((resolve, reject) => {
       axios
-        .post("http://127.0.0.1:8000/api/borrowing/" + id, formData)
+        .post("http://localhost:5000/api/borrowing/" + id, formData)
         .then((res) => {
           if (res.data.status) {
             resolve(true);
@@ -129,7 +130,7 @@ function App() {
   }
   const getUser = async () => {
     await axios
-     .get("http://127.0.0.1:8000/api/profile")
+     .get("http://localhost:5000/api/profile")
      .then((res) => {
         console.log(res.data.data);
         setUser(res.data.data)

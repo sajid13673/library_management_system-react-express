@@ -8,7 +8,7 @@ function AddMember(props) {
   const navigate = useNavigate();
   const handleSubmit = async (formData, formik) => {
     axios
-      .post("http://127.0.0.1:8000/api/member", formData)
+      .post("http://localhost:5000/api/members", formData)
       .then((res) => {
         if (res.data.status) {
           props.getMembers();
@@ -21,8 +21,8 @@ function AddMember(props) {
         if (errors.email) {
           formik.setFieldError("email", errors.email);
         }
-        if (errors.phone_number) {
-          formik.setFieldError("phone_number", errors.phone_number);
+        if (errors.phoneNumber) {
+          formik.setFieldError("phoneNumber", errors.phoneNumber);
         }
       });
   };

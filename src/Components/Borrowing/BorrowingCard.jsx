@@ -19,7 +19,7 @@ import {
   Zoom,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
-import { useAuth } from "../../Utils/authProvider";
+import { useAuth } from "../../utils/AuthProvider";
 
 const useStyles = makeStyles({
   root: {

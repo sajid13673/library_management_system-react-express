@@ -12,10 +12,12 @@ import {
   Typography,
   Tooltip,
 } from "@mui/material";
-import { useAuth } from "../../Utils/authProvider";
+import { useAuth } from "../../utils/AuthProvider";
 
 export default function BookCard(props) {
   const { token } = useAuth();
+  console.log(props.path);
+  
   return (
     <Grid item xs={12} sm={12} md={6} lg={4}>
       <Card sx={{ minWidth: 200 }}>
@@ -29,7 +31,7 @@ export default function BookCard(props) {
         >
           <img
             style={{ maxWidth: "100px" }}
-            src={props.path !== null ? props.path : props.defaultImage}
+            src={props.path !== null ? `http://localhost:5000${props.path}` : props.defaultImage}
             alt="productImage"
           />
           <Typography variant="h5" component="div">

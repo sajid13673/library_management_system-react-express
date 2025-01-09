@@ -29,7 +29,7 @@ export default function MemberList(props) {
   }
   function handleDeleteMember(id) {
     axios
-      .delete("http://127.0.0.1:8000/api/member/" + id)
+      .delete("http://localhost:5000/api/member/" + id)
       .then((res) => {
         if (res.data.status) {
           console.log("member deleted");
@@ -62,7 +62,7 @@ export default function MemberList(props) {
               email={row.user.email}
               phone_number={row.phone_number}
               address={row.address}
-              path={row.path}
+              path={row?.image?.url}
               defaultImage={props.defaultImage}
               handleEditMember={(id) => handleEditMember(id)}
               handleDeleteMember={(id) => handleDeleteMember(id)}

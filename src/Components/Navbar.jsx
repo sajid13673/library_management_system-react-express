@@ -14,7 +14,7 @@ import MenuItem from '@mui/material/MenuItem';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
-import { useAuth } from '../Utils/authProvider';
+import { useAuth } from '../utils/AuthProvider';
 import { FormControlLabel, styled, Switch } from '@mui/material';
 
 const settings = ['profile', 'account', 'dashboard', 'logout'];
@@ -104,7 +104,7 @@ const navigateToPage = (page) => {
   };
     async function handleLogout() {
     await axios
-      .get("http://127.0.0.1:8000/api/logout")
+      .get("http://localhost:5000/api/logout")
       .then((res) => {
         if (res.data.status) {
           setToken(null);

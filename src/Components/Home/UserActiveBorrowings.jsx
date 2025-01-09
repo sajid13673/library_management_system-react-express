@@ -38,7 +38,7 @@ function UserActiveBorrowings({ user }) {
         p={1}
         justifyContent={"center"}
       >
-        {user?.member?.activeBorrowings.map((borrowing) => (
+        {user?.member?.borrowings.map((borrowing) => (
           <Grid xs={12} sm={6} key={borrowing.id}>
             <Card key={borrowing.id} sx={{ height: "100%" }}>
               <CardContent>

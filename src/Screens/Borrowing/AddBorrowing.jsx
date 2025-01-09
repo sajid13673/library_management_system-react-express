@@ -50,7 +50,7 @@ function AddBorrowing(props) {
   async function getMembers() {
     setLoading(true);
     await axios
-      .get("http://127.0.0.1:8000/api/member")
+      .get("http://localhost:5000/api/member")
       .then((res) => {
         if (res.data.status) {
           setMembers(res.data.data);
@@ -62,7 +62,7 @@ function AddBorrowing(props) {
   }
   async function getBookById() {
     await axios
-      .get("http://127.0.0.1:8000/api/book/" + bookId)
+      .get("http://localhost:5000/api/book/" + bookId)
       .then((res) => {
         if (res.data.status) {
           setBook(res.data.data);
@@ -77,7 +77,7 @@ function AddBorrowing(props) {
       form.append("_method", "put");
       form.set("status", 0);
       await axios
-        .post("http://127.0.0.1:8000/api/borrowing", formData)
+        .post("http://localhost:5000/api/borrowing", formData)
         .then((res) => {
           if (res.data.status) {
             props.getBooks();
