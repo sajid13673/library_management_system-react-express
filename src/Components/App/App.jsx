@@ -4,7 +4,6 @@ import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "../../Screens/Login";
 import AddMember from "../../Screens/Member/AddMember";
 import AddBook from "../../Screens/Book/AddBook";
-import NavBar from "../Navbar";
 import MemberList from "../../Screens/Member/MemberList";
 import BookList from "../../Screens/Book/BookList";
 import EditBook from "../Book/EditBook";
@@ -19,6 +18,8 @@ import Home from "../../Screens/Home";
 import { useAuth } from "../../utils/AuthProvider";
 import UserBorrowings from "../../Screens/Borrowing/UserBorrowings";
 import useApi from "../../Hooks/useApi";
+import { ThemeProvider as CustomThemeProvider, useTheme} from "../../Context/ThemeContext";
+import Layout from "../Layout";
 
 function App() {
   const defaultImage = "https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829";
@@ -35,7 +36,7 @@ function App() {
   const [booksPerPage, setBooksPerPage] = React.useState(9);
   const [memberPage, setMemberPage] = React.useState(1);
   const [membersPerPage, setMembersPerPage] = React.useState(9);
-  const [darkMode, setDarkMode] = useState(false);
+  const {darkMode} = useTheme();
   const [user, setUser] = React.useState({})
   const { fetchData } = useApi([]);
   const theme = createTheme({
@@ -150,24 +151,15 @@ function App() {
                 <Route
                   path="/"
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                        
-                      />
+                    <Layout>
                       <Home user={user}/>
-                    </>
+                    </Layout>
                   }
                 />
                 <Route
                   path="/book-list"
                   element={
-                    <>
-                      <NavBar 
-                      darkMode={darkMode}
-                      setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <BookList
                         books={books.data ? books.data : []}
                         totalPages={books.last_page ? books.last_page : 1}
@@ -177,7 +169,7 @@ function App() {
                         getBooks={() => getBooks()}
                         loading={loading}
                       />
-                    </>
+                    </Layout>
                   }
                 />
               </Route>
@@ -185,13 +177,9 @@ function App() {
                   <Route
                   path="my-borrowings"
                   element={
-                    <>
-                    <NavBar
-                      darkMode={darkMode}
-                      setDarkMode={(bool) => setDarkMode(bool)}
-                    />
-                  <UserBorrowings borrowings={user?.member?.borrowing}/>
-                  </>
+                    <Layout>
+                      <UserBorrowings borrowings={user?.member?.borrowing}/>
+                    </Layout>
                 }
                   />
               </Route>
@@ -200,26 +188,18 @@ function App() {
                   path="/add-book"
                   exact
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <AddBook
                         getBooks={() => getBooks()}
                         validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                       />
-                    </>
+                    </Layout>
                   }
                 />
                 <Route
                   path="/member-list"
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <MemberList
                         members={members.data ? members.data : []}
                         defaultImage={defaultImage}
@@ -229,63 +209,47 @@ function App() {
                         setMemberPage={(page) => setMemberPage(page)}
                         loading={loading}
                       />
-                    </>
+                    </Layout>
                   }
                 />
                 <Route
                   path="/edit-book"
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <EditBook
                         getBooks={() => getBooks()}
                         validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                       />
-                    </>
+                    </Layout>
                   }
                 />
                 <Route
                   path="/edit-member"
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <EditMember
                         getMembers={() => getMembers()}
                         validateEmail={(str) => validateEmail(str)}
                         validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                       />
-                    </>
+                    </Layout>
                   }
                 />
                 <Route
                   path="/add-borrowing"
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <AddBorrowing
                         getBooks={() => getBooks()}
                         getMembers={() => getMembers()}
                       />
-                    </>
+                    </Layout>
                   }
                 />
                 <Route
                   path="/member-borrowing-list"
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <MemberBorrowingList
                         handleConfirmReturn={(id, formData, book) =>
                           handleConfirmReturn(id, formData, book)
@@ -296,17 +260,13 @@ function App() {
                           handleDeleteBorrowing(id)
                         }
                       />
-                    </>
+                    </Layout>
                   }
                 />
                 <Route
                   path="/borrowing-list"
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <BorrowingList
                         getBooks={() => getBooks()}
                         getMembers={() => getMembers()}
@@ -317,23 +277,19 @@ function App() {
                           handleConfirmReturn(id, formData, book)
                         }
                       />
-                    </>
+                    </Layout>
                   }
                 />
                 <Route
                   path="/add-member"
                   element={
-                    <>
-                      <NavBar
-                        darkMode={darkMode}
-                        setDarkMode={(bool) => setDarkMode(bool)}
-                      />
+                    <Layout>
                       <AddMember
                         getMembers={() => getMembers()}
                         validateEmail={(str) => validateEmail(str)}
                         validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                       />
-                    </>
+                    </Layout>
                   }
                 />
               </Route>
@@ -350,7 +306,11 @@ function App() {
           </BrowserRouter>
       </Paper>
     </ThemeProvider>
-  );
+    );
 }
-
-export default App;
+const AppWrapper = () => ( 
+  <CustomThemeProvider> 
+    <App /> 
+  </CustomThemeProvider>
+);
+export default AppWrapper;
