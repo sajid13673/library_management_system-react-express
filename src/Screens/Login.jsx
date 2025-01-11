@@ -1,7 +1,7 @@
+// Screens/Login.jsx
 import React from "react";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useFormik } from "formik";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthProvider";
 import {
@@ -14,6 +14,7 @@ import {
   InputAdornment,
   InputLabel,
 } from "@mui/material";
+import useApi from "../Hooks/useApi"; 
 
 export default function Login(props) {
   const { setToken } = useAuth();
@@ -35,32 +36,37 @@ export default function Login(props) {
     }
     return errors;
   };
+
+  const { fetchData, loading } = useApi([]);
+
   const formik = useFormik({
     initialValues: {
       email: "",
       password: "",
     },
     validate: validate,
-    onSubmit: (values) => {
-      axios
-        .post("http://localhost:5000/api/login", values)
-        .then((res) => {
-          if (res.data.status) {
-            setToken({
-              token: res.data.access_token,
-              role: res.data.role
-            });
-            navigate("/");
-          }
-        })
-        .catch((err) => console.log(err));
+    onSubmit: async (values) => {
+      const res = await fetchData({
+        method: "POST",
+        url: "/login",
+        data: values,
+      });
+      if (res && res.data.status) {
+        setToken({
+          token: res.data.access_token,
+          role: res.data.role,
+        });
+        navigate("/");
+      }
     },
   });
+
   React.useEffect(() => {
     if (localStorage.getItem("token")) {
       navigate("/");
     }
   }, []);
+
   return (
     <Box
       sx={{
@@ -119,8 +125,9 @@ export default function Login(props) {
             variant="contained"
             type="submit"
             sx={{ width: "60%", mx: "auto" }}
+            disabled={loading}
           >
-            Login
+            {loading ? "Logging in..." : "Login"}
           </Button>
           <Button
             variant="text"

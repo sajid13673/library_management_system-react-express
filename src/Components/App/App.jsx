@@ -7,7 +7,6 @@ import AddBook from "../../Screens/Book/AddBook";
 import NavBar from "../Navbar";
 import MemberList from "../../Screens/Member/MemberList";
 import BookList from "../../Screens/Book/BookList";
-import axios from "axios";
 import EditBook from "../Book/EditBook";
 import EditMember from "../../Screens/Member/EditMember";
 import AddBorrowing from "../../Screens/Borrowing/AddBorrowing";
@@ -19,10 +18,10 @@ import { createTheme, Paper, ThemeProvider } from "@mui/material";
 import Home from "../../Screens/Home";
 import { useAuth } from "../../utils/AuthProvider";
 import UserBorrowings from "../../Screens/Borrowing/UserBorrowings";
+import useApi from "../../Hooks/useApi";
 
 function App() {
-  const defaultImage =
-    "https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829";
+  const defaultImage = "https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829";
   const [members, setMembers] = React.useState({});
   const [books, setBooks] = React.useState({});
   const [loading, setLoading] = React.useState(false);
@@ -38,6 +37,7 @@ function App() {
   const [membersPerPage, setMembersPerPage] = React.useState(9);
   const [darkMode, setDarkMode] = useState(false);
   const [user, setUser] = React.useState({})
+  const { fetchData } = useApi([]);
   const theme = createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
@@ -67,43 +67,33 @@ function App() {
       }
     },
   });
-  const {token} = useAuth()
+  const { token } = useAuth();
+
   const getMembers = async () => {
     setLoading(true);
-    await axios
-      .get(
-        `http://localhost:5000/api/members?page=${memberPage}&per_page=${membersPerPage}`
-      )
-      .then((res) => {
-        console.log(res.data);
-        setMembers(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-      });
+    const res = await fetchData({ method: "GET", url: `/members?page=${memberPage}&per_page=${membersPerPage}` });
+    if (res) {
+      console.log(res.data);
+      setMembers(res.data);
+      setLoading(false);
+    }
   };
+
   const getBooks = async () => {
     setLoading(true);
     const link = token?.role === "admin" ? `http://localhost:5000/api/books` : `http://localhost:5000/api/member_book`;
-    await axios
-      .get(
-        `${link}?page=${bookPage}&perPage=${booksPerPage}`
-      )
-      .then((res) => {
-        console.log("books");
-        console.log(res.data);
-        setBooks(res.data);
-        setLoading(false);
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-      });
+    const res = await fetchData({ method: "GET", url: `${link}?page=${bookPage}&perPage=${booksPerPage}` });
+    if (res) {
+      console.log("books");
+      console.log(res.data);
+      setBooks(res.data);
+      setLoading(false);
+    }
   };
+
   function handleDeleteBorrowing(id) {
     return new Promise(function (resolve, reject) {
-      axios
-        .delete("http://localhost:5000/api/borrowing/" + id)
+      fetchData({ method: "DELETE", url: `http://localhost:5000/api/borrowing/${id}` })
         .then((res) => {
           if (res.data.status) {
             console.log("borrowing deleted");
@@ -113,13 +103,13 @@ function App() {
         .catch((err) => reject(err));
     });
   }
+
   async function handleConfirmReturn(id, formData, book) {
     const form = new FormData();
     Object.keys(book).map((key) => form.append(key, book[key]));
     form.append("_method", "put");
     return new Promise((resolve, reject) => {
-      axios
-        .post("http://localhost:5000/api/borrowing/" + id, formData)
+      fetchData({ method: "POST", url: `http://localhost:5000/api/borrowing/${id}`, data: formData })
         .then((res) => {
           if (res.data.status) {
             resolve(true);
@@ -128,30 +118,31 @@ function App() {
         .catch((err) => reject(err));
     });
   }
+
   const getUser = async () => {
-    await axios
-     .get("http://localhost:5000/api/profile")
-     .then((res) => {
-        console.log(res.data.data);
-        setUser(res.data.data)
-      })
-     .catch((err) => {
-        console.log(err.response.data.message);
-      });
-  }
-  React.useEffect(() => {
+    const res = await fetchData({ method: "GET", url: "/profile" });
+    if (res) {
+      console.log(res.data.data);
+      setUser(res.data.data);
+    }
+  };
+
+  useEffect(() => {
     token?.role === "admin" && getMembers("", 9);
     getBooks();
     getUser();
   }, [token]);
+
   useEffect(() => {
     getBooks();
   }, [bookPage]);
+
   useEffect(() => {
     getMembers();
   }, [memberPage]);
+
   return (
-    <ThemeProvider theme={theme}>
+        <ThemeProvider theme={theme}>
       <Paper sx={{ minHeight: "100vh", minWidth: "18rem", display: 'flex', flexDirection: 'column' }}>
           <BrowserRouter>
             <Routes>

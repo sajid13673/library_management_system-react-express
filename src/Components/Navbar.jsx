@@ -16,6 +16,7 @@ import { useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { useAuth } from '../utils/AuthProvider';
 import { FormControlLabel, styled, Switch } from '@mui/material';
+import useApi from '../Hooks/useApi';
 
 const settings = ['profile', 'account', 'dashboard', 'logout'];
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
@@ -79,6 +80,7 @@ function Navbar(props) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const { setToken, token } = useAuth();
+  const {fetchData, error} = useApi([]);
 
 const pages = token.role == "admin" ? ["book list", "member list", "add book", "borrowing list"] : ["book list", "my borrowings"];
 const navigateToPage = (page) => {
@@ -103,16 +105,14 @@ const navigateToPage = (page) => {
     setAnchorElUser(null);
   };
     async function handleLogout() {
-    await axios
-      .get("http://localhost:5000/api/logout")
-      .then((res) => {
-        if (res.data.status) {
-          setToken(null);
-        }
-      })
-      .catch((err) => {
-        console.log(err.response.data.message);
-      });
+    const res = await fetchData({method: "GET", url: "/logout"});
+    if(res && res.data.status){
+      setToken(null);
+    }
+    if(error){
+      console.log(error);
+      
+    }
   }
   return (
     <AppBar position="static">

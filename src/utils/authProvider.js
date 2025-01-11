@@ -15,16 +15,10 @@ const AuthProvider = ({ children }) => {
 
   useEffect(() => {
     if (token) {
-      axios.defaults.headers.common["Authorization"] = "Bearer " + token.token;
       localStorage.setItem("token", JSON.stringify(token));
     } else {
-      delete axios.defaults.headers.common["Authorization"];
       localStorage.removeItem("token");
     }
-
-    return () => {
-      delete axios.defaults.headers.common["Authorization"];
-    };
   }, [token]);
 
   const contextValue = useMemo(() => ({
