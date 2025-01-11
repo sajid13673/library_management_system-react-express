@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import MembersCard from "../../Components/Member/MembersCard";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 import {
   Pagination,
   Stack,
@@ -13,10 +12,17 @@ import {
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Loading from "../../Components/Loading";
+import useMembers from "../../Hooks/useMember";
+import useApi from "../../Hooks/useApi";
 
 export default function MemberList(props) {
-  const totalPages = props.totalPages;
-  const data = Array.from(props.members);
+  const { fetchData } = useApi();
+  const [page, setPage] = useState(1);
+  const {members, error, getMembers} = useMembers(page, 5)
+  const data = Array.from(members?.data || []);
+  const totalPages = members?.totalPages || 1;
+  console.log(data);
+  
   const navigate = useNavigate();
   function handleBorrowings(id) {
     navigate("/member-borrowing-list", { state: { memberId: id } });
@@ -27,22 +33,22 @@ export default function MemberList(props) {
   function handleEditMember(id) {
     navigate("/edit-member", { state: { id: id } });
   }
-  function handleDeleteMember(id) {
-    axios
-      .delete("http://localhost:5000/api/member/" + id)
+  async function handleDeleteMember(id) {
+      await fetchData({method: "DELETE", url: `http://localhost:5000/api/members/${id}`})
       .then((res) => {
         if (res.data.status) {
           console.log("member deleted");
-          props.getMembers();
+          getMembers();
         }
       })
       .catch((err) => console.log(err));
   }
   function handleChange(e, value) {
-    props.setMemberPage(value);
+    setPage(value);
   }
   return (
     <Box flex={1} display="flex" flexDirection="column" p={2} gap={2}>
+      {error && <Typography>Error</Typography>}
       <Button
         variant="contained"
         sx={{ maxWidth: "15rem" }}
@@ -84,7 +90,7 @@ export default function MemberList(props) {
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
             count={totalPages}
-            page={props.memberPage}
+            page={page}
             color="primary"
             onChange={handleChange}
           />
