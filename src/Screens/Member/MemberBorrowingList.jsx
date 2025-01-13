@@ -5,7 +5,11 @@ import BorrowingCard from "../../Components/Borrowing/BorrowingCard";
 import { useLocation } from "react-router-dom";
 import { Box, Pagination, Stack } from "@mui/material";
 import Loading from "../../Components/Loading";
+import useMembers from "../../Hooks/useMember";
+import useBooks from "../../Hooks/useBook";
 function MemberBorrowingList(props) {
+  const {getMembers} = useMembers();
+  const {getBooks} = useBooks();
   const location = useLocation();
   const memberId = location.state.memberId;
   const [member, setMember] = React.useState([]);
@@ -32,8 +36,8 @@ function MemberBorrowingList(props) {
   async function handleConfirmReturn(id, formData, book) {
     await props.handleConfirmReturn(id, formData, book).then((res) => {
       if (res) {
-        props.getBooks();
-        props.getMembers();
+        getBooks();
+        getMembers();
         getMemberWithBorrowings();
       }
     });

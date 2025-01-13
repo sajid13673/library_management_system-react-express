@@ -10,19 +10,27 @@ import {
   Box,
 } from "@mui/material";
 import Loading from "../../Components/Loading";
+import useMembers from "../../Hooks/useMember";
+import useBooks from "../../Hooks/useBook";
+import useApi from "../../Hooks/useApi";
+
 function BorrowingList(props) {
+  const {getMembers} = useMembers;
+  const {getBooks} = useBooks();
   const [borrowings, setBorrowings] = React.useState([]);
   const [totalPages, setTotalPages] = React.useState(1);
   const [borrowingPage, setBorrowingPage] = React.useState(1);
   const [borrowingsPerPage, setBorrowingsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
   const borrowingsArray = borrowings ? Array.from(borrowings) : [];
+  const {fetchData} = useApi([]);
+  
   async function getBorrowings() {
     setLoading(true);
-    await axios
-      .get(
-        `http://localhost:5000/api/borrowings?per_page=${borrowingsPerPage}&page=${borrowingPage}`
-      )
+    fetchData({
+      method: "GET",
+      url: `http://localhost:5000/api/borrowings?per_page=${borrowingsPerPage}&page=${borrowingPage}`,
+      })
       .then((res) => {
         if (res.data.status) {
           console.log(res.data);
@@ -36,8 +44,8 @@ function BorrowingList(props) {
   async function handleConfirmReturn(id, formData, book) {
     await props.handleConfirmReturn(id, formData, book).then((res) => {
       if (res) {
-        props.getBooks();
-        props.getMembers();
+        getBooks();
+        getMembers();
         getBorrowings();
       }
     });

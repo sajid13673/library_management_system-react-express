@@ -12,14 +12,19 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import moment from "moment";
 import React, { useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import Loading from "../../Components/Loading";
+import useMembers from "../../Hooks/useMember";
+import useBooks from "../../Hooks/useBook";
+import useApi from "../../Hooks/useApi";
 
-function AddBorrowing(props) {
+function AddBorrowing() {
+  const {fetchData} = useApi([]);
+  const {members, getMembers} = useMembers();
+  const {getBooks} = useBooks();
   const location = useLocation();
   const navigate = useNavigate();
   const bookId = location.state.bookId;
@@ -38,7 +43,6 @@ function AddBorrowing(props) {
     setError(value === null ? true : false);
   };
 
-  const [members, setMembers] = React.useState({});
   const [book, setBook] = React.useState({});
   const [value, setValue] = React.useState(null);
   const [error, setError] = React.useState(false);
@@ -47,22 +51,8 @@ function AddBorrowing(props) {
     getOptionLabel: (option) => option.id + ". " + option.name,
   };
   const [loading, setLoading] = React.useState(false);
-  async function getMembers() {
-    setLoading(true);
-    await axios
-      .get("http://localhost:5000/api/member")
-      .then((res) => {
-        if (res.data.status) {
-          setMembers(res.data.data);
-          setLoading(false);
-          console.log(res.data.data);
-        }
-      })
-      .catch((err) => console.log(err));
-  }
   async function getBookById() {
-    await axios
-      .get("http://localhost:5000/api/book/" + bookId)
+    await fetchData({method: "GET", url: `http://localhost:5000/api/book/${bookId}`})
       .then((res) => {
         if (res.data.status) {
           setBook(res.data.data);
@@ -76,12 +66,16 @@ function AddBorrowing(props) {
       Object.keys(book).map((key) => form.append(key, book[key]));
       form.append("_method", "put");
       form.set("status", 0);
-      await axios
-        .post("http://localhost:5000/api/borrowing", formData)
+      fetchData({
+        method: "POST",
+        url: `http://localhost:5000/api/borrowings`,
+        data: formData,
+        headers: 'application/x-www-form-urlencoded'
+      })
         .then((res) => {
           if (res.data.status) {
-            props.getBooks();
-            props.getMembers();
+            getBooks();
+            getMembers();
             navigate("/");
           }
         })

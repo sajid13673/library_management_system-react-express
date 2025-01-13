@@ -1,5 +1,5 @@
 import "./App.css";
-import React, { useEffect, useMemo, useRef, useState } from "react";
+import React, { useEffect, useMemo } from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Login from "../../Screens/Login";
 import AddMember from "../../Screens/Member/AddMember";
@@ -20,11 +20,9 @@ import UserBorrowings from "../../Screens/Borrowing/UserBorrowings";
 import useApi from "../../Hooks/useApi";
 import { ThemeProvider as CustomThemeProvider, useTheme} from "../../Context/ThemeContext";
 import Layout from "../Layout";
-import useMembers from "../../Hooks/useMember";
 
 function App() {
   const defaultImage = "https://firebasestorage.googleapis.com/v0/b/laravel-product-list-frontend.appspot.com/o/images%2Fno%20image.jpg?alt=media&token=cfaed1bd-c1f4-4566-8dca-25b05e101829";
-  const [books, setBooks] = React.useState({});
   const [loading, setLoading] = React.useState(false);
   function validateEmail(str) {
     return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(str);
@@ -32,13 +30,10 @@ function App() {
   function validateOnlyNumbers(str) {
     return /^[0-9]*$/.test(str);
   }
-  const [bookPage, setBookPage] = React.useState(1);
-  const [booksPerPage, setBooksPerPage] = React.useState(9);
   const [memberPage, setMemberPage] = React.useState(1);
   const {darkMode} = useTheme();
   const [user, setUser] = React.useState({})
   const { fetchData, error } = useApi([]);
-  const {getMembers} = useMembers();
   const theme = useMemo(() => createTheme({
     palette: {
       mode: darkMode ? "dark" : "light",
@@ -70,19 +65,6 @@ function App() {
   }), [darkMode]);
   const { token } = useAuth();
 
-  const getBooks = async () => {
-    setLoading(true);
-    const link = token?.role === "admin" ? `http://localhost:5000/api/books` : `http://localhost:5000/api/member_book`;
-    fetchData({ method: "GET", url: `${link}?page=${bookPage}&perPage=${booksPerPage}` }).then((res)=>{
-      if (res) {
-        console.log(res.data);
-        setBooks(res.data);
-        setLoading(false);
-      }
-    }).catch((err)=>console.log(err))
-    .finally(() => setLoading(false));;
-  };
-
   function handleDeleteBorrowing(id) {
     return new Promise(function (resolve, reject) {
       fetchData({ method: "DELETE", url: `http://localhost:5000/api/borrowing/${id}` })
@@ -100,7 +82,7 @@ function App() {
     const form = new FormData();
     Object.keys(book).map((key) => form.append(key, book[key]));
     return new Promise((resolve, reject) => {
-      fetchData({ method: "PUT", url: `http://localhost:5000/api/borrowing/${id}`, data: formData })
+      fetchData({ method: "PUT", url: `http://localhost:5000/api/borrowings/${id}`, data: formData })
         .then((res) => {
           if (res.data.status) {
             resolve(true);
@@ -120,26 +102,9 @@ function App() {
   };
 
   useEffect(() => {
-    if (token?.role === "admin") {
-      getMembers();
-    }
-    getBooks();
     getUser();
   }, [token]);
   
-  useEffect(() => {
-    if (bookPage > 1) {
-      getBooks();
-    }
-  }, [bookPage]);
-  
-  useEffect(() => {
-    if (memberPage > 1) {
-      getMembers();
-    }
-  }, [memberPage]);
-  
-
   return (
         <ThemeProvider theme={theme}>
           <Paper sx={{ minHeight: "100vh", minWidth: "18rem", display: 'flex', flexDirection: 'column' }}>
@@ -159,12 +124,7 @@ function App() {
                       element={
                         <Layout>
                           <BookList
-                            books={books.data ? books.data : []}
-                            totalPages={books.last_page ? books.last_page : 1}
-                            bookPage={bookPage}
-                            setBookPage={(page) => setBookPage(page)}
                             defaultImage={defaultImage}
-                            getBooks={() => getBooks()}
                             loading={loading}
                           />
                         </Layout>
@@ -188,7 +148,6 @@ function App() {
                       element={
                         <Layout>
                           <AddBook
-                            getBooks={() => getBooks()}
                             validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                           />
                         </Layout>
@@ -212,7 +171,6 @@ function App() {
                       element={
                         <Layout>
                           <EditBook
-                            getBooks={() => getBooks()}
                             validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                           />
                         </Layout>
@@ -223,7 +181,6 @@ function App() {
                       element={
                         <Layout>
                           <EditMember
-                            getMembers={() => getMembers()}
                             validateEmail={(str) => validateEmail(str)}
                             validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                           />
@@ -234,10 +191,7 @@ function App() {
                       path="/add-borrowing"
                       element={
                         <Layout>
-                          <AddBorrowing
-                            getBooks={() => getBooks()}
-                            getMembers={() => getMembers()}
-                          />
+                          <AddBorrowing />
                         </Layout>
                       }
                     />
@@ -249,8 +203,6 @@ function App() {
                             handleConfirmReturn={(id, formData, book) =>
                               handleConfirmReturn(id, formData, book)
                             }
-                            getBooks={() => getBooks()}
-                            getMembers={() => getMembers()}
                             handleDeleteBorrowing={(id) =>
                               handleDeleteBorrowing(id)
                             }
@@ -263,8 +215,6 @@ function App() {
                       element={
                         <Layout>
                           <BorrowingList
-                            getBooks={() => getBooks()}
-                            getMembers={() => getMembers()}
                             handleDeleteBorrowing={(id) =>
                               handleDeleteBorrowing(id)
                             }
@@ -280,7 +230,6 @@ function App() {
                       element={
                         <Layout>
                           <AddMember
-                            getMembers={() => getMembers()}
                             validateEmail={(str) => validateEmail(str)}
                             validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                           />

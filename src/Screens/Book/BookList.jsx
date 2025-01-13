@@ -1,7 +1,6 @@
-import React from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BookCard from "../../Components/Book/BookCard";
-import axios from "axios";
 import {
   Box,
   Pagination,
@@ -11,10 +10,15 @@ import {
   Typography,
 } from "@mui/material";
 import Loading from "../../Components/Loading";
+import useBooks from "../../Hooks/useBook";
+import useApi from "../../Hooks/useApi";
 
 export default function BookList(props) {
-  const totalPages = props.totalPages;
-  const data = Array.from(props.books);
+  const {fetchData} = useApi([]);
+  const [page, setPage] = useState(1)
+  const {books, error, getBooks} = useBooks(page, 9)
+  const data = Array.from(books?.data || []);
+  const totalPages = books?.totalPages || 1;
   console.log("data");
   console.log(data);
   
@@ -23,13 +27,12 @@ export default function BookList(props) {
     console.log(id);
     navigate("/edit-book", { state: { id: id } });
   }
-  function handleBookDelete(id) {
-    axios
-      .delete("http://localhost:5000/api/books/" + id)
+  async function handleBookDelete(id) {
+    
+      fetchData({method: "DELETE", url: `http://localhost:5000/api/books/${id}`})
       .then((res) => {
-        if (res.data.status) {
-          console.log("book deleted");
-          props.getBooks();
+        if (res.status) {
+          getBooks();
         }
       })
       .catch((err) => console.log(err));
@@ -38,7 +41,7 @@ export default function BookList(props) {
     navigate("/add-borrowing", { state: { bookId: bookId } });
   }
   function handleChange(e, value) {
-    props.setBookPage(value);
+    setPage(value);
   }
   React.useEffect(() => {}, []);
   return (
@@ -75,7 +78,7 @@ export default function BookList(props) {
       <Stack spacing={2} sx={{ mt: "auto" }}>
         <Pagination
           count={totalPages}
-          page={props.bookPage}
+          page={page}
           color="primary"
           onChange={handleChange}
         />

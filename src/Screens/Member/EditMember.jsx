@@ -4,8 +4,10 @@ import { useLocation } from "react-router-dom";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
+import useMembers from "../../Hooks/useMember";
 
 function EditMember(props) {
+  const {getMembers} = useMembers();
   const navigate = useNavigate();
   const location = useLocation();
   const memberId = location.state.id;
@@ -28,7 +30,7 @@ function EditMember(props) {
       .then((res) => {
         if (res.data.status) {
           navigate("/member-list");
-          props.getMembers();
+          getMembers();
         }
       });
   };

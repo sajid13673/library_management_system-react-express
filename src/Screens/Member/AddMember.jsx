@@ -3,15 +3,21 @@ import MemberForm from "../../Components/Member/MemberForm";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
-
+import useMembers from "../../Hooks/useMember";
+import useApi from "../../Hooks/useApi";
 function AddMember(props) {
+  const {fetchData} = useApi([]);
+  const {getMembers} = useMembers();
   const navigate = useNavigate();
   const handleSubmit = async (formData, formik) => {
-    axios
-      .post("http://localhost:5000/api/members", formData)
+    fetchData({
+      method: "POST",
+      url: `http://localhost:5000/api/members`,
+      data: formData,
+    })
       .then((res) => {
         if (res.data.status) {
-          props.getMembers();
+          getMembers();
           navigate("/member-list");
         }
       })

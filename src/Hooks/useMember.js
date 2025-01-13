@@ -24,5 +24,4 @@ const useMembers = (page, perPage) => {
 
     return { members, error, getMembers };
 };
-
 export default useMembers;

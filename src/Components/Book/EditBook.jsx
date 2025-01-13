@@ -3,8 +3,9 @@ import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BookForm from "./BookForm";
 import { Box } from "@mui/material";
-
+import useBooks from "../../Hooks/useBook";
 function EditBook(props) {
+  const {getBooks} = useBooks();
   const navigate = useNavigate();
   const location = useLocation();
   const id = location.state.id;
@@ -25,7 +26,7 @@ function EditBook(props) {
       .then((res) => {
         if (res.data.status) {
           navigate("/");
-          props.getBooks();
+          getBooks();
         }
       })
       .catch((err) => console.log(err));
