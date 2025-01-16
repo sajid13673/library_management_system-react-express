@@ -1,17 +1,22 @@
-import axios from "axios";
 import React from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import BookForm from "./BookForm";
 import { Box } from "@mui/material";
 import useBooks from "../../Hooks/useBook";
+import useApi from "../../Hooks/useApi";
+
 function EditBook(props) {
+  const {fetchData} = useApi([]);
   const {getBooks} = useBooks();
   const navigate = useNavigate();
   const location = useLocation();
   const id = location.state.id;
   const [book, setBook] = React.useState({});
   const getBookById = async (id) => {
-    await axios.get("http://localhost:5000/api/books/" + id).then((res) => {
+    fetchData({
+      method: "GET", 
+      url: `http://localhost:5000/api/books/${id}`  
+    }).then((res) => {
       console.log(res.data);
       if (res.data.status) {
         setBook(res.data.data);
@@ -21,11 +26,14 @@ function EditBook(props) {
   const handleSubmit = async (values) => {
     const formData = new FormData();
     Object.keys(values).map((key) => formData.append(key, values[key]));
-    await axios
-      .put("http://localhost:5000/api/books/" + id, formData)
+    fetchData({
+      method: "PUT",
+      url: `http://localhost:5000/api/books/${id}`, 
+      data: formData
+    })
       .then((res) => {
         if (res.data.status) {
-          navigate("/");
+          navigate("/book-list");
           getBooks();
         }
       })
