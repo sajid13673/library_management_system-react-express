@@ -1,10 +1,8 @@
-import axios from "axios";
 import React from "react";
 import BorrowingCard from "../../Components/Borrowing/BorrowingCard";
 import {
   Pagination,
   Stack,
-  Container,
   Grid,
   Typography,
   Box,
@@ -15,7 +13,7 @@ import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 
 function BorrowingList(props) {
-  const {getMembers} = useMembers;
+  const {getMembers} = useMembers();
   const {getBooks} = useBooks();
   const [borrowings, setBorrowings] = React.useState([]);
   const [totalPages, setTotalPages] = React.useState(1);

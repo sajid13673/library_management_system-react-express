@@ -8,7 +8,6 @@ import {
   Divider,
   FormControl,
   Grid,
-  styled,
   TextField,
   Typography,
 } from "@mui/material";
@@ -29,15 +28,15 @@ function AddBorrowing() {
   const navigate = useNavigate();
   const bookId = location.state.bookId;
   const [formData, setFormData] = React.useState({
-    member_id: "",
-    book_id: bookId,
-    due_date: "",
+    memberId: "",
+    bookId: bookId,
+    dueDate: "",
     status: true,
     return_date: "",
   });
   const handleChange = (value) => {
     setFormData((prevFormData) => {
-      return { ...prevFormData, member_id: value === null ? "" : value.id };
+      return { ...prevFormData, memberId: value === null ? "" : value.id };
     });
     setValue(value);
     setError(value === null ? true : false);
@@ -52,7 +51,7 @@ function AddBorrowing() {
   };
   const [loading, setLoading] = React.useState(false);
   async function getBookById() {
-    await fetchData({method: "GET", url: `http://localhost:5000/api/book/${bookId}`})
+    await fetchData({method: "GET", url: `http://localhost:5000/api/books/${bookId}`})
       .then((res) => {
         if (res.data.status) {
           setBook(res.data.data);
@@ -61,16 +60,15 @@ function AddBorrowing() {
       .catch((err) => console.log(err));
   }
   async function handleSubmit() {
-    if (formData.member_id) {
+    if (formData.memberId) {
       const form = new FormData();
       Object.keys(book).map((key) => form.append(key, book[key]));
-      form.append("_method", "put");
       form.set("status", 0);
       fetchData({
         method: "POST",
         url: `http://localhost:5000/api/borrowings`,
         data: formData,
-        headers: 'application/x-www-form-urlencoded'
+        headers: {'Content-Type' :'application/x-www-form-urlencoded'}
       })
         .then((res) => {
           if (res.data.status) {
@@ -89,9 +87,9 @@ function AddBorrowing() {
     getBookById();
     console.log(members);
     const date = moment().format("YYYY-MM-DDTHH:mm:ss");
-    const dueDate = moment(date).add(5, "days").format("YYYY/MM/DD HH:mm:ss");
+    const dueDate = moment(date).add(5, "days").format("YYYY-MM-DD HH:mm:ss");
     setFormData((prevFormData) => {
-      return { ...prevFormData, due_date: dueDate };
+      return { ...prevFormData, dueDate: dueDate };
     });
   }, []);
 
@@ -130,7 +128,7 @@ function AddBorrowing() {
               </Grid>
               <Grid item xs={12}>
                 <Typography variant="h5" align="center">
-                  DUE DATE: {moment(formData.due_date).format("DD MMMM YYYY")}
+                  DUE DATE: {moment(formData.dueDate).format("DD MMMM YYYY")}
                 </Typography>
                 <Divider sx={{ mt: 1 }} />
               </Grid>
