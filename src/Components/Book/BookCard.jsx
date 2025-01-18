@@ -19,8 +19,8 @@ export default function BookCard(props) {
   console.log(props.path);
   
   return (
-    <Grid item xs={12} sm={12} md={6} lg={4}>
-      <Card sx={{ minWidth: 200 }}>
+    <Grid item xs={12} sm={12} md={6} lg={4} >
+      <Card sx={{ minWidth: 200, height: '100%' }}>
         <CardContent
           sx={{
             display: "flex",

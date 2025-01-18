@@ -72,10 +72,10 @@ function BorrowingList(props) {
               key={row.id}
               id={row.id}
               book={row.book}
-              due_date={row.due_date}
+              dueDate={row.dueDate}
               status={row.status}
-              return_date={row.return_date}
-              borrowed_date={row.created_at}
+              returnDate={row.returnDate}
+              borrowed_date={row.createdAt}
               member={row.member.id + ". " + row.member.name}
               handleConfirmReturn={(id, formData, book) =>
                 handleConfirmReturn(id, formData, book)

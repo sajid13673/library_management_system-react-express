@@ -26,7 +26,7 @@ const Item = styled(Paper)(({ theme }) => ({
   alignItems: "center",
 }));
 function UserActiveBorrowings({ user }) {
-  console.log(user?.member?.borrowing);
+  console.log(user?.member?.borrowings);
 
   return (
     <Card>

@@ -71,10 +71,10 @@ function AddBorrowing() {
         headers: {'Content-Type' :'application/x-www-form-urlencoded'}
       })
         .then((res) => {
-          if (res.data.status) {
+          if (res.status) {
             getBooks();
             getMembers();
-            navigate("/");
+            navigate("/borrowing-list");
           }
         })
         .catch((err) => console.log(err));
