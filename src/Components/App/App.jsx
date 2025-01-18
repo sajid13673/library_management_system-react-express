@@ -136,7 +136,7 @@ function App() {
                       path="my-borrowings"
                       element={
                         <Layout>
-                          <UserBorrowings borrowings={user?.member?.borrowing}/>
+                          <UserBorrowings borrowings={user?.member?.borrowings}/>
                         </Layout>
                     }
                       />
