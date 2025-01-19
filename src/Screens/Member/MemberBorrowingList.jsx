@@ -1,5 +1,4 @@
 import { Container, Grid, Typography } from "@material-ui/core";
-import axios from "axios";
 import React from "react";
 import BorrowingCard from "../../Components/Borrowing/BorrowingCard";
 import { useLocation } from "react-router-dom";
@@ -7,28 +6,36 @@ import { Box, Pagination, Stack } from "@mui/material";
 import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useBooks from "../../Hooks/useBook";
+import useApi from "../../Hooks/useApi";
+
 function MemberBorrowingList(props) {
   const {getMembers} = useMembers();
   const {getBooks} = useBooks();
+  const {fetchData} = useApi();
   const location = useLocation();
   const memberId = location.state.memberId;
+  
   const [member, setMember] = React.useState([]);
   const [totalPages, setTotalPages] = React.useState(1);
   const [borrowingPage, setBorrowingPage] = React.useState(1);
   const [borrowingsPerPage, setBorrowingsPerPage] = React.useState(10);
   const [loading, setLoading] = React.useState(false);
-  const borrwings = member.borrowing ? Array.from(member.borrowing.data) : [];
+  const borrwings = member?.borrowings ? Array.from(member.borrowings) : [];
+
   async function getMemberWithBorrowings() {
+  console.log("memberId: " + memberId);
+
     setLoading(true);
-    await axios
-      .get(
-        `http://localhost:5000/api/member/${memberId}?borrowing=1&page=${borrowingPage}&per_page=${borrowingsPerPage}`
-      )
+    fetchData({
+      method: "GET",
+      url: `/members/${memberId}?borrowings=1&borrowingPage=${borrowingPage}&borrowingsPerPage=${borrowingsPerPage}`,
+    })
       .then((res) => {
         if (res.data.status) {
+          console.log(res.data)
           setLoading(false);
           setMember(res.data.data);
-          setTotalPages(res.data.data.borrowing.last_page);
+          setTotalPages(res.data.totalPages);
         }
       })
       .catch((err) => console.log(err));
@@ -67,10 +74,10 @@ function MemberBorrowingList(props) {
               key={row.id}
               id={row.id}
               book={row.book}
-              due_date={row.due_date}
+              dueDate={row.dueDate}
               status={row.status}
-              return_date={row.return_date}
-              borrowed_date={row.created_at}
+              returnDate={row.returnDate}
+              borrowedDate={row.createdAt}
               member={member.id + ". " + member.name}
               handleConfirmReturn={(id, formData, book) =>
                 handleConfirmReturn(id, formData, book)
