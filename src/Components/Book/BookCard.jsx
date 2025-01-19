@@ -13,6 +13,7 @@ import {
   Tooltip,
 } from "@mui/material";
 import { useAuth } from "../../utils/AuthProvider";
+import noImagePic from "../../images/no_image.jpg";
 
 export default function BookCard(props) {
   const { token } = useAuth();
@@ -31,7 +32,7 @@ export default function BookCard(props) {
         >
           <img
             style={{ maxWidth: "100px" }}
-            src={props.path !== null ? `http://localhost:5000${props.path}` : props.defaultImage}
+            src={props.path !== null ? `http://localhost:5000${props.path}` : noImagePic}
             alt="productImage"
           />
           <Typography variant="h5" component="div">

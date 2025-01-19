@@ -65,7 +65,7 @@ function BorrowingCard(props) {
       setError(true);
       setErrorMsg("Enter Valid Date");
     } else if (
-      !moment(props.borrowed_date).isBefore(moment(formData.returnDate))
+      !moment(props.borrowedDate).isBefore(moment(formData.returnDate))
     ) {
       setError(true);
       setErrorMsg("Entered date is before the borrowed date");
@@ -93,9 +93,9 @@ function BorrowingCard(props) {
                 </Grid>
                 <Grid item xs={6}>
                   <Typography align="left" variant="body1" component="p" color="textSecondary">
-                    {moment(props.borrowed_date).format('DD MMMM YYYY')}
+                    {moment(props.borrowedDate).format('DD MMMM YYYY')}
                     <br />
-                    {moment(props.borrowed_date).format('hh:mm:ss A')}
+                    {moment(props.borrowedDate).format('hh:mm:ss A')}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>

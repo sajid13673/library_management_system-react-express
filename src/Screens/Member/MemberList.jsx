@@ -68,8 +68,7 @@ export default function MemberList(props) {
               email={row.user.email}
               phone_number={row.phone_number}
               address={row.address}
-              path={row?.image?.url}
-              defaultImage={props.defaultImage}
+              path={row?.image?.url || null}
               handleEditMember={(id) => handleEditMember(id)}
               handleDeleteMember={(id) => handleDeleteMember(id)}
               handleBorrowings={(id) => handleBorrowings(id)}

@@ -3,6 +3,7 @@ import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import EditIcon from '@mui/icons-material/Edit';
 import ListIcon from '@mui/icons-material/List';
 import { Card, Button, CardActions, CardContent, Grid,Tooltip, Typography } from '@mui/material';
+import noImagePic from '../../images/no_image.jpg'
 
 export default function MembersCard(props) {
   return (
@@ -11,7 +12,7 @@ export default function MembersCard(props) {
             <CardContent>
               <img
                 style={{ height: "60px" }}
-                src={props.path !== null ? `http://localhost:5000${props.path}` : props.defaultImage}
+                src={props.path !== null ? `http://localhost:5000${props.path}` : noImagePic}
                 alt="productImage"
               />
               <Typography variant="h5" component="div">

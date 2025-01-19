@@ -56,10 +56,9 @@ export default function BookList(props) {
               author={row.author}
               publisher={row.publisher}
               year={row.year}
-              path={row.images[0]?.url}
+              path={row.images[0]?.url || null}
               status={row.status}
               activeBorrowings={row.activeBorrowings}
-              defaultImage={props.defaultImage}
               handleBookEdit={(id) => handleBookEdit(id)}
               handleBookDelete={(id) => handleBookDelete(id)}
               handleAddBrowing={(bookId) => handleAddBrowing(bookId)}
