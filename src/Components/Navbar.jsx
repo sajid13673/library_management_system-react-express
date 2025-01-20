@@ -13,7 +13,6 @@ import Tooltip from '@mui/material/Tooltip';
 import MenuItem from '@mui/material/MenuItem';
 import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
 import { useAuth } from '../utils/AuthProvider';
 import { FormControlLabel, styled, Switch } from '@mui/material';
 import useApi from '../Hooks/useApi';

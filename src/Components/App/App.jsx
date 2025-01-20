@@ -66,7 +66,7 @@ function App() {
 
   function handleDeleteBorrowing(id) {
     return new Promise(function (resolve, reject) {
-      fetchData({ method: "DELETE", url: `http://localhost:5000/api/borrowing/${id}` })
+      fetchData({ method: "DELETE", url: `http://localhost:5000/api/borrowings/${id}` })
         .then((res) => {
           if (res.data.status) {
             console.log("borrowing deleted");
@@ -101,7 +101,7 @@ function App() {
   };
 
   useEffect(() => {
-    getUser();
+    token && getUser();
   }, [token]);
   
   return (

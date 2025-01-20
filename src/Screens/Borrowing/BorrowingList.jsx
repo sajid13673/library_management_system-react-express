@@ -33,7 +33,7 @@ function BorrowingList(props) {
         if (res.data.status) {
           console.log(res.data);
           setBorrowings(res.data.data);
-          setTotalPages(res.data.data.last_page);
+          setTotalPages(res.data.totalPages);
           setLoading(false);
         }
       })
