@@ -1,3 +1,4 @@
+import React from "react";
 import {
   Box,
   Card,
@@ -6,9 +7,9 @@ import {
   Paper,
   styled,
   Typography,
+  Divider,
+  Grid,
 } from "@mui/material";
-import React from "react";
-import Grid from "@mui/material/Unstable_Grid2";
 import moment from "moment";
 
 const Item = styled(Paper)(({ theme }) => ({
@@ -17,58 +18,87 @@ const Item = styled(Paper)(({ theme }) => ({
   padding: theme.spacing(1),
   textAlign: "center",
   color: theme.palette.text.secondary,
-  ...theme.applyStyles("dark", {
-    backgroundColor: "#1A2027",
-  }),
   height: 60,
   display: "flex",
   justifyContent: "center",
   alignItems: "center",
 }));
+
 function UserActiveBorrowings({ user }) {
   console.log(user?.member?.borrowings);
 
   return (
-    <Card>
-      <CardHeader title="active borrowings" />
-      <Grid
-        container
-        rowSpacing={1}
-        columnSpacing={{ xs: 1, sm: 2, md: 3 }}
-        p={1}
-        justifyContent={"center"}
-      >
-        {user?.member?.borrowings.map((borrowing) => (
-          <Grid xs={12} sm={6} key={borrowing.id}>
-            <Card key={borrowing.id} sx={{ height: "100%" }}>
-              <CardContent>
-                <Typography variant="h5" textTransform={"capitalize"}>
-                  {borrowing.book.title} by {borrowing.book.author}
-                </Typography>
-                <Box
-                  display={"grid"}
-                  gridTemplateColumns="repeat(12, 1fr)"
-                  gap={1}
-                  p={1}
-                >
-                  <Typography variant="body2" gridColumn="span 6">
-                    Borrowed Date:
+    <Card sx={{ margin: 3 }}>
+      <CardHeader 
+        title="Active Borrowings" 
+        // sx={{ backgroundColor: "#1976d2", color: "#fff", textAlign: "center" }}
+        sx={[
+          (theme) => ({
+            backgroundColor: theme.palette.primary.main,
+            color: "#fff"
+          }),
+          (theme) =>
+            theme.applyStyles('dark', {
+              backgroundColor:'rgb(64, 131, 199)',
+            }),
+        ]}
+      />
+      <CardContent>
+        <Grid 
+          container 
+          spacing={2}
+          justifyContent="center"
+        >
+          {user?.member?.borrowings.map((borrowing) => (
+            <Grid item xs={12} sm={6} key={borrowing.id}>
+              <Card 
+              sx={[
+                (theme) => ({
+                  backgroundColor: '#C7E3FF',
+                }),
+                (theme) =>
+                  theme.applyStyles('dark', {
+                    backgroundColor:'rgb(23, 70, 117)',
+                  }),
+              ]}>
+                <CardContent>
+                  <Typography variant="h5" gutterBottom 
+                  sx={[
+                    (theme) => ({
+                      color: theme.palette.primary.main
+                    }),
+                    (theme) =>
+                      theme.applyStyles('dark', {
+                        color:'#fff',
+                      }),
+                  ]}>
+                    {borrowing.book.title} by {borrowing.book.author}
                   </Typography>
-                  <Typography variant="body2" gridColumn="span 6">
-                    {moment(borrowing.created_at).format("DD/MM/YYYY HH:MM")}
-                  </Typography>
-                  <Typography variant="body2" gridColumn="span 6">
-                    Due Date:
-                  </Typography>
-                  <Typography variant="body2" gridColumn="span 6">
-                    {moment(borrowing.due_date).format("DD/MM/YYYY HH:MM")}
-                  </Typography>
-                </Box>
-              </CardContent>
-            </Card>
-          </Grid>
-        ))}
-      </Grid>
+                  <Divider />
+                  <Box
+                    display="flex"
+                    flexDirection="column"
+                    mt={2}
+                  >
+                    <Box display="flex" justifyContent="space-between" mb={1}>
+                      <Typography variant="body2">Borrowed Date:</Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        {moment(borrowing.created_at).format("DD/MM/YYYY HH:mm")}
+                      </Typography>
+                    </Box>
+                    <Box display="flex" justifyContent="space-between" mb={1}>
+                      <Typography variant="body2">Due Date:</Typography>
+                      <Typography variant="body2" color="error">
+                        {moment(borrowing.due_date).format("DD/MM/YYYY HH:mm")}
+                      </Typography>
+                    </Box>
+                  </Box>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </CardContent>
     </Card>
   );
 }

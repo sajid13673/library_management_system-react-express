@@ -1,10 +1,11 @@
 // Screens/Login.jsx
-import React from "react";
+import React, { useState } from "react";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthProvider";
 import {
+  Alert,
   Box,
   Button,
   Card,
@@ -19,6 +20,7 @@ import useApi from "../Hooks/useApi";
 export default function Login(props) {
   const { setToken } = useAuth();
   const navigate = useNavigate();
+  const [errorMessage, setErrorMessage] = useState(null);
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword((show) => !show);
   const handleMouseDownPassword = (event) => {
@@ -37,7 +39,7 @@ export default function Login(props) {
     return errors;
   };
 
-  const { fetchData, loading } = useApi([]);
+  const { fetchData, loading, error } = useApi([]);
 
   const formik = useFormik({
     initialValues: {
@@ -46,17 +48,27 @@ export default function Login(props) {
     },
     validate: validate,
     onSubmit: async (values) => {
-      const res = await fetchData({
+      setErrorMessage(null);
+      await fetchData({
         method: "POST",
         url: "/login",
         data: values,
+      }).then((res) => {
+        console.log("res");
+        console.log(res);
+        
+        if (res && res.data.status) {
+          setToken({
+            token: res.data.access_token,
+            role: res.data.role,
+          });
+          navigate("/");
+        }
       });
-      if (res && res.data.status) {
-        setToken({
-          token: res.data.access_token,
-          role: res.data.role,
-        });
-        navigate("/");
+      if(error){
+        console.log(error);
+        console.log(error.response.data.message);
+        setErrorMessage(error.response.data.message);
       }
     },
   });
@@ -79,12 +91,14 @@ export default function Login(props) {
       <form onSubmit={formik.handleSubmit}>
         <Card
           sx={{ display: "flex", flexDirection: "column", p: 3, gap: 3 }}
-          maxWidth="sm"
         >
+          {errorMessage &&
+          <Alert severity="error">{errorMessage}</Alert>
+          }
           <FormControl>
             <InputLabel htmlFor="my-input">Email address</InputLabel>
             <Input
-              error={formik.errors.email}
+              error={Boolean(formik.errors.email)}
               className="email-input"
               aria-describedby="my-helper-text"
               value={formik.values.email}

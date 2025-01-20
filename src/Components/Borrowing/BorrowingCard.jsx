@@ -1,10 +1,4 @@
-import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
-import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
-import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
 import React, { useEffect } from "react";
-import moment from "moment";
-import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
-import CloseIcon from '@mui/icons-material/Close';
 import {
   Box,
   Button,
@@ -17,8 +11,15 @@ import {
   Tooltip,
   Typography,
   Zoom,
+  Divider,
 } from "@mui/material";
 import { makeStyles } from "@material-ui/core";
+import { DateTimePicker, LocalizationProvider } from "@mui/x-date-pickers";
+import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
+import DoneOutlineIcon from "@mui/icons-material/DoneOutline";
+import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
+import CloseIcon from '@mui/icons-material/Close';
+import moment from "moment";
 import { useAuth } from "../../utils/AuthProvider";
 
 const useStyles = makeStyles({
@@ -28,12 +29,28 @@ const useStyles = makeStyles({
       fontSize: 11,
     },
   },
+  card: {
+    display: 'flex',
+    flexDirection: 'column',
+    justifyContent: 'space-between',
+    height: '100%',
+  },
+  cardContent: {
+    flexGrow: 1,
+  },
+  detailsSection: {
+    marginBottom: '1rem',
+  },
+  bookDetails: {
+    marginTop: '1rem',
+  },
 });
+
 function BorrowingCard(props) {
   const classes = useStyles();
-  const {token} = useAuth();
+  const { token } = useAuth();
   const [error, setError] = React.useState(false);
-  const [errorMsg, setErrorMsg] = React.useState(false);
+  const [errorMsg, setErrorMsg] = React.useState("");
   const [formData, setFormData] = React.useState({
     status: false,
     returnDate: null,
@@ -42,21 +59,23 @@ function BorrowingCard(props) {
 
   function handleChange(value) {
     const returnDate =
-      value === null
-        ? null
-        : moment(value.toDate()).format("YYYY-MM-DD HH:mm:ss");
+      value === null ? null : moment(value.toDate()).format("YYYY-MM-DD HH:mm:ss");
     console.log("date :" + returnDate);
     setError(false);
-    setFormData((prevFormData) => {
-      return { ...prevFormData, returnDate: returnDate };
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      returnDate,
+    }));
   }
+
   function handleSetReturnDate(id) {
     props.setCurrentId(id);
-    setFormData((prevFormData) => {
-      return { ...prevFormData, returnDate: null };
-    });
+    setFormData((prevFormData) => ({
+      ...prevFormData,
+      returnDate: null,
+    }));
   }
+
   function handleSubmit(id, formData, book) {
     if (formData.returnDate === null) {
       setError(true);
@@ -64,74 +83,50 @@ function BorrowingCard(props) {
     } else if (formData.returnDate === "Invalid date") {
       setError(true);
       setErrorMsg("Enter Valid Date");
-    } else if (
-      !moment(props.borrowedDate).isBefore(moment(formData.returnDate))
-    ) {
+    } else if (!moment(props.borrowedDate).isBefore(moment(formData.returnDate))) {
       setError(true);
       setErrorMsg("Entered date is before the borrowed date");
     } else {
       props.handleConfirmReturn(id, formData, book);
     }
   }
+
   useEffect(() => {
     console.log(formData);
   }, [formData]);
+
   return (
     <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
-      <Card sx={{ flexGrow: 1, maxHeight: "25rem", display: 'flex', flexDirection: 'column' }}>
-        <CardContent sx={{ flexGrow: 1 }}>
-          <Typography gutterBottom variant="h6" component="div">
+      <Card className={classes.card}>
+        <CardContent className={classes.cardContent}>
+          <Typography gutterBottom variant="h6" fontWeight="600" color="#1976d2" textTransform="capitalize">
             {props.member}
           </Typography>
+          <Divider className={classes.detailsSection} />
           <Grid container spacing={1}>
             <Grid item xs={12} sm={7} sx={{ pr: "30px", alignContent: "center" }}>
-              <Grid container spacing={1} sx={{ mb: 1 }}>
+              <Grid container spacing={1} className={classes.detailsSection}>
                 <Grid item xs={6}>
-                  <Typography align="left" variant="body1" component="p">
-                    Borrowed Date:
+                  <Typography variant="body1">Borrowed Date:</Typography>
+                </Grid>
+                <Grid item xs={6}>
+                  <Typography variant="body1" color="textSecondary">
+                    {moment(props.borrowedDate).format('DD MMMM YYYY, hh:mm:ss A')}
                   </Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography align="left" variant="body1" component="p" color="textSecondary">
-                    {moment(props.borrowedDate).format('DD MMMM YYYY')}
-                    <br />
-                    {moment(props.borrowedDate).format('hh:mm:ss A')}
-                  </Typography>
+                  <Typography variant="body1">Due Date:</Typography>
                 </Grid>
                 <Grid item xs={6}>
-                  <Typography align="left" variant="body1" component="p">
-                    Due date:
-                  </Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography align="left" variant="body1" color="error" component="p">
-                    {moment(props.dueDate).format('DD MMMM YYYY')}
-                    <br />
-                    {moment(props.dueDate).format('hh:mm:ss A')}
+                  <Typography variant="body1" color="error">
+                    {moment(props.dueDate).format('DD MMMM YYYY, hh:mm:ss A')}
                   </Typography>
                 </Grid>
               </Grid>
-              {!props.status ? (
-                <Grid container>
-                  <Grid item xs={6}>
-                    <Typography variant="body1" component="p" align="left">
-                      Return Date:
-                    </Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="body1" color="textSecondary" component="p" align="left">
-                      {moment(props.returnDate).format('DD MMMM YYYY')}
-                      <br />
-                      {moment(props.returnDate).format('hh:mm:ss A')}
-                    </Typography>
-                  </Grid>
-                </Grid>
-              ) : (
-                <Grid container xs={12} spacing={1} sx={{ alignItems: 'center' }}>
+              {props.status ? (
+                <Grid container spacing={1} alignItems="center">
                   <Grid item xs={props.currentId === props.id ? 4 : 6}>
-                    <Typography variant="body1" align="left" component="p">
-                      Return Date:
-                    </Typography>
+                    <Typography variant="body1">Return Date:</Typography>
                   </Grid>
                   {props.currentId === props.id ? (
                     <Grid item xs={8}>
@@ -140,9 +135,7 @@ function BorrowingCard(props) {
                           <DateTimePicker
                             className={classes.root}
                             onChange={(newValue) => handleChange(newValue)}
-                            slotProps={{
-                              textField: { size: 'small', fontSize: 'sm' },
-                            }}
+                            slotProps={{ textField: { size: 'small', fontSize: 'sm' } }}
                           />
                         </LocalizationProvider>
                         {error && <div className="error">{errorMsg}</div>}
@@ -181,36 +174,47 @@ function BorrowingCard(props) {
                     </Grid>
                   )}
                 </Grid>
+              ) : (
+                <Grid container spacing={1}>
+                  <Grid item xs={6}>
+                    <Typography variant="body1">Return Date:</Typography>
+                  </Grid>
+                  <Grid item xs={6}>
+                    <Typography variant="body1" color="textSecondary">
+                      {moment(props.returnDate).format('DD MMMM YYYY, hh:mm:ss A')}
+                    </Typography>
+                  </Grid>
+                </Grid>
               )}
             </Grid>
-            <Grid item xs={12} sm={5}>
-              {props.book !== null && (
+            <Grid item xs={12} sm={5} className={classes.bookDetails}>
+              {props.book && (
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
-                  <Typography variant="h6" component="p" align="left" gridColumn="span 12">
+                  <Typography variant="h6" gridColumn="span 12">
                     Book Details
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" gridColumn="span 4" component="p" align="left">
+                  <Typography variant="body2" color="textSecondary" gridColumn="span 4">
                     Title:
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" gridColumn="span 8" align="left">
+                  <Typography variant="body2" color="textSecondary" gridColumn="span 8">
                     {props.book.title}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" gridColumn="span 4" align="left">
+                  <Typography variant="body2" color="textSecondary" gridColumn="span 4">
                     Author:
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" gridColumn="span 8" align="left">
+                  <Typography variant="body2" color="textSecondary" gridColumn="span 8">
                     {props.book.author}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" gridColumn="span 4" align="left">
+                  <Typography variant="body2" color="textSecondary" gridColumn="span 4">
                     Publisher:
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" gridColumn="span 8" align="left">
+                  <Typography variant="body2" color="textSecondary" gridColumn="span 8">
                     {props.book.publisher}
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" gridColumn="span 4" align="left">
+                  <Typography variant="body2" color="textSecondary" gridColumn="span 4">
                     Year:
                   </Typography>
-                  <Typography variant="body2" color="textSecondary" component="p" gridColumn="span 8" align="left">
+                  <Typography variant="body2" color="textSecondary" gridColumn="span 8">
                     {props.book.year}
                   </Typography>
                 </Box>
@@ -232,5 +236,5 @@ function BorrowingCard(props) {
     </Grid>
   );
 }
-export default BorrowingCard;
 
+export default BorrowingCard;

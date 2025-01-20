@@ -5,7 +5,7 @@ import UserActiveBorrowings from './UserActiveBorrowings'
 function UserHome({user}) {
   return (
     <>
-    <InfoGrid/>
+    {/* <InfoGrid/> */}
     <UserActiveBorrowings user={user}/>
     </>
     
