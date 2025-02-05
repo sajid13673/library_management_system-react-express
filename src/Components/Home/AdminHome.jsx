@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import useApi from '../../Hooks/useApi';
 import { Box, Grid, Typography } from '@mui/material';
-import BookStat from './BookStat'; // Adjust the import path as needed
+import BookStat from './BookStat'; 
 
 function AdminHome() {
   const { fetchData } = useApi([]);
@@ -11,7 +11,6 @@ function AdminHome() {
     fetchData({ method: 'GET', url: `/books/stats` })
     .then((res) => {
       if (res.status) {
-        console.log(res.data); // Debugging purposes only, remove in production.
         setBookStats(res.data);
       }
     }).catch(err => console.error(err));

@@ -20,6 +20,7 @@ import UserBorrowings from "../../Screens/Borrowing/UserBorrowings";
 import useApi from "../../Hooks/useApi";
 import { ThemeProvider as CustomThemeProvider, useTheme} from "../../Context/ThemeContext";
 import Layout from "../Layout";
+import FineList from "../../Screens/FineList";
 
 function App() {
   const [loading, setLoading] = React.useState(false);
@@ -230,6 +231,14 @@ function App() {
                             validateEmail={(str) => validateEmail(str)}
                             validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
                           />
+                        </Layout>
+                      }
+                    />
+                    <Route
+                      path="/fine-list"
+                      element={
+                        <Layout>
+                          <FineList />
                         </Layout>
                       }
                     />
