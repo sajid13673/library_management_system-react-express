@@ -7,20 +7,22 @@ function FineList() {
     const { fetchData, error, data, loading } = useApi()
     const [fines, setFines] = React.useState([])
     const [totalPages, setTotalPages] = useState(1);
+    const perPage = 9;  
     const [page, setPage] = useState(1);
     const getFines = async () => {
-        await fetchData({ method: 'GET', url: '/fines'})
+        await fetchData({ method: 'GET', url: `/fines?page=${page}&perPage=${perPage}`})
     }
     function handleChange(e, value) {
         setPage(value);
       }
     useEffect(() => {
         getFines();
-    },[])
+    },[page])
     useEffect(() => {
         if(data	){
             console.log(data);
             setFines(data.data)
+            setTotalPages(data.totalPages)
         }
         if(error){
             console.error(error)
