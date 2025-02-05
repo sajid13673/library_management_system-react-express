@@ -81,7 +81,7 @@ function Navbar(props) {
   const { setToken, token } = useAuth();
   const {fetchData, error} = useApi([]);
 
-const pages = token.role == "admin" ? ["book list", "member list", "add book", "borrowing list"] : ["book list", "my borrowings"];
+const pages = token.role === "admin" ? ["book list", "member list", "add book", "borrowing list", "fine list"] : ["book list", "my borrowings"];
 const navigateToPage = (page) => {
       navigate("/" + page.split(" ").join("-"));
   };
