@@ -61,6 +61,7 @@ export default function Login(props) {
           setToken({
             token: res.data.access_token,
             role: res.data.role,
+            refreshToken: res.data.refresh_token
           });
           navigate("/");
         }
