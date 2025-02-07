@@ -104,7 +104,10 @@ const navigateToPage = (page) => {
     setAnchorElUser(null);
   };
     async function handleLogout() {
-    const res = await fetchData({method: "GET", url: "/logout"});
+      const refreshToken = token.refreshToken;
+      console.log("logout", refreshToken);
+      
+      const res = await fetchData({method: "POST", url: "/logout", data: {refreshToken}});
     if(res && res.data.status){
       setToken(null);
     }
