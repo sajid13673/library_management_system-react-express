@@ -100,7 +100,7 @@ function BorrowingCard(props) {
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
           <Typography gutterBottom variant="h6" fontWeight="600" color="#1976d2" textTransform="capitalize">
-            {props.member}
+            {props.memberName} (ID: {props.memberId})
           </Typography>
           <Divider className={classes.detailsSection} />
           <Grid container spacing={1}>

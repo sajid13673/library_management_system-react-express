@@ -366,6 +366,7 @@ function FineList() {
           fines.map((fine) => (
             <FineCard
               key={fine.id}
+              memberId={fine.member?.id}
               amount={fine.amount}
               days={fine.days}
               memberName={fine.member?.name}

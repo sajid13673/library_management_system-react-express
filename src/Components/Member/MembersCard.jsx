@@ -15,8 +15,8 @@ export default function MembersCard(props) {
                 src={props.path !== null ? `http://localhost:5000${props.path}` : noImagePic}
                 alt="productImage"
               />
-              <Typography variant="h5" component="div">
-                {props.name}
+              <Typography variant="h6" sx={{ textTransform: 'capitalize' }} component="div">
+                {props.name} (ID: {props.id})
               </Typography>
               <Typography
                 sx={{ fontSize: 14 }}

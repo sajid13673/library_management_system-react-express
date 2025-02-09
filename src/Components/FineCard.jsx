@@ -11,6 +11,7 @@ import React from "react";
 
 function FineCard({
   memberName,
+  memberId, // Add memberId here
   amount,
   days,
   isPaid,
@@ -21,8 +22,8 @@ function FineCard({
     <Grid item xs={12} sm={12} md={6} lg={4}>
       <Card sx={{ minWidth: 275, height: "100%" }}>
         <CardContent>
-          <Typography variant="h6" component="div">
-            {memberName}
+          <Typography variant="h6" sx={{ textTransform: 'capitalize' }} component="div">
+            {memberName} (ID: {memberId}) 
           </Typography>
           <Box sx={{ mt: 2, mb: 2, textAlign: "center" }}>
             <Typography variant="body2" color="text.secondary">
@@ -41,7 +42,17 @@ function FineCard({
           </Box>
           <Typography
             variant="body1"
-            sx={{ color: isPaid ? "green" : "red", fontWeight: "bold" }}
+            sx={{
+              color: isPaid ? "green" : "red",
+              fontWeight: "bold",
+              textTransform: "uppercase",
+              border: "3px solid", // Increased border width
+              borderColor: isPaid ? "green" : "red",
+              padding: "5px 10px",
+              display: "inline-block",
+              mt: 2,
+              textAlign: "center",
+            }}
           >
             {isPaid ? "Paid" : "Unpaid"}
           </Typography>
