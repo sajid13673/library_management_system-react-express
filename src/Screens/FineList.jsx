@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import useApi from "../Hooks/useApi";
 import {
+  Alert,
   Box,
   Button,
   Dialog,
@@ -44,6 +45,7 @@ function FineList() {
   const [processPaymentDialog, setProcessPaymentDialog] = useState(false);
   const [confirmPaymentDialog, setConfirmPaymentDialog] = useState(false);
   const [type, setType] = React.useState("cash");
+  const [paymentMessage, setPaymentMessage] = useState(null);
   const getFines = async () => {
     await fetchAllFInes({
       method: "GET",
@@ -70,6 +72,17 @@ function FineList() {
       url: `/payments`,
       data: { fineId: fine.id, amount: fine.amount, type: type },
     });
+  };
+  const hadleAfterMessage = () => {
+    setConfirmPaymentDialog(false);
+    if (paymentMessage.type === "success") {
+      setProcessPaymentDialog(false);
+    }
+    setPaymentMessage(null);
+  };
+  const handleMakePayment = () => {
+    setPaymentMessage(null);
+    setConfirmPaymentDialog(true);
   };
   useEffect(() => {
     getFines();
@@ -106,10 +119,20 @@ function FineList() {
     if (paymentRes) {
       console.log(paymentRes);
       getFines();
-      setProcessPaymentDialog(false);
+      // setProcessPaymentDialog(false);
+      if (paymentRes.status) {
+        setPaymentMessage({
+          type: "success",
+          message: "Payment Successful !",
+        });
+      }
     }
     if (errorPayment) {
       console.error(errorPayment);
+      setPaymentMessage({
+        type: "error",
+        message: "Payment Failed!",
+      });
     }
   }, [paymentRes, errorPayment]);
 
@@ -181,10 +204,13 @@ function FineList() {
         color: "white",
       }),
   ];
+  useEffect(() => {
+    console.log("payment message");
 
+    console.log(paymentMessage);
+  }, [paymentMessage]);
   return (
     <Box display="flex" flexDirection="column" p={3} flex={1} gap={2}>
-      (
       <Dialog
         open={processPaymentDialog}
         onClose={() => setProcessPaymentDialog(false)}
@@ -267,7 +293,7 @@ function FineList() {
             Cancel
           </Button>
           <Button
-            onClick={() => setConfirmPaymentDialog(true)}
+            onClick={() => handleMakePayment()}
             color="primary"
             variant="contained"
           >
@@ -275,26 +301,71 @@ function FineList() {
           </Button>
         </DialogActions>
         <Dialog open={confirmPaymentDialog} maxWidth="xs" fullWidth>
-          <DialogTitle>Confirm Payment</DialogTitle>
-          {!loadingPayment ? <>
-          <DialogContent>
-            <Typography>Are you sure you want to make this payment?</Typography>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={() => setConfirmPaymentDialog(false)} color="secondary">Cancel</Button>
-            <Button onClick={() => handlePayment()} color="primary" variant="contained">Confirm</Button>
-          </DialogActions></> : 
-          <DialogContent sx={{ padding: 5 }}>
-          <Typography>payment Processing</Typography>
-          <LinearProgress sx={{ my: 2 }}/>        
-        </DialogContent>
-        }
-        </Dialog> 
+          {!paymentMessage ? (
+            <>
+              <DialogTitle>Confirm Payment</DialogTitle>
+              {!loadingPayment ? (
+                <>
+                  <DialogContent>
+                    <Typography>
+                      Are you sure you want to make this payment?
+                    </Typography>
+                  </DialogContent>
+                  <DialogActions>
+                    <Button
+                      onClick={() => setConfirmPaymentDialog(false)}
+                      color="secondary"
+                    >
+                      Cancel
+                    </Button>
+                    <Button
+                      onClick={() => handlePayment()}
+                      color="primary"
+                      variant="contained"
+                    >
+                      Confirm
+                    </Button>
+                  </DialogActions>
+                </>
+              ) : (
+                <DialogContent sx={{ padding: 5 }}>
+                  <Typography>payment Processing</Typography>
+                  <LinearProgress sx={{ my: 2 }} />
+                </DialogContent>
+              )}
+            </>
+          ) : (
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                padding: 3,
+                alignItems: "center",
+              }}
+            >
+              <Alert
+                variant="filled"
+                sx={{ m: 2, width: "100%" }}
+                severity={paymentMessage.type}
+              >
+                {paymentMessage.message}
+              </Alert>
+              <Button
+                onClick={() => hadleAfterMessage()}
+                variant="contained"
+                sx={{ width: "50%" }}
+              >
+                ok
+              </Button>
+            </Box>
+          )}
+        </Dialog>
       </Dialog>
       <Grid container spacing={2}>
         {fines?.length > 0 ? (
           fines.map((fine) => (
             <FineCard
+              key={fine.id}
               amount={fine.amount}
               days={fine.days}
               memberName={fine.member?.name}
