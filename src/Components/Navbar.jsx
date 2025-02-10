@@ -17,7 +17,7 @@ import { useAuth } from '../utils/AuthProvider';
 import { FormControlLabel, styled, Switch } from '@mui/material';
 import useApi from '../Hooks/useApi';
 
-const settings = ['profile', 'account', 'dashboard', 'logout'];
+const settings = ['profile', 'settings', 'logout'];
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
