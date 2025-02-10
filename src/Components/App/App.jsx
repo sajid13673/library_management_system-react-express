@@ -21,6 +21,7 @@ import useApi from "../../Hooks/useApi";
 import { ThemeProvider as CustomThemeProvider, useTheme} from "../../Context/ThemeContext";
 import Layout from "../Layout";
 import FineList from "../../Screens/FineList";
+import Settings from "../../Screens/Member/Settings";
 
 function App() {
   const [loading, setLoading] = React.useState(false);
@@ -250,6 +251,14 @@ function App() {
                         validateEmail={(str) => validateEmail(str)}
                       />
                     }
+                  />
+                  <Route
+                  path="settings"
+                  element={
+                    <Layout>
+                      <Settings />
+                    </Layout>
+                  }
                   />
                   <Route path="/signup" element={<SignUp />} />
                 </Routes>

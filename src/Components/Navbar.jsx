@@ -100,7 +100,16 @@ const navigateToPage = (page) => {
   };
   const handleCloseUserMenu = (setting) => {
     console.log(setting);
-    setting === "logout" && handleLogout();
+    switch(setting) {
+      case "logout":
+        handleLogout();
+        break;
+      case "settings":
+        navigate("/settings");
+        break;
+      default:
+        break;
+    }
     setAnchorElUser(null);
   };
     async function handleLogout() {
