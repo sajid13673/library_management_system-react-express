@@ -21,7 +21,7 @@ import useApi from "../../Hooks/useApi";
 import { ThemeProvider as CustomThemeProvider, useTheme} from "../../Context/ThemeContext";
 import Layout from "../Layout";
 import FineList from "../../Screens/FineList";
-import Settings from "../../Screens/Member/Settings";
+import Settings from "../../Screens/Settings";
 
 function App() {
   const [loading, setLoading] = React.useState(false);
