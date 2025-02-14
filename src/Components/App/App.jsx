@@ -256,7 +256,9 @@ function App() {
                   path="settings"
                   element={
                     <Layout>
-                      <Settings />
+                      <Settings
+                       user = {user}
+                       />
                     </Layout>
                   }
                   />
