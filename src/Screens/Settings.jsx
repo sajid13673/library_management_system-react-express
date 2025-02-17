@@ -7,11 +7,12 @@ import {
   Button,
   Divider,
   Box,
+  CircularProgress,
 } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import useApi from "../Hooks/useApi";
 export default function SettingsScreen({ user }) {
-  const {fetchData, data, error} = useApi();
+  const { fetchData, loading, data, error } = useApi();
   console.log(user.email);
   const initialValuesAccount = {
     currentPassword: "",
@@ -102,7 +103,10 @@ export default function SettingsScreen({ user }) {
                       variant="outlined"
                       as={TextField}
                     />
-                    <ErrorMessage name="currentPassword" component={CustomErrorMessage} />
+                    <ErrorMessage
+                      name="currentPassword"
+                      component={CustomErrorMessage}
+                    />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Field
@@ -113,7 +117,10 @@ export default function SettingsScreen({ user }) {
                       variant="outlined"
                       as={TextField}
                     />
-                    <ErrorMessage name="newPassword" component={CustomErrorMessage} />
+                    <ErrorMessage
+                      name="newPassword"
+                      component={CustomErrorMessage}
+                    />
                   </Grid>
                   <Grid item xs={12} sm={6}>
                     <Field
@@ -124,11 +131,20 @@ export default function SettingsScreen({ user }) {
                       variant="outlined"
                       as={TextField}
                     />
-                    <ErrorMessage name="confirmPassword" component={CustomErrorMessage} />
+                    <ErrorMessage
+                      name="confirmPassword"
+                      component={CustomErrorMessage}
+                    />
                   </Grid>
                   <Grid item xs={12}>
-                    <Button type="submit" variant="contained" color="primary">
-                      Update Password
+                    <Button
+                      type="submit"
+                      disabled={loading}
+                      startIcon={loading && <CircularProgress size={20} />}
+                      variant="contained"
+                      color="primary"
+                    >
+                      {loading ? "updating" : "Update Password"}
                     </Button>
                   </Grid>
                 </Grid>
