@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useRef, useState } from "react";
 import {
   Container,
   Grid,
@@ -8,12 +8,18 @@ import {
   Divider,
   Box,
   CircularProgress,
+  Alert,
 } from "@mui/material";
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import useApi from "../Hooks/useApi";
+
 export default function SettingsScreen({ user }) {
   const { fetchData, loading, data, error } = useApi();
-  console.log(user.email);
+  const [passwordAlert, setPasswordAlert] = useState({
+    status: false,
+    message: "",
+    type: "success",
+  });
   const initialValuesAccount = {
     currentPassword: "",
     newPassword: "",
@@ -40,6 +46,35 @@ export default function SettingsScreen({ user }) {
       {children}
     </Typography>
   );
+
+  const initialRender = useRef(true);
+
+  useEffect(() => {
+    if (data.status) {
+      setPasswordAlert(true);
+      setPasswordAlert({
+        status: true,
+        message: "Password changed successfully!",
+        type: "success",
+      });
+      console.log("password changed");
+      console.log(data);
+    }
+    if (error) {
+      setPasswordAlert({
+        status: true,
+        message:
+          error.response.data.errors && error.response.data.errors.length > 0
+            ? error.response.data.errors[0].msg
+            : error.response.data.message,
+        type: "error",
+      });
+
+      console.log(error);
+      console.log(error.message);
+    }
+  }, [data, error]);
+
   return (
     <Container maxWidth="md" sx={{ mt: 4, mb: 4 }}>
       <Typography variant="h4" gutterBottom>
@@ -47,7 +82,6 @@ export default function SettingsScreen({ user }) {
       </Typography>
       <Divider />
 
-      {/* Profile Settings */}
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6" gutterBottom>
           Profile Settings
@@ -78,20 +112,27 @@ export default function SettingsScreen({ user }) {
         <Formik
           initialValues={initialValuesAccount}
           validate={validateAccountForm}
-          onSubmit={async (values) => {
-            await fetchData({
+          onSubmit={async (values, { resetForm }) => {
+            const response = await fetchData({
               method: "POST",
               url: "/change-password",
               data: values,
             });
-            console.log(values);
+            if (response && response.status === 200) {
+              resetForm();
+            }
           }}
         >
           {({ errors, touched }) => (
-            <>
+            <Box sx={{ display: "flex", flexDirection: "column", gap: 2 }}>
               <Typography variant="h6" gutterBottom>
                 Account Settings
               </Typography>
+              {passwordAlert.status && (
+                <Alert severity={passwordAlert.type}>
+                  {passwordAlert.message}
+                </Alert>
+              )}
               <Form>
                 <Grid container spacing={2}>
                   <Grid item xs={12} sm={6}>
@@ -149,7 +190,7 @@ export default function SettingsScreen({ user }) {
                   </Grid>
                 </Grid>
               </Form>
-            </>
+            </Box>
           )}
         </Formik>
       </Box>
