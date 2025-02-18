@@ -31,7 +31,6 @@ function UserActiveBorrowings({ user }) {
     <Card sx={{ margin: 3 }}>
       <CardHeader 
         title="Active Borrowings" 
-        // sx={{ backgroundColor: "#1976d2", color: "#fff", textAlign: "center" }}
         sx={[
           (theme) => ({
             backgroundColor: theme.palette.primary.main,
@@ -49,13 +48,11 @@ function UserActiveBorrowings({ user }) {
           spacing={2}
           justifyContent="center"
         >
-          {user?.member?.borrowings.map((borrowing) => (
+          {user?.member?.borrowings.length > 0 ? user?.member?.borrowings.map((borrowing) => (
             <Grid item xs={12} sm={6} key={borrowing.id}>
               <Card 
-              sx={[
-                (theme) => ({
-                  backgroundColor: '#C7E3FF',
-                }),
+              sx={[{
+                  backgroundColor: '#C7E3FF',},
                 (theme) =>
                   theme.applyStyles('dark', {
                     backgroundColor:'rgb(23, 70, 117)',
@@ -96,7 +93,42 @@ function UserActiveBorrowings({ user }) {
                 </CardContent>
               </Card>
             </Grid>
-          ))}
+          )) : (
+            <Grid item xs={12} sx={{ textAlign: 'center' }}>
+              <Box 
+                sx={[
+                  (theme) => ({
+                    backgroundColor: '#f0f0f0',
+                    padding: 3,
+                    borderRadius: 1,
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'center',
+                    minHeight: '100px',
+                    color: theme.palette.text.secondary
+                  }),
+                  (theme) =>
+                    theme.applyStyles('dark', {
+                      backgroundColor: 'rgb(23, 70, 117)',
+                      color: '#fff',
+                    }),
+                ]}
+              >
+                <Typography variant="h6" 
+                sx={[
+                  (theme) => ({
+                    color: theme.palette.text.secondary,
+                  }),
+                  (theme) =>
+                    theme.applyStyles('dark', {
+                      color: '#fff',
+                    }),
+                ]}>
+                  No active borrowings
+                </Typography>
+              </Box>
+            </Grid>
+          )}
         </Grid>
       </CardContent>
     </Card>
