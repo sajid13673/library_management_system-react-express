@@ -1,12 +1,12 @@
 import React from 'react'
-import InfoGrid from './InfoGrid'
 import UserActiveBorrowings from './UserActiveBorrowings'
+import UserPendingFines from './UserPendingFines'
 
 function UserHome({user}) {
   return (
     <>
-    {/* <InfoGrid/> */}
     <UserActiveBorrowings user={user}/>
+    <UserPendingFines fines={user?.member?.fines}/>
     </>
     
   )
