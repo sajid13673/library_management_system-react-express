@@ -18,7 +18,7 @@ import useApi from "../../Hooks/useApi";
 export default function MemberList(props) {
   const { fetchData } = useApi();
   const [page, setPage] = useState(1);
-  const {members, error, getMembers} = useMembers(page, 5)
+  const {members, error, getMembers, loading} = useMembers(page, 5)
   const data = Array.from(members?.data || []);
   const totalPages = members?.totalPages || 1;
   console.log(data);
@@ -77,7 +77,7 @@ export default function MemberList(props) {
           ))
         ) : (
           <Container className="keyMessage">
-            {!props.loading ? (
+            {!loading ? (
               <Typography variant="h3">Nothing to show</Typography>
             ) : (
               <Loading />
@@ -85,7 +85,7 @@ export default function MemberList(props) {
           </Container>
         )}
       </Grid>
-      {data.length > 0 && !props.loading && (
+      {data.length > 0 && !loading && (
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
             count={totalPages}

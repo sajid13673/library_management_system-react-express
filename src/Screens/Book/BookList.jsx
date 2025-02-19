@@ -16,7 +16,7 @@ import useApi from "../../Hooks/useApi";
 export default function BookList(props) {
   const {fetchData} = useApi([]);
   const [page, setPage] = useState(1)
-  const {books, error, getBooks} = useBooks(page, 9)
+  const {books, error, getBooks, loading} = useBooks(page, 9)
   const data = Array.from(books?.data || []);
   const totalPages = books?.totalPages || 1;
   console.log("data");
@@ -66,7 +66,7 @@ export default function BookList(props) {
           ))
         ) : (
           <Container className="keyMessage">
-            {!props.loading ? (
+            {!loading ? (
               <Typography variant="h3">Nothing to show</Typography>
             ) : (
               <Loading />
