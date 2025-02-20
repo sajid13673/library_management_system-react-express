@@ -9,13 +9,13 @@ import {
   Grid,
 } from "@mui/material";
 import moment from "moment";
-import BookIcon from '@mui/icons-material/Book';
+import BookIcon from "@mui/icons-material/Book";
 
 function UserActiveBorrowings({ user }) {
   console.log(user?.member?.borrowings);
 
   return (
-    <Card sx={{ margin: 3 }}>
+    <Card sx={{ height: "100%" }}>
       <CardHeader
         title="Active Borrowings"
         sx={[
@@ -30,10 +30,23 @@ function UserActiveBorrowings({ user }) {
         ]}
       />
       <CardContent>
-        <Grid container spacing={2} justifyContent="center">
+        <Grid
+          container
+          spacing={1}
+          sx={{
+            maxHeight: "25rem",
+            overflowY: "scroll",
+            "&::-webkit-scrollbar": {
+              display: "none",
+            },
+            "-ms-overflow-style": "none", 
+            "scrollbar-width": "none",
+          }}
+          justifyContent="center"
+        >
           {user?.member?.borrowings.length > 0 ? (
             user?.member?.borrowings.map((borrowing) => (
-              <Grid item xs={12} sm={6} key={borrowing.id}>
+              <Grid item xs={12} key={borrowing.id}>
                 <Card
                   sx={[
                     {
@@ -49,41 +62,49 @@ function UserActiveBorrowings({ user }) {
                   ]}
                 >
                   <CardContent>
-                    {/* <Typography
-                      variant="h5"
-                      gutterBottom
-                      sx={[
-                        (theme) => ({
-                          color: theme.palette.primary.main,
-                        }),
-                        (theme) =>
-                          theme.applyStyles("dark", {
-                            color: "#fff",
-                          }),
-                      ]}
-                    >
-                      {borrowing.book.title} by {borrowing.book.author}
-                    </Typography> */}
                     <Box display="flex" alignItems="center" gap={1}>
-                      <BookIcon sx={(theme) => ({ mr: 1, color: theme.palette.primary.main })} />
-                      <Typography variant="h6" sx={(theme) => ({ color: theme.palette.primary.main, fontWeight: 'bold' })}>
+                      <BookIcon
+                        sx={(theme) => ({
+                          mr: 1,
+                          color: theme.palette.primary.main,
+                        })}
+                      />
+                      <Typography
+                        variant="h6"
+                        sx={(theme) => ({
+                          color: theme.palette.primary.main,
+                          fontWeight: "bold",
+                        })}
+                      >
                         {borrowing.book.title}
                       </Typography>
-                      <Typography variant="body2" color="textSecondary" >
-                      by {borrowing.book.author}
-                    </Typography>
+                      <Typography variant="body2" color="textSecondary">
+                        by {borrowing.book.author}
+                      </Typography>
                     </Box>
                     <Divider />
                     <Box display="flex" flexDirection="column" mt={2}>
-                      <Box display="flex" justifyContent="space-between" gap={0.5} mb={1}>
-                        <Typography variant="body2">Borrowed Date : </Typography>
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        gap={0.5}
+                        mb={1}
+                      >
+                        <Typography variant="body2">
+                          Borrowed Date :{" "}
+                        </Typography>
                         <Typography variant="body2" color="textSecondary">
                           {moment(borrowing.created_at).format(
                             "DD/MM/YYYY HH:mm"
                           )}
                         </Typography>
                       </Box>
-                      <Box display="flex" justifyContent="space-between" gap={0.5} mb={1}>
+                      <Box
+                        display="flex"
+                        justifyContent="space-between"
+                        gap={0.5}
+                        mb={1}
+                      >
                         <Typography variant="body2">Due Date :</Typography>
                         <Typography variant="body2" color="error">
                           {moment(borrowing.due_date).format(
