@@ -99,9 +99,9 @@ function BorrowingCard(props) {
     <Grid item xs={12} md={6} sx={{ display: 'flex' }}>
       <Card className={classes.card}>
         <CardContent className={classes.cardContent}>
-          <Typography gutterBottom variant="h6" fontWeight="600" color="#1976d2" textTransform="capitalize">
+          { token.role === 'admin' && <Typography gutterBottom variant="h6" fontWeight="600" color="#1976d2" textTransform="capitalize">
             {props.memberName} (ID: {props.memberId})
-          </Typography>
+          </Typography>}
           <Divider className={classes.detailsSection} />
           <Grid container spacing={1}>
             <Grid item xs={12} sm={7} sx={{ pr: "30px", alignContent: "center" }}>

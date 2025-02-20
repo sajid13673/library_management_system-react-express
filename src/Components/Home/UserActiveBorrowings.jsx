@@ -39,7 +39,7 @@ function UserActiveBorrowings({ user }) {
             "&::-webkit-scrollbar": {
               display: "none",
             },
-            "-ms-overflow-style": "none", 
+            "-ms-overflow-style": "none",
             "scrollbar-width": "none",
           }}
           justifyContent="center"
@@ -60,6 +60,7 @@ function UserActiveBorrowings({ user }) {
                         backgroundColor: "rgb(23, 70, 117)",
                       }),
                   ]}
+                  variant="filled"
                 >
                   <CardContent>
                     <Box display="flex" alignItems="center" gap={1}>
@@ -74,14 +75,19 @@ function UserActiveBorrowings({ user }) {
                         sx={(theme) => ({
                           color: theme.palette.primary.main,
                           fontWeight: "bold",
+                          textTransform: "capitalize",
                         })}
                       >
                         {borrowing.book.title}
                       </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        by {borrowing.book.author}
+                      <Typography variant="body2" color="textSecondary" noWrap>
+                        by{" "}
+                        <Typography component="span" textTransform="capitalize">
+                          {borrowing.book.author}
+                        </Typography>
                       </Typography>
                     </Box>
+
                     <Divider />
                     <Box display="flex" flexDirection="column" mt={2}>
                       <Box
