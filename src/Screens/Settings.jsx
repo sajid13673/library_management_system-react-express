@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Container,
   Grid,
@@ -13,7 +13,7 @@ import {
 import { Formik, Field, Form, ErrorMessage } from "formik";
 import useApi from "../Hooks/useApi";
 
-export default function SettingsScreen({ user }) {
+export default function SettingsScreen({ user, userLoading, userError }) {
   const { fetchData, loading, data, error } = useApi();
   const [passwordAlert, setPasswordAlert] = useState({
     status: false,
@@ -46,9 +46,6 @@ export default function SettingsScreen({ user }) {
       {children}
     </Typography>
   );
-
-  const initialRender = useRef(true);
-
   useEffect(() => {
     if (data.status) {
       setPasswordAlert(true);
@@ -81,31 +78,43 @@ export default function SettingsScreen({ user }) {
         Settings
       </Typography>
       <Divider />
-
       <Box sx={{ mt: 4 }}>
         <Typography variant="h6" gutterBottom>
           Profile Settings
         </Typography>
-        <Grid container spacing={2}>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              disabled
-              label="Name"
-              fullWidth
-              variant="outlined"
-              defaultValue=""
-            />
+        {!userLoading && !userError ? (
+          <Grid container spacing={2}>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                disabled
+                label="Name"
+                fullWidth
+                variant="outlined"
+                defaultValue={user?.member?.name}
+              />
+            </Grid>
+            <Grid item xs={12} sm={6}>
+              <TextField
+                disabled
+                label="Email"
+                fullWidth
+                variant="outlined"
+                defaultValue={user.email}
+              />
+            </Grid>
           </Grid>
-          <Grid item xs={12} sm={6}>
-            <TextField
-              disabled
-              label="Email"
-              fullWidth
-              variant="outlined"
-              defaultValue=""
-            />
-          </Grid>
-        </Grid>
+        ) : (
+          <Box display={"flex"}>
+            {" "}
+            {userLoading ? (
+              <CircularProgress sx={{ my: 1, mx: "auto" }} />
+            ) : (
+              <Typography textTransform="uppercase" color="error" mx="auto">
+                something went wrong
+              </Typography>
+            )}{" "}
+          </Box>
+        )}
       </Box>
       <Divider sx={{ my: 4 }} />
       <Box sx={{ mt: 4 }}>

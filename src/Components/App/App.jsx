@@ -34,6 +34,7 @@ function App() {
   const [memberPage, setMemberPage] = React.useState(1);
   const {darkMode} = useTheme();
   const [user, setUser] = React.useState({})
+  const { fetchData:fetchUser, error:userError, loading:userLoading } = useApi([]);
   const { fetchData, error } = useApi([]);
   const theme = useMemo(() => createTheme({
     palette: {
@@ -94,7 +95,7 @@ function App() {
   }
 
   const getUser = async () => {
-    await fetchData({ method: "GET", url: "/profile" }).then((res) => {
+    await fetchUser({ method: "GET", url: "/profile" }).then((res) => {
       if (res) {
         console.log(res.data.data);
         setUser(res.data.data);
@@ -258,6 +259,8 @@ function App() {
                     <Layout>
                       <Settings
                        user = {user}
+                       userLoading = {userLoading}
+                       userError = {userError}
                        />
                     </Layout>
                   }
