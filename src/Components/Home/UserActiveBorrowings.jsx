@@ -20,12 +20,12 @@ function UserActiveBorrowings({ user }) {
         title="Active Borrowings"
         sx={[
           (theme) => ({
-            backgroundColor: theme.palette.primary.main,
+            background: 'linear-gradient(45deg, rgba(25,118,220,1) 0%, rgba(23,210,252,1) 100%)',
             color: "#fff",
           }),
           (theme) =>
             theme.applyStyles("dark", {
-              backgroundColor: "rgb(64, 131, 199)",
+              background: "linear-gradient(45deg, rgba(8,75,148,1) 0%, rgba(17,153,184,1) 100%)",
             }),
         ]}
       />

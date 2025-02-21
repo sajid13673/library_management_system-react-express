@@ -1,23 +1,23 @@
-import * as React from 'react';
-import AppBar from '@mui/material/AppBar';
-import Box from '@mui/material/Box';
-import Toolbar from '@mui/material/Toolbar';
-import IconButton from '@mui/material/IconButton';
-import Typography from '@mui/material/Typography';
-import Menu from '@mui/material/Menu';
-import MenuIcon from '@mui/icons-material/Menu';
-import Container from '@mui/material/Container';
-import Avatar from '@mui/material/Avatar';
-import Button from '@mui/material/Button';
-import Tooltip from '@mui/material/Tooltip';
-import MenuItem from '@mui/material/MenuItem';
-import LocalLibraryIcon from '@mui/icons-material/LocalLibrary';
-import { useNavigate } from 'react-router-dom';
-import { useAuth } from '../utils/AuthProvider';
-import { FormControlLabel, styled, Switch } from '@mui/material';
-import useApi from '../Hooks/useApi';
+import * as React from "react";
+import AppBar from "@mui/material/AppBar";
+import Box from "@mui/material/Box";
+import Toolbar from "@mui/material/Toolbar";
+import IconButton from "@mui/material/IconButton";
+import Typography from "@mui/material/Typography";
+import Menu from "@mui/material/Menu";
+import MenuIcon from "@mui/icons-material/Menu";
+import Container from "@mui/material/Container";
+import Avatar from "@mui/material/Avatar";
+import Button from "@mui/material/Button";
+import Tooltip from "@mui/material/Tooltip";
+import MenuItem from "@mui/material/MenuItem";
+import LocalLibraryIcon from "@mui/icons-material/LocalLibrary";
+import { useNavigate } from "react-router-dom";
+import { useAuth } from "../utils/AuthProvider";
+import { FormControlLabel, styled, Switch } from "@mui/material";
+import useApi from "../Hooks/useApi";
 
-const settings = ['profile', 'settings', 'logout'];
+const settings = ["profile", "settings", "logout"];
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   width: 62,
   height: 34,
@@ -79,11 +79,14 @@ function Navbar(props) {
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
   const { setToken, token } = useAuth();
-  const {fetchData, error} = useApi([]);
+  const { fetchData, error } = useApi([]);
 
-const pages = token.role === "admin" ? ["book list", "member list", "add book", "borrowing list", "fine list"] : ["book list", "my borrowings"];
-const navigateToPage = (page) => {
-      navigate("/" + page.split(" ").join("-"));
+  const pages =
+    token.role === "admin"
+      ? ["book list", "member list", "add book", "borrowing list", "fine list"]
+      : ["book list", "my borrowings"];
+  const navigateToPage = (page) => {
+    navigate("/" + page.split(" ").join("-"));
   };
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -100,7 +103,7 @@ const navigateToPage = (page) => {
   };
   const handleCloseUserMenu = (setting) => {
     console.log(setting);
-    switch(setting) {
+    switch (setting) {
       case "logout":
         handleLogout();
         break;
@@ -112,24 +115,42 @@ const navigateToPage = (page) => {
     }
     setAnchorElUser(null);
   };
-    async function handleLogout() {
-      const refreshToken = token.refreshToken;
-      console.log("logout", refreshToken);
-      
-      const res = await fetchData({method: "POST", url: "/logout", data: {refreshToken}});
-    if(res && res.data.status){
+  async function handleLogout() {
+    const refreshToken = token.refreshToken;
+    console.log("logout", refreshToken);
+
+    const res = await fetchData({
+      method: "POST",
+      url: "/logout",
+      data: { refreshToken },
+    });
+    if (res && res.data.status) {
       setToken(null);
     }
-    if(error){
+    if (error) {
       console.log(error);
-      
     }
   }
   return (
-    <AppBar position="static">
+    <AppBar
+      position="static"
+      sx={[
+        {
+          background:
+            "linear-gradient(45deg, rgba(25,118,220,1) 0%, rgba(112,217,241,1) 45%, rgba(0,207,255,1) 98%)",
+        },
+        (theme) =>
+          theme.applyStyles("dark", {
+            background:
+              "linear-gradient(45deg, rgba(0,40,82,1) 4%, rgba(14,110,133,1) 45%, rgba(0,42,52,1) 92%)",
+          }),
+      ]}
+    >
       <Container maxWidth="xl">
         <Toolbar disableGutters>
-          <LocalLibraryIcon sx={{ display: { xs: 'none', md: 'flex' }, mr: 1 }} />
+          <LocalLibraryIcon
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+          />
           <Typography
             variant="h6"
             noWrap
@@ -138,19 +159,19 @@ const navigateToPage = (page) => {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
-              display: { xs: 'none', md: 'flex' },
-              fontFamily: 'monospace',
+              display: { xs: "none", md: "flex" },
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
-            onClick={()=>navigate('/')}
+            onClick={() => navigate("/")}
           >
             Home
           </Typography>
 
-          <Box sx={{ flexGrow: 1, display: { xs: 'flex', md: 'none' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
               size="large"
               aria-label="account of current user"
@@ -165,26 +186,28 @@ const navigateToPage = (page) => {
               id="menu-appbar"
               anchorEl={anchorElNav}
               anchorOrigin={{
-                vertical: 'bottom',
-                horizontal: 'left',
+                vertical: "bottom",
+                horizontal: "left",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'left',
+                vertical: "top",
+                horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
               onClose={handleCloseNavMenu}
-              sx={{ display: { xs: 'block', md: 'none' } }}
+              sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
-                <MenuItem key={page} onClick={()=>handleCloseNavMenu(page)}>
-                  <Typography sx={{ textAlign: 'center' }}>{page}</Typography>
+                <MenuItem key={page} onClick={() => handleCloseNavMenu(page)}>
+                  <Typography sx={{ textAlign: "center" }}>{page}</Typography>
                 </MenuItem>
               ))}
             </Menu>
           </Box>
-          <LocalLibraryIcon sx={{ display: { xs: 'flex', md: 'none' }, mr: 1 }} />
+          <LocalLibraryIcon
+            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+          />
           <Typography
             variant="h5"
             noWrap
@@ -192,25 +215,25 @@ const navigateToPage = (page) => {
             href="#app-bar-with-responsive-menu"
             sx={{
               mr: 2,
-              display: { xs: 'flex', md: 'none' },
+              display: { xs: "flex", md: "none" },
               flexGrow: 1,
-              fontFamily: 'monospace',
+              fontFamily: "monospace",
               fontWeight: 700,
-              letterSpacing: '.3rem',
-              color: 'inherit',
-              textDecoration: 'none',
+              letterSpacing: ".3rem",
+              color: "inherit",
+              textDecoration: "none",
             }}
             textTransform="uppercase"
-            onClick={()=>navigate('/')}
+            onClick={() => navigate("/")}
           >
             home
           </Typography>
-          <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
+          <Box sx={{ flexGrow: 1, display: { xs: "none", md: "flex" } }}>
             {pages.map((page) => (
               <Button
                 key={page}
-                onClick={()=>handleCloseNavMenu(page)}
-                sx={{ my: 2, color: 'white', display: 'block' }}
+                onClick={() => handleCloseNavMenu(page)}
+                sx={{ my: 2, color: "white", display: "block" }}
               >
                 {page}
               </Button>
@@ -232,24 +255,32 @@ const navigateToPage = (page) => {
               </IconButton>
             </Tooltip>
             <Menu
-              sx={{ mt: '45px' }}
+              sx={{ mt: "45px" }}
               id="menu-appbar"
               anchorEl={anchorElUser}
               anchorOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               keepMounted
               transformOrigin={{
-                vertical: 'top',
-                horizontal: 'right',
+                vertical: "top",
+                horizontal: "right",
               }}
               open={Boolean(anchorElUser)}
               onClose={handleCloseUserMenu}
             >
               {settings.map((setting) => (
-                <MenuItem key={setting} onClick={()=>handleCloseUserMenu(setting)}>
-                  <Typography textTransform="capitalize" sx={{ textAlign: 'center' }}>{setting}</Typography>
+                <MenuItem
+                  key={setting}
+                  onClick={() => handleCloseUserMenu(setting)}
+                >
+                  <Typography
+                    textTransform="capitalize"
+                    sx={{ textAlign: "center" }}
+                  >
+                    {setting}
+                  </Typography>
                 </MenuItem>
               ))}
             </Menu>

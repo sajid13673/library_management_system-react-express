@@ -16,13 +16,13 @@ function UserPendingFines({ fines }) {
         title="pending fines"
         sx={[
           (theme) => ({
-            backgroundColor: theme.palette.error.main,
+            background: 'linear-gradient(45deg, rgba(255,30,17,1) 4%, rgba(255,140,54,1) 45%)',
             color: "#fff",
             padding: theme.spacing(2),
           }),
           (theme) =>
             theme.applyStyles("dark", {
-              backgroundColor: "#bc3838",
+              background: "linear-gradient(45deg, rgba(152,43,43,1) 18%, rgba(196,108,42,1) 51%)",
             }),
         ]}
       />
@@ -52,7 +52,7 @@ function UserPendingFines({ fines }) {
                     },
                     (theme) =>
                       theme.applyStyles("dark", {
-                        backgroundColor: "#5f1111",
+                        background: "#5f1111",
                       }),
                   ]}
                   variant="filled"
