@@ -222,13 +222,13 @@ function FineList() {
           {fine && (
             <>
               <Box sx={memberBoxStyle}>
-                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
+                <Typography variant="h6" textAlign={'center'} sx={{ fontWeight: "bold" }}>
                   Member: {fine.member?.name} (ID: {fine.member?.id})
                 </Typography>
               </Box>
 
               <Box sx={amountBoxStyle}>
-                <Typography variant="body1" sx={{ fontWeight: "bold" }}>
+                <Typography variant="h6" sx={{ fontWeight: "bold" }}>
                   Amount: ${fine.amount}
                 </Typography>
                 <Typography variant="body1" sx={{ fontWeight: "bold" }}>

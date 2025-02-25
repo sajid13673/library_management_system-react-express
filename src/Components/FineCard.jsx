@@ -11,7 +11,7 @@ import React from "react";
 
 function FineCard({
   memberName,
-  memberId, // Add memberId here
+  memberId, 
   amount,
   days,
   isPaid,
@@ -46,7 +46,7 @@ function FineCard({
               color: isPaid ? "green" : "red",
               fontWeight: "bold",
               textTransform: "uppercase",
-              border: "3px solid", // Increased border width
+              border: "3px solid", 
               borderColor: isPaid ? "green" : "red",
               padding: "5px 10px",
               display: "inline-block",

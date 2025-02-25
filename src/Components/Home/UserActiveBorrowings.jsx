@@ -15,14 +15,15 @@ function UserActiveBorrowings({ user }) {
   console.log(user?.member?.borrowings);
 
   return (
-    <Card sx={{ height: "100%" }}>
+    <Card sx={[{ height: "100%" }, (theme) => theme.applyStyles('dark', {boxShadow: "0px 2px 5px rgba(61, 166, 236, 0.5)"})]} >
       <CardHeader
         title="Active Borrowings"
         sx={[
-          (theme) => ({
+          {
+            height: '1rem',
             background: 'linear-gradient(45deg, rgba(25,118,220,1) 0%, rgba(23,210,252,1) 100%)',
             color: "#fff",
-          }),
+          },
           (theme) =>
             theme.applyStyles("dark", {
               background: "linear-gradient(45deg, rgba(8,75,148,1) 0%, rgba(17,153,184,1) 100%)",

@@ -11,11 +11,12 @@ import BookIcon from "@mui/icons-material/Book";
 
 function UserPendingFines({ fines }) {
   return (
-    <Card sx={{  boxShadow: 3, height: "100%" }}>
+    <Card sx={[{  boxShadow: 3, height: "100%" }, (theme) => theme.applyStyles('dark', {boxShadow: "0px 2px 5px rgba(238, 96, 68, 0.5)"})]}>
       <CardHeader
         title="pending fines"
         sx={[
           (theme) => ({
+            height: '1rem',
             background: 'linear-gradient(45deg, rgba(255,30,17,1) 4%, rgba(255,140,54,1) 45%)',
             color: "#fff",
             padding: theme.spacing(2),
