@@ -11,6 +11,7 @@ import {
   Grid,
   Typography,
   Tooltip,
+  Box,
 } from "@mui/material";
 import { useAuth } from "../../utils/AuthProvider";
 import noImagePic from "../../images/no_image.jpg";
@@ -18,21 +19,39 @@ import noImagePic from "../../images/no_image.jpg";
 export default function BookCard(props) {
   const { token } = useAuth();
   console.log(props.path);
-  
+
   return (
-    <Grid item xs={12} sm={12} md={6} lg={4} >
-      <Card sx={{ minWidth: 200, height: '100%' }}>
+    <Grid item xs={12} sm={12} md={6} lg={4}>
+      <Card
+        sx={{
+          minWidth: 200,
+          height: "100%",
+          display: "flex",
+          flexDirection: "column",
+        }}
+      >
         <CardContent
           sx={{
             display: "flex",
             flexDirection: "column",
             justifyContent: "center",
             alignItems: "center",
+            my: "auto",
           }}
         >
-          <img
-            style={{ maxWidth: "100px" }}
-            src={props.path !== null ? `http://localhost:5000${props.path}` : noImagePic}
+          <Box
+            component="img"
+            sx={{
+              maxWidth: 100,
+              borderRadius: 1.7,
+              mb: 1,
+              boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.41)",
+            }}
+            src={
+              props.path !== null
+                ? `http://localhost:5000${props.path}`
+                : noImagePic
+            }
             alt="productImage"
           />
           <Typography variant="h5" component="div">
@@ -46,11 +65,11 @@ export default function BookCard(props) {
           </Typography>
           <Typography variant="body2">{props.year}</Typography>
         </CardContent>
-        <CardActions style={{ justifyContent: "center" }}>
+        <CardActions sx={{ justifyContent: "center", mt: "auto" }}>
           {token.role === "admin" && (
             <>
               <Tooltip title="Edit" placement="top-start">
-                <div>
+                <>
                   <Button
                     onClick={() => props.handleBookEdit(props.id)}
                     size="small"
@@ -62,7 +81,7 @@ export default function BookCard(props) {
                   >
                     <EditIcon />
                   </Button>
-                </div>
+                </>
               </Tooltip>
               <Tooltip
                 title={
@@ -90,33 +109,27 @@ export default function BookCard(props) {
             </>
           )}
           {!props.activeBorrowings ? (
-                token.role === "admin" ? <Button
-                  onClick={() => props.handleAddBrowing(props.id)}
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                >
-                  Add Borrowing
-                  <AddCircleIcon style={{ marginLeft: "5px" }} />
-                </Button> : 
-                <Button
+            token.role === "admin" ? (
+              <Button
+                onClick={() => props.handleAddBrowing(props.id)}
                 size="small"
                 variant="contained"
                 color="primary"
               >
+                Add Borrowing
+                <AddCircleIcon style={{ marginLeft: "5px" }} />
+              </Button>
+            ) : (
+              <Button size="small" variant="contained" color="primary">
                 Available
               </Button>
-              ) : (
-                <Button
-                  disabled
-                  size="small"
-                  variant="contained"
-                  color="primary"
-                >
-                  Not Available
-                  <BlockIcon style={{ marginLeft: "5px" }} />
-                </Button>
-              )}
+            )
+          ) : (
+            <Button disabled size="small" variant="contained" color="primary">
+              Not Available
+              <BlockIcon style={{ marginLeft: "5px" }} />
+            </Button>
+          )}
         </CardActions>
       </Card>
     </Grid>
