@@ -1,8 +1,8 @@
 import React from "react";
 import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import EditIcon from "@mui/icons-material/Edit";
-import AddCircleIcon from "@mui/icons-material/AddCircle";
 import BlockIcon from "@mui/icons-material/Block";
+import EventNoteIcon from "@mui/icons-material/EventNote";
 import {
   Button,
   Card,
@@ -21,7 +21,7 @@ export default function BookCard(props) {
   console.log(props.path);
 
   return (
-    <Grid item xs={12} sm={12} md={6} lg={4}>
+    <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card
         sx={{
           minWidth: 200,
@@ -116,8 +116,8 @@ export default function BookCard(props) {
                 variant="contained"
                 color="primary"
               >
-                Add Borrowing
-                <AddCircleIcon style={{ marginLeft: "5px" }} />
+                Borrow
+                <EventNoteIcon sx={{ ml: 1 }} />
               </Button>
             ) : (
               <Button size="small" variant="contained" color="primary">
@@ -126,7 +126,7 @@ export default function BookCard(props) {
             )
           ) : (
             <Button disabled size="small" variant="contained" color="primary">
-              Not Available
+              unavailable
               <BlockIcon style={{ marginLeft: "5px" }} />
             </Button>
           )}
