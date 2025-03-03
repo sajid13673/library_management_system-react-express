@@ -89,6 +89,7 @@ function FineList() {
     setConfirmPaymentDialog(true);
   };
   const handleTypeChange = (event) => {
+    setPage(1);
     setType(event.target.value);
   };
   useEffect(() => {

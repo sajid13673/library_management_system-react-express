@@ -16,7 +16,8 @@ import useApi from "../../Hooks/useApi";
 export default function BookList(props) {
   const {fetchData} = useApi([]);
   const [page, setPage] = useState(1)
-  const {books, error, getBooks, loading} = useBooks(page, 9)
+  const [perPage, setPerPage] = useState(12)
+  const {books, error, getBooks, loading} = useBooks(page, perPage)
   const data = Array.from(books?.data || []);
   const totalPages = books?.totalPages || 1;
   console.log("data");

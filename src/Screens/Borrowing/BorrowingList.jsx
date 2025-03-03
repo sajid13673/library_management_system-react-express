@@ -64,6 +64,7 @@ function BorrowingList(props) {
   const [type, setType] = useState("all");
   const [currentId, setCurrentId] = useState();
   const handleTypeChange = (event) => {
+    setBorrowingPage(1);
     setType(event.target.value);
   };
   useEffect(() => {
