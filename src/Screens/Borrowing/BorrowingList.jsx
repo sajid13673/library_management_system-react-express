@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BorrowingCard from "../../Components/Borrowing/BorrowingCard";
 import {
   Pagination,
@@ -6,6 +6,9 @@ import {
   Grid,
   Typography,
   Box,
+  FormControl,
+  InputLabel,
+  NativeSelect,
 } from "@mui/material";
 import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
@@ -13,22 +16,22 @@ import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 
 function BorrowingList(props) {
-  const {getMembers} = useMembers();
-  const {getBooks} = useBooks();
-  const [borrowings, setBorrowings] = React.useState([]);
-  const [totalPages, setTotalPages] = React.useState(1);
-  const [borrowingPage, setBorrowingPage] = React.useState(1);
-  const [borrowingsPerPage, setBorrowingsPerPage] = React.useState(10);
-  const [loading, setLoading] = React.useState(false);
+  const { getMembers } = useMembers();
+  const { getBooks } = useBooks();
+  const [borrowings, setBorrowings] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [borrowingPage, setBorrowingPage] = useState(1);
+  const [borrowingsPerPage, setBorrowingsPerPage] = useState(10);
+  const [loading, setLoading] = useState(false);
   const borrowingsArray = borrowings ? Array.from(borrowings) : [];
-  const {fetchData} = useApi([]);
-  
+  const { fetchData } = useApi([]);
+
   async function getBorrowings() {
     setLoading(true);
     fetchData({
       method: "GET",
-      url: `http://localhost:5000/api/borrowings?per_page=${borrowingsPerPage}&page=${borrowingPage}`,
-      })
+      url: `http://localhost:5000/api/borrowings?per_page=${borrowingsPerPage}&page=${borrowingPage}&type=${type}`,
+    })
       .then((res) => {
         if (res.data.status) {
           console.log(res.data);
@@ -58,13 +61,36 @@ function BorrowingList(props) {
       }
     });
   }
-
-  const [currentId, setCurrentId] = React.useState();
-  React.useEffect(() => {
+  const [type, setType] = useState("all");
+  const [currentId, setCurrentId] = useState();
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
+  };
+  useEffect(() => {
     getBorrowings();
   }, [borrowingPage]);
+  useEffect(() => {
+    getBorrowings();
+    console.log(type);
+  }, [type]);
   return (
     <Box display="flex" flexDirection="column" p={3} flex={1} gap={2}>
+      <FormControl sx={{ ml: "auto", mr: 5 }}>
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          Filter
+        </InputLabel>
+        <NativeSelect
+          inputProps={{
+            name: "filter",
+            id: "uncontrolled-native",
+          }}
+          onChange={handleTypeChange}
+        >
+          <option value={"all"}>All</option>
+          <option value={"active"}>Active</option>
+          <option value={"returned"}>Returned</option>
+        </NativeSelect>
+      </FormControl>
       <Grid container xs={12} spacing={2}>
         {borrowingsArray.length > 0 ? (
           borrowingsArray.map((row) => (
