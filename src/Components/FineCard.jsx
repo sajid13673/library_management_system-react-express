@@ -19,7 +19,7 @@ function FineCard({
   borrowingStatus,
 }) {
   return (
-    <Grid item xs={12} sm={12} md={6} lg={4}>
+    <Grid item xs={12} sm={6} md={4} lg={3}>
       <Card sx={{ minWidth: 275, height: "100%" }}>
         <CardContent>
           <Typography variant="h6" sx={{ textTransform: 'capitalize' }} component="div">

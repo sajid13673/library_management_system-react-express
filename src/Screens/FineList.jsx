@@ -8,9 +8,12 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
+  FormControl,
   Grid,
+  InputLabel,
   LinearProgress,
   MenuItem,
+  NativeSelect,
   Pagination,
   Select,
   Stack,
@@ -37,19 +40,20 @@ function FineList() {
     data: paymentRes,
     loading: loadingPayment,
   } = useApi();
-  const [fines, setFines] = React.useState([]);
-  const [fine, setFine] = React.useState([]);
+  const [fines, setFines] = useState([]);
+  const [fine, setFine] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
-  const perPage = 9;
+  const perPage = 12;
   const [page, setPage] = useState(1);
   const [processPaymentDialog, setProcessPaymentDialog] = useState(false);
   const [confirmPaymentDialog, setConfirmPaymentDialog] = useState(false);
-  const [type, setType] = React.useState("cash");
+  const [paymentType, setPaymentType] = useState("cash");
   const [paymentMessage, setPaymentMessage] = useState(null);
+  const [type, setType] = useState('all');
   const getFines = async () => {
     await fetchAllFInes({
       method: "GET",
-      url: `/fines?page=${page}&perPage=${perPage}`,
+      url: `/fines?page=${page}&perPage=${perPage}&type=${type}`,
     });
   };
   function handleChange(e, value) {
@@ -63,14 +67,14 @@ function FineList() {
       url: `/fines/${id}`,
     });
   };
-  const handleTypeChange = (event) => {
-    setType(event.target.value);
+  const handlePaymentTypeChange = (event) => {
+    setPaymentType(event.target.value);
   };
   const handlePayment = async () => {
     await makePayment({
       method: "POST",
       url: `/payments`,
-      data: { fineId: fine.id, amount: fine.amount, type: type },
+      data: { fineId: fine.id, amount: fine.amount, type: paymentType },
     });
   };
   const hadleAfterMessage = () => {
@@ -83,6 +87,9 @@ function FineList() {
   const handleMakePayment = () => {
     setPaymentMessage(null);
     setConfirmPaymentDialog(true);
+  };
+  const handleTypeChange = (event) => {
+    setType(event.target.value);
   };
   useEffect(() => {
     getFines();
@@ -204,13 +211,33 @@ function FineList() {
         color: "white",
       }),
   ];
+  
   useEffect(() => {
     console.log("payment message");
 
     console.log(paymentMessage);
   }, [paymentMessage]);
+   useEffect(() => {
+      getFines();
+    }, [type]);
   return (
     <Box display="flex" flexDirection="column" p={3} flex={1} gap={2}>
+      <FormControl sx={{ ml: "auto", mr: 5 }}>
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          Filter
+        </InputLabel>
+        <NativeSelect
+          inputProps={{
+            name: "filter",
+            id: "uncontrolled-native",
+          }}
+          onChange={handleTypeChange}
+        >
+          <option value={"all"}>All</option>
+          <option value={"paid"}>Paid</option>
+          <option value={"unpaid"}>Unpaid</option>
+        </NativeSelect>
+      </FormControl>
       <Dialog
         open={processPaymentDialog}
         onClose={() => setProcessPaymentDialog(false)}
@@ -272,8 +299,8 @@ function FineList() {
               <Select
                 labelId="payment-type-label"
                 id="payment-type"
-                value={type}
-                onChange={handleTypeChange}
+                value={paymentType}
+                onChange={handlePaymentTypeChange}
                 fullWidth
                 sx={{ marginTop: 2 }}
               >
