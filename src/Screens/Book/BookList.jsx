@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BookCard from "../../Components/Book/BookCard";
 import {
@@ -8,16 +8,20 @@ import {
   Container,
   Grid,
   Typography,
+  FormControl,
+  InputLabel,
+  NativeSelect,
 } from "@mui/material";
 import Loading from "../../Components/Loading";
 import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 
 export default function BookList(props) {
-  const {fetchData} = useApi([]);
+  const {fetchData:deleteBook, error:deleteError, loading:deleteLoading, data:deleteData} = useApi([]);
   const [page, setPage] = useState(1)
   const [perPage, setPerPage] = useState(12)
-  const {books, error, getBooks, loading} = useBooks(page, perPage)
+  const [orderBy, setOrderBy] = useState('createdAt-desc');
+  const {books, error, getBooks, loading} = useBooks(page, perPage, orderBy)
   const data = Array.from(books?.data || []);
   const totalPages = books?.totalPages || 1;
   console.log("data");
@@ -29,14 +33,7 @@ export default function BookList(props) {
     navigate("/edit-book", { state: { id: id } });
   }
   async function handleBookDelete(id) {
-    
-      fetchData({method: "DELETE", url: `http://localhost:5000/api/books/${id}`})
-      .then((res) => {
-        if (res.status) {
-          getBooks();
-        }
-      })
-      .catch((err) => console.log(err));
+    deleteBook({method: "DELETE", url: `http://localhost:5000/api/books/${id}`})
   }
   function handleAddBrowing(bookId) {
     navigate("/add-borrowing", { state: { bookId: bookId } });
@@ -44,9 +41,46 @@ export default function BookList(props) {
   function handleChange(e, value) {
     setPage(value);
   }
-  React.useEffect(() => {}, []);
+  const handleOrderByChange = (event) => {
+    setOrderBy(event.target.value);
+  };
+  useEffect(() => {
+    if(deleteData && deleteData.status) {
+      getBooks();
+    }
+    if(deleteError) {
+      console.error(deleteError);
+    }
+  }, [deleteData, deleteError]);
+  useEffect(() => {
+    if(totalPages < page) {
+      setPage(totalPages)
+    }
+    console.log("totalPages: " + totalPages);
+    
+  }, [totalPages])
+
   return (
     <Box p={3} flex={1} display="flex" flexDirection="column" gap={2}>
+      <FormControl sx={{ ml: "auto", mr: 3 }}>
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          Sort by
+        </InputLabel>
+        <NativeSelect
+          inputProps={{
+            name: "filter",
+            id: "uncontrolled-native",
+          }}
+          onChange={handleOrderByChange}
+        >
+          <option value={"createdAt-desc"}>New to old</option>
+          <option value={"createdAt-asc"}>Old to new</option>
+          <option value={"title-asc"}>Title ascending</option>
+          <option value={"title-desc"}>Title descending</option>
+          <option value={"year-desc"}>Year descending</option>
+          <option value={"year-asc"}>Year ascending</option>
+        </NativeSelect>
+      </FormControl>
       <Grid container spacing={2}>
         {data.length > 0 ? (
           data.map((row) => (

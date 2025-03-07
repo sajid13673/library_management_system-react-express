@@ -29,7 +29,7 @@ function AddBook(props) {
       alignItems="center" 
       justifyContent="center" 
       flexGrow={1} 
-      minHeight="calc(100vh - 69px)"  // Adjust based on navbar height
+      minHeight="calc(100vh - 69px)"  
     >
       <BookForm
         handleSubmit={handleSubmit}

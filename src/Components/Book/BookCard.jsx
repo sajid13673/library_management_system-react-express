@@ -18,7 +18,6 @@ import noImagePic from "../../images/no_image.jpg";
 
 export default function BookCard(props) {
   const { token } = useAuth();
-  console.log(props.path);
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
