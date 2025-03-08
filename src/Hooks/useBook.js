@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useApi from "./useApi";
 
-const useBooks = (page, perPage, orderBy) => {
+const useBooks = (page, perPage, orderBy, searchTerm) => {
     const [books, setBooks] = useState([]);
     const [loading, setLoading] = useState(false);
     const {fetchData} = useApi([]);
@@ -10,7 +10,7 @@ const useBooks = (page, perPage, orderBy) => {
     const getBooks = async () => {
         try {
             setLoading(true);
-            const res = await fetchData({method: 'GET', url: `/books?page=${page}&perPage=${perPage}&order=${orderBy ? orderBy : 'createdAt-desc'}`});
+            const res = await fetchData({method: 'GET', url: `/books?page=${page}&perPage=${perPage}&order=${orderBy ? orderBy : 'createdAt-desc'}&search=${searchTerm}`});
             if(res){
                 setBooks(res.data);
                 setLoading(false);	
