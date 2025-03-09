@@ -1,5 +1,5 @@
 import { Container, Grid, Typography } from "@material-ui/core";
-import React from "react";
+import React, { useEffect, useState } from "react";
 import BorrowingCard from "../../Components/Borrowing/BorrowingCard";
 import { useLocation } from "react-router-dom";
 import { Box, Pagination, Stack } from "@mui/material";
@@ -7,6 +7,7 @@ import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
+import useBorrowing from "../../Hooks/useBorrowing";
 
 function MemberBorrowingList(props) {
   const {getMembers} = useMembers();
@@ -15,12 +16,13 @@ function MemberBorrowingList(props) {
   const location = useLocation();
   const memberId = location.state.memberId;
   
-  const [member, setMember] = React.useState([]);
-  const [totalPages, setTotalPages] = React.useState(1);
-  const [borrowingPage, setBorrowingPage] = React.useState(1);
-  const [borrowingsPerPage, setBorrowingsPerPage] = React.useState(10);
-  const [loading, setLoading] = React.useState(false);
+  const [member, setMember] = useState([]);
+  const [totalPages, setTotalPages] = useState(1);
+  const [borrowingPage, setBorrowingPage] = useState(1);
+  const [borrowingsPerPage, setBorrowingsPerPage] = useState(10);
+  const [loading, setLoading] = useState(false);
   const borrwings = member?.borrowings ? Array.from(member.borrowings) : [];
+  const {deleteBorrowing, deleteError, deleteLoading, deleteData} = useBorrowing();
 
   async function getMemberWithBorrowings() {
   console.log("memberId: " + memberId);
@@ -52,19 +54,19 @@ function MemberBorrowingList(props) {
   function handleChange(e, value) {
     setBorrowingPage(value);
   }
-  async function handleDelete(id) {
-    await props
-      .handleDeleteBorrowing(id)
-      .then((res) => {
-        res && getMemberWithBorrowings();
-      })
-      .catch((err) => console.log(err));
-  }
 
   const [currentId, setCurrentId] = React.useState();
-  React.useEffect(() => {
+  useEffect(() => {
     getMemberWithBorrowings();
   }, [borrowingPage]);
+  useEffect(() => {
+      if(deleteData && deleteData.status) {
+        getMemberWithBorrowings();
+      }
+      if(deleteError) {
+        console.error(deleteError);
+      }
+    }, [deleteData, deleteError])
   return (
     <Box display="flex" flexDirection="column" flex={1} p={2} gap={2}>
       <Grid container xs={12} spacing={2}>
@@ -84,7 +86,7 @@ function MemberBorrowingList(props) {
               }
               currentId={currentId}
               setCurrentId={(id) => setCurrentId(id)}
-              handleDelete={(id) => handleDelete(id)}
+              handleDelete={(id) => deleteBorrowing(id)}
             />
           ))
         ) : (

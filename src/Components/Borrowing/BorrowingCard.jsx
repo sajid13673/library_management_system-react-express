@@ -96,7 +96,7 @@ function BorrowingCard(props) {
   }
   return (
     <Grid item xs={12} md={6} sx={{ display: "flex" }}>
-      <Card className={classes.card}>
+      <Card sx={{ width: "100%" }} className={classes.card}>
         <CardContent className={classes.cardContent}>
           {token.role === "admin" && (
             <Typography
@@ -226,11 +226,12 @@ function BorrowingCard(props) {
               )}
             </Grid>
             <Grid item xs={12} sm={5} className={classes.bookDetails}>
-              {props.book && (
                 <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
                   <Typography variant="h6" gridColumn="span 12">
                     Book Details
                   </Typography>
+              {props.book ? (
+                <>
                   <Typography
                     variant="body2"
                     color="textSecondary"
@@ -287,8 +288,13 @@ function BorrowingCard(props) {
                   >
                     {props.book.year}
                   </Typography>
-                </Box>
+                  </>
+              ) : (
+                <Typography variant="body2" color="textSecondary" gridColumn="span 12">
+                  Book details not available
+                </Typography>
               )}
+                </Box>
             </Grid>
           </Grid>
         </CardContent>

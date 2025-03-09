@@ -37,6 +37,7 @@ function App() {
   const [memberPage, setMemberPage] = React.useState(1);
   const { darkMode } = useTheme();
   const [user, setUser] = React.useState({});
+  const { token } = useAuth();
   const {
     fetchData: fetchUser,
     error: userError,
@@ -86,24 +87,6 @@ function App() {
       }),
     [darkMode]
   );
-  const { token } = useAuth();
-
-  function handleDeleteBorrowing(id) {
-    return new Promise(function (resolve, reject) {
-      fetchData({
-        method: "DELETE",
-        url: `http://localhost:5000/api/borrowings/${id}`,
-      })
-        .then((res) => {
-          if (res.data.status) {
-            console.log("borrowing deleted");
-            resolve(true);
-          }
-        })
-        .catch((err) => reject(err));
-    });
-  }
-
   async function handleConfirmReturn(id, formData, book) {
     const form = new FormData();
     Object.keys(book).map((key) => form.append(key, book[key]));
@@ -236,7 +219,6 @@ function App() {
                       handleConfirmReturn={(id, formData, book) =>
                         handleConfirmReturn(id, formData, book)
                       }
-                      handleDeleteBorrowing={(id) => handleDeleteBorrowing(id)}
                     />
                   </Layout>
                 }
@@ -246,7 +228,6 @@ function App() {
                 element={
                   <Layout>
                     <BorrowingList
-                      handleDeleteBorrowing={(id) => handleDeleteBorrowing(id)}
                       handleConfirmReturn={(id, formData, book) =>
                         handleConfirmReturn(id, formData, book)
                       }

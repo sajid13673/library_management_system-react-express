@@ -14,6 +14,7 @@ import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
+import useBorrowing from "../../Hooks/useBorrowing";
 
 function BorrowingList(props) {
   const { getMembers } = useMembers();
@@ -25,6 +26,7 @@ function BorrowingList(props) {
   const [loading, setLoading] = useState(false);
   const borrowingsArray = borrowings ? Array.from(borrowings) : [];
   const { fetchData } = useApi([]);
+  const {deleteBorrowing, deleteError, deleteLoading, deleteData} = useBorrowing();
 
   async function getBorrowings() {
     setLoading(true);
@@ -54,13 +56,6 @@ function BorrowingList(props) {
   function handleChange(e, value) {
     setBorrowingPage(value);
   }
-  async function handleDelete(id) {
-    await props.handleDeleteBorrowing(id).then((res) => {
-      if (res) {
-        getBorrowings();
-      }
-    });
-  }
   const [type, setType] = useState("all");
   const [currentId, setCurrentId] = useState();
   const handleTypeChange = (event) => {
@@ -74,6 +69,14 @@ function BorrowingList(props) {
     getBorrowings();
     console.log(type);
   }, [type]);
+  useEffect(() => {
+    if(deleteData && deleteData.status) {
+      getBorrowings();
+    }
+    if(deleteError) {
+      console.error(deleteError);
+    }
+  }, [deleteData, deleteError])
   return (
     <Box display="flex" flexDirection="column" p={3} flex={1} gap={2}>
       <FormControl sx={{ ml: "auto", mr: 5 }}>
@@ -110,7 +113,7 @@ function BorrowingList(props) {
               }
               currentId={currentId}
               setCurrentId={(id) => setCurrentId(id)}
-              handleDelete={(id) => handleDelete(id)}
+              handleDelete={(id) => deleteBorrowing(id)}
             />
           ))
         ) : (
