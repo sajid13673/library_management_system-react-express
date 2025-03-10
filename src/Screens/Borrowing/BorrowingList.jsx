@@ -16,7 +16,7 @@ import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 import useBorrowing from "../../Hooks/useBorrowing";
 
-function BorrowingList(props) {
+function BorrowingList() {
   const { getMembers } = useMembers();
   const { getBooks } = useBooks();
   const [borrowings, setBorrowings] = useState([]);
@@ -26,7 +26,15 @@ function BorrowingList(props) {
   const [loading, setLoading] = useState(false);
   const borrowingsArray = borrowings ? Array.from(borrowings) : [];
   const { fetchData } = useApi([]);
-  const {deleteBorrowing, deleteError, deleteLoading, deleteData} = useBorrowing();
+  const {
+    deleteBorrowing,
+    deleteError,
+    deleteLoading,
+    deleteData,
+    confirmReturn,
+    returnData,
+    returnError,
+  } = useBorrowing();
 
   async function getBorrowings() {
     setLoading(true);
@@ -43,15 +51,6 @@ function BorrowingList(props) {
         }
       })
       .catch((err) => console.log(err));
-  }
-  async function handleConfirmReturn(id, formData, book) {
-    await props.handleConfirmReturn(id, formData, book).then((res) => {
-      if (res) {
-        getBooks();
-        getMembers();
-        getBorrowings();
-      }
-    });
   }
   function handleChange(e, value) {
     setBorrowingPage(value);
@@ -70,13 +69,23 @@ function BorrowingList(props) {
     console.log(type);
   }, [type]);
   useEffect(() => {
-    if(deleteData && deleteData.status) {
+    if (deleteData && deleteData.status) {
       getBorrowings();
     }
-    if(deleteError) {
+    if (deleteError) {
       console.error(deleteError);
     }
-  }, [deleteData, deleteError])
+  }, [deleteData, deleteError]);
+  useEffect(() => {
+    if (returnData && returnData.status) {
+      getBooks();
+      getMembers();
+      getBorrowings();
+    }
+    if (returnError) {
+      console.error(returnError);
+    }
+  }, [returnData, returnError])
   return (
     <Box display="flex" flexDirection="column" p={3} flex={1} gap={2}>
       <FormControl sx={{ ml: "auto", mr: 5 }}>
@@ -109,7 +118,7 @@ function BorrowingList(props) {
               memberId={row.member.id}
               memberName={row.member.name}
               handleConfirmReturn={(id, formData, book) =>
-                handleConfirmReturn(id, formData, book)
+                confirmReturn(id, formData)
               }
               currentId={currentId}
               setCurrentId={(id) => setCurrentId(id)}

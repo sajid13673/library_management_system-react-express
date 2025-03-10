@@ -87,24 +87,6 @@ function App() {
       }),
     [darkMode]
   );
-  async function handleConfirmReturn(id, formData, book) {
-    const form = new FormData();
-    Object.keys(book).map((key) => form.append(key, book[key]));
-    return new Promise((resolve, reject) => {
-      fetchData({
-        method: "PUT",
-        url: `http://localhost:5000/api/borrowings/${id}`,
-        data: formData,
-      })
-        .then((res) => {
-          if (res.data.status) {
-            resolve(true);
-          }
-        })
-        .catch((err) => reject(err));
-    });
-  }
-
   const getUser = async () => {
     await fetchUser({ method: "GET", url: "/profile" }).then((res) => {
       if (res) {
@@ -215,11 +197,7 @@ function App() {
                 path="/member-borrowing-list"
                 element={
                   <Layout>
-                    <MemberBorrowingList
-                      handleConfirmReturn={(id, formData, book) =>
-                        handleConfirmReturn(id, formData, book)
-                      }
-                    />
+                    <MemberBorrowingList />
                   </Layout>
                 }
               />
@@ -227,11 +205,7 @@ function App() {
                 path="/borrowing-list"
                 element={
                   <Layout>
-                    <BorrowingList
-                      handleConfirmReturn={(id, formData, book) =>
-                        handleConfirmReturn(id, formData, book)
-                      }
-                    />
+                    <BorrowingList />
                   </Layout>
                 }
               />

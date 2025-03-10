@@ -9,23 +9,31 @@ import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 import useBorrowing from "../../Hooks/useBorrowing";
 
-function MemberBorrowingList(props) {
-  const {getMembers} = useMembers();
-  const {getBooks} = useBooks();
-  const {fetchData} = useApi();
+function MemberBorrowingList() {
+  const { getMembers } = useMembers();
+  const { getBooks } = useBooks();
+  const { fetchData } = useApi();
   const location = useLocation();
   const memberId = location.state.memberId;
-  
+
   const [member, setMember] = useState([]);
   const [totalPages, setTotalPages] = useState(1);
   const [borrowingPage, setBorrowingPage] = useState(1);
   const [borrowingsPerPage, setBorrowingsPerPage] = useState(10);
   const [loading, setLoading] = useState(false);
   const borrwings = member?.borrowings ? Array.from(member.borrowings) : [];
-  const {deleteBorrowing, deleteError, deleteLoading, deleteData} = useBorrowing();
+  const {
+    deleteBorrowing,
+    deleteError,
+    deleteLoading,
+    deleteData,
+    confirmReturn,
+    returnData,
+    returnError,
+  } = useBorrowing();
 
   async function getMemberWithBorrowings() {
-  console.log("memberId: " + memberId);
+    console.log("memberId: " + memberId);
 
     setLoading(true);
     fetchData({
@@ -34,22 +42,13 @@ function MemberBorrowingList(props) {
     })
       .then((res) => {
         if (res.data.status) {
-          console.log(res.data)
+          console.log(res.data);
           setLoading(false);
           setMember(res.data.data);
           setTotalPages(res.data.totalPages);
         }
       })
       .catch((err) => console.log(err));
-  }
-  async function handleConfirmReturn(id, formData, book) {
-    await props.handleConfirmReturn(id, formData, book).then((res) => {
-      if (res) {
-        getBooks();
-        getMembers();
-        getMemberWithBorrowings();
-      }
-    });
   }
   function handleChange(e, value) {
     setBorrowingPage(value);
@@ -58,15 +57,25 @@ function MemberBorrowingList(props) {
   const [currentId, setCurrentId] = React.useState();
   useEffect(() => {
     getMemberWithBorrowings();
+    getBooks();
+    getMembers();
   }, [borrowingPage]);
   useEffect(() => {
-      if(deleteData && deleteData.status) {
-        getMemberWithBorrowings();
-      }
-      if(deleteError) {
-        console.error(deleteError);
-      }
-    }, [deleteData, deleteError])
+    if (deleteData && deleteData.status) {
+      getMemberWithBorrowings();
+    }
+    if (deleteError) {
+      console.error(deleteError);
+    }
+  }, [deleteData, deleteError]);
+  useEffect(() => {
+    if (returnData && returnData.status) {
+      getMemberWithBorrowings();
+    }
+    if (returnError) {
+      console.error(returnError);
+    }
+  }, [returnData, returnError]);
   return (
     <Box display="flex" flexDirection="column" flex={1} p={2} gap={2}>
       <Grid container xs={12} spacing={2}>
@@ -82,7 +91,7 @@ function MemberBorrowingList(props) {
               borrowedDate={row.createdAt}
               member={member.id + ". " + member.name}
               handleConfirmReturn={(id, formData, book) =>
-                handleConfirmReturn(id, formData, book)
+                confirmReturn(id, formData)
               }
               currentId={currentId}
               setCurrentId={(id) => setCurrentId(id)}
