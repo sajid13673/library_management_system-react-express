@@ -78,7 +78,7 @@ function BorrowingCard(props) {
     }));
   }
 
-  function handleSubmit(id, formData, book) {
+  function handleSubmit(id, formData) {
     if (formData.returnDate === null) {
       setError(true);
       setErrorMsg("Required");
@@ -91,7 +91,7 @@ function BorrowingCard(props) {
       setError(true);
       setErrorMsg("Entered date is before the borrowed date");
     } else {
-      props.handleConfirmReturn(id, formData, book);
+      props.handleConfirmReturn(id, formData);
     }
   }
   return (
@@ -189,7 +189,7 @@ function BorrowingCard(props) {
                         <ButtonGroup>
                           <Button
                             onClick={() =>
-                              handleSubmit(props.id, formData, props.book)
+                              handleSubmit(props.id, formData)
                             }
                             variant="contained"
                             color="primary"

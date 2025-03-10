@@ -117,7 +117,7 @@ function BorrowingList() {
               borrowedDate={row.createdAt}
               memberId={row.member.id}
               memberName={row.member.name}
-              handleConfirmReturn={(id, formData, book) =>
+              handleConfirmReturn={(id, formData) =>
                 confirmReturn(id, formData)
               }
               currentId={currentId}
