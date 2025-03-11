@@ -9,20 +9,24 @@ import {
   Grid,
   Typography,
   Box,
+  FormControl,
+  InputLabel,
+  NativeSelect,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 
-export default function MemberList(props) {
+export default function MemberList() {
   const { fetchData } = useApi();
   const [page, setPage] = useState(1);
-  const {members, error, getMembers, loading} = useMembers(page, 5)
+  const [orderBy, setOrderBy] = useState("createdAt-desc");
+  const { members, error, getMembers, loading } = useMembers(page, 5, orderBy);
   const data = Array.from(members?.data || []);
   const totalPages = members?.totalPages || 1;
   console.log(data);
-  
+
   const navigate = useNavigate();
   function handleBorrowings(id) {
     navigate("/member-borrowing-list", { state: { memberId: id } });
@@ -34,7 +38,10 @@ export default function MemberList(props) {
     navigate("/edit-member", { state: { id: id } });
   }
   async function handleDeleteMember(id) {
-      await fetchData({method: "DELETE", url: `http://localhost:5000/api/members/${id}`})
+    await fetchData({
+      method: "DELETE",
+      url: `http://localhost:5000/api/members/${id}`,
+    })
       .then((res) => {
         if (res.data.status) {
           console.log("member deleted");
@@ -46,6 +53,9 @@ export default function MemberList(props) {
   function handleChange(e, value) {
     setPage(value);
   }
+  const handleOrderByChange = (event) => {
+    setOrderBy(event.target.value);
+  };
   return (
     <Box flex={1} display="flex" flexDirection="column" p={2} gap={2}>
       {error && <Typography>Error</Typography>}
@@ -58,6 +68,23 @@ export default function MemberList(props) {
         ADD MEMBER
         <AddCircleIcon style={{ marginLeft: "5px" }} />
       </Button>
+      <FormControl sx={{ ml: "auto", mr: 3 }}>
+        <InputLabel variant="standard" htmlFor="uncontrolled-native">
+          Sort by
+        </InputLabel>
+        <NativeSelect
+          inputProps={{
+            name: "filter",
+            id: "uncontrolled-native",
+          }}
+          onChange={handleOrderByChange}
+        >
+          <option value={"createdAt-desc"}>New to old</option>
+          <option value={"createdAt-asc"}>Old to new</option>
+          <option value={"name-asc"}>Name ascending</option>
+          <option value={"name-desc"}>Name descending</option>
+        </NativeSelect>
+      </FormControl>
       <Grid container spacing={2}>
         {data.length > 0 ? (
           data.map((row) => (

@@ -19,7 +19,7 @@ import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 import SearchIcon from "@mui/icons-material/Search";
 
-export default function BookList(props) {
+export default function BookList() {
   const {
     fetchData: deleteBook,
     error: deleteError,
