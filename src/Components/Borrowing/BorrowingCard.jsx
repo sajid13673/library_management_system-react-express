@@ -307,8 +307,9 @@ function BorrowingCard(props) {
                 variant="contained"
                 color="secondary"
                 sx={{ background: "#E71919" }}
+                disabled={props.hasPendingFine}
               >
-                Delete
+                {!props.hasPendingFine ?  "delete" : "has unpaid fine"}
                 <DeleteForeverIcon sx={{ ml: 1 }} />
               </Button>
             )}

@@ -78,18 +78,20 @@ function MemberBorrowingList() {
   }, [returnData, returnError]);
   return (
     <Box display="flex" flexDirection="column" flex={1} p={2} gap={2}>
-      <Grid container xs={12} spacing={2}>
+      <Grid container spacing={2}>
         {borrwings.length > 0 ? (
           borrwings.map((row) => (
             <BorrowingCard
               key={row.id}
+              memberName={member.name}
+              memberId={member.id}
               id={row.id}
               book={row.book}
               dueDate={row.dueDate}
               status={row.status}
               returnDate={row.returnDate}
               borrowedDate={row.createdAt}
-              member={member.id + ". " + member.name}
+              hasPendingFine={row.hasPendingFine}
               handleConfirmReturn={(id, formData) =>
                 confirmReturn(id, formData)
               }
