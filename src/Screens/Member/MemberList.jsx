@@ -12,17 +12,21 @@ import {
   FormControl,
   InputLabel,
   NativeSelect,
+  IconButton,
+  InputBase,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
 import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
+import SearchIcon from "@mui/icons-material/Search";
 
 export default function MemberList() {
   const { fetchData } = useApi();
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState("createdAt-desc");
-  const { members, error, getMembers, loading } = useMembers(page, 5, orderBy);
+  const [searchTerm, setSearchTerm] = useState("");
+  const { members, error, getMembers, loading } = useMembers(page, 5, orderBy, searchTerm);
   const data = Array.from(members?.data || []);
   const totalPages = members?.totalPages || 1;
   console.log(data);
@@ -56,6 +60,14 @@ export default function MemberList() {
   const handleOrderByChange = (event) => {
     setOrderBy(event.target.value);
   };
+  const handleSearchChange = (event) => {
+    setSearchTerm(event.target.value);
+  };
+  const handleSearch = (e) => {
+    e.preventDefault();
+    setPage(1);
+    getMembers();
+  };
   return (
     <Box flex={1} display="flex" flexDirection="column" p={2} gap={2}>
       {error && <Typography>Error</Typography>}
@@ -68,6 +80,29 @@ export default function MemberList() {
         ADD MEMBER
         <AddCircleIcon style={{ marginLeft: "5px" }} />
       </Button>
+        <Box
+          component="form"
+          onSubmit={handleSearch}
+          noValidate
+          sx={{
+            display: "flex",
+            flexDirection: "row",
+            width: "10rem",
+            ml: "auto",
+            mr: 3,
+          }}
+        >
+          <InputBase
+            sx={{ ml: 1, flex: 1 }}
+            placeholder="Search"
+            inputProps={{ "aria-label": "search google maps" }}
+            onChange={handleSearchChange}
+            value={searchTerm}
+          />
+          <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+            <SearchIcon />
+          </IconButton>
+        </Box>
       <FormControl sx={{ ml: "auto", mr: 3 }}>
         <InputLabel variant="standard" htmlFor="uncontrolled-native">
           Sort by

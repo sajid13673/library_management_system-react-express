@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import useApi from "./useApi";
 
-const useMembers = (page, perPage, orderBy) => {
+const useMembers = (page, perPage, orderBy, searchTerm) => {
   const [members, setMembers] = useState({});
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -15,7 +15,7 @@ const useMembers = (page, perPage, orderBy) => {
         method: "GET",
         url: `/members?page=${page}&per_page=${perPage}&order=${
           orderBy ? orderBy : "createdAt-desc"
-        }`,
+        }&search=${searchTerm}`,
       });
       if (res) {
         setMembers(res.data);
