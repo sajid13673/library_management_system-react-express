@@ -7,8 +7,8 @@ import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 
 function EditMember(props) {
-  const {getMembers} = useMembers();
-  const {fetchData} = useApi([]);
+  const { getMembers } = useMembers();
+  const { fetchData } = useApi([]);
   const navigate = useNavigate();
   const location = useLocation();
   const memberId = location.state.id;
@@ -48,6 +48,7 @@ function EditMember(props) {
       justifyContent="center"
       alignItems="center"
       flex={1}
+      minHeight="calc(100vh - 69px)"
     >
       <MemberForm
         validateEmail={(str) => props.validateEmail(str)}

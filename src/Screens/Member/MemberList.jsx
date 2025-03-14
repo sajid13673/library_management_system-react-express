@@ -26,7 +26,12 @@ export default function MemberList() {
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState("createdAt-desc");
   const [searchTerm, setSearchTerm] = useState("");
-  const { members, error, getMembers, loading } = useMembers(page, 5, orderBy, searchTerm);
+  const { members, error, getMembers, loading } = useMembers(
+    page,
+    5,
+    orderBy,
+    searchTerm
+  );
   const data = Array.from(members?.data || []);
   const totalPages = members?.totalPages || 1;
   console.log(data);
@@ -71,15 +76,16 @@ export default function MemberList() {
   return (
     <Box flex={1} display="flex" flexDirection="column" p={2} gap={2}>
       {error && <Typography>Error</Typography>}
-      <Button
-        variant="contained"
-        sx={{ maxWidth: "15rem" }}
-        color="primary"
-        onClick={handleAddMember}
-      >
-        ADD MEMBER
-        <AddCircleIcon style={{ marginLeft: "5px" }} />
-      </Button>
+      <Box display="flex">
+        <Button
+          variant="contained"
+          sx={{ maxWidth: "15rem" }}
+          color="primary"
+          onClick={handleAddMember}
+        >
+          ADD MEMBER
+          <AddCircleIcon style={{ marginLeft: "5px" }} />
+        </Button>
         <Box
           component="form"
           onSubmit={handleSearch}
@@ -103,6 +109,7 @@ export default function MemberList() {
             <SearchIcon />
           </IconButton>
         </Box>
+      </Box>
       <FormControl sx={{ ml: "auto", mr: 3 }}>
         <InputLabel variant="standard" htmlFor="uncontrolled-native">
           Sort by

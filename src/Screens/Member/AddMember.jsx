@@ -1,13 +1,12 @@
 import React from "react";
 import MemberForm from "../../Components/Member/MemberForm";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 function AddMember(props) {
-  const {fetchData} = useApi([]);
-  const {getMembers} = useMembers();
+  const { fetchData } = useApi([]);
+  const { getMembers } = useMembers();
   const navigate = useNavigate();
   const handleSubmit = async (formData, formik) => {
     fetchData({
@@ -38,7 +37,7 @@ function AddMember(props) {
       justifyContent="center"
       alignItems="center"
       flex={1}
-      p={2}
+      minHeight="calc(100vh - 69px)"
     >
       <MemberForm
         validateEmail={(str) => props.validateEmail(str)}
