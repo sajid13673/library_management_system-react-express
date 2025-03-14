@@ -86,7 +86,7 @@ function Navbar(props) {
       ? ["book list", "member list", "add book", "borrowing list", "fine list"]
       : ["book list", "my borrowings"];
   const navigateToPage = (page) => {
-    navigate("/" + page.split(" ").join("-"));
+      navigate("/" + page.split(" ").join("-"));
   };
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -96,6 +96,9 @@ function Navbar(props) {
   };
 
   const handleCloseNavMenu = (page) => {
+    console.log("page");
+    console.log(page);
+    
     setAnchorElNav(null);
     if (page) {
       navigateToPage(page);
@@ -195,7 +198,7 @@ function Navbar(props) {
                 horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
-              onClose={handleCloseNavMenu}
+              onClose={()=>handleCloseNavMenu(null)}
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
