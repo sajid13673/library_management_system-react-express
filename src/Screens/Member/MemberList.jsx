@@ -26,12 +26,12 @@ export default function MemberList() {
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState("createdAt-desc");
   const [searchTerm, setSearchTerm] = useState("");
-  const { members, error, getMembers, loading } = useMembers(
+  const { members, error, getMembers, loading } = useMembers({
     page,
-    5,
+    perPage: 12,
     orderBy,
     searchTerm
-  );
+  });
   const data = Array.from(members?.data || []);
   const totalPages = members?.totalPages || 1;
   console.log(data);

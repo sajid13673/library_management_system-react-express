@@ -10,7 +10,7 @@ import useApi from "../../Hooks/useApi";
 import useBorrowing from "../../Hooks/useBorrowing";
 
 function MemberBorrowingList() {
-  const { getMembers } = useMembers();
+  const { getMembers } = useMembers({});
   const { getBooks } = useBooks();
   const { fetchData } = useApi();
   const location = useLocation();

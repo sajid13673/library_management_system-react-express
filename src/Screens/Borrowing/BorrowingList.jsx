@@ -17,7 +17,7 @@ import useApi from "../../Hooks/useApi";
 import useBorrowing from "../../Hooks/useBorrowing";
 
 function BorrowingList() {
-  const { getMembers } = useMembers();
+  const { getMembers } = useMembers({});
   const { getBooks } = useBooks();
   const [borrowings, setBorrowings] = useState([]);
   const [totalPages, setTotalPages] = useState(1);

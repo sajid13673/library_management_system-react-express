@@ -6,7 +6,7 @@ import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 function AddMember(props) {
   const { fetchData } = useApi([]);
-  const { getMembers } = useMembers();
+  const { getMembers } = useMembers({});
   const navigate = useNavigate();
   const handleSubmit = async (formData, formik) => {
     fetchData({

@@ -22,7 +22,7 @@ import useApi from "../../Hooks/useApi";
 
 function AddBorrowing() {
   const {fetchData} = useApi([]);
-  const {members, getMembers} = useMembers();
+  const {members, getMembers} = useMembers({all: true});
   const {getBooks} = useBooks();
   const location = useLocation();
   const navigate = useNavigate();

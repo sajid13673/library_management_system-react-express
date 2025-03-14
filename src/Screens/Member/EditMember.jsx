@@ -7,7 +7,7 @@ import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 
 function EditMember(props) {
-  const { getMembers } = useMembers();
+  const { getMembers } = useMembers({});
   const { fetchData } = useApi([]);
   const navigate = useNavigate();
   const location = useLocation();
