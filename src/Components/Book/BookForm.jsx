@@ -1,6 +1,8 @@
 import {
+  Alert,
   Button,
   Card,
+  CircularProgress,
   FormControl,
   Input,
   InputLabel,
@@ -9,17 +11,17 @@ import {
 } from "@mui/material";
 import { useFormik } from "formik";
 import React from "react";
-import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 
-const VisuallyHiddenInput = styled('input')({
-  clip: 'rect(0 0 0 0)',
-  clipPath: 'inset(50%)',
+const VisuallyHiddenInput = styled("input")({
+  clip: "rect(0 0 0 0)",
+  clipPath: "inset(50%)",
   height: 1,
-  overflow: 'hidden',
-  position: 'absolute',
+  overflow: "hidden",
+  position: "absolute",
   bottom: 0,
   left: 0,
-  whiteSpace: 'nowrap',
+  whiteSpace: "nowrap",
   width: 1,
 });
 
@@ -94,8 +96,20 @@ export default function BookForm(props) {
         className="input-form"
         maxWidth="sm"
       >
-        <Typography variant="h3" textTransform='uppercase'>{props.title}</Typography>
-        {/* <h1>Add Member</h1> */}
+        <Typography variant="h3" textTransform="uppercase">
+          {props.title}
+        </Typography>
+        {props.error && (
+          <Alert
+            severity="error"
+            variant="outlined"
+            sx={[(theme) => ({ color: theme.palette.error.main, mb: 2 })]}
+          >
+            {props.error.response?.data?.errors.length > 0
+              ? props.error.response?.data?.errors[0].msg
+              : "Something went wrong"}
+          </Alert>
+        )}
         <FormControl>
           <InputLabel htmlFor="my-input">Title</InputLabel>
           <Input
@@ -153,14 +167,6 @@ export default function BookForm(props) {
           ) : null}
         </FormControl>
         <FormControl>
-          {/* <Input
-            error={formik.errors.image}
-            className="form-input"
-            name="image"
-            type="file"
-            aria-describedby="my-helper-text"
-            onChange={handleUpload}
-          /> */}
           <Button
             component="label"
             role={undefined}
@@ -169,18 +175,23 @@ export default function BookForm(props) {
             startIcon={<CloudUploadIcon />}
           >
             Upload files
-            <VisuallyHiddenInput
-              type="file"
-              onChange={handleUpload}
-              multiple
-            />
+            <VisuallyHiddenInput type="file" onChange={handleUpload} multiple />
           </Button>
           {formik.errors.image ? (
             <div className="error">{formik.errors.image}</div>
           ) : null}
         </FormControl>
-        <Button type="submit" variant="contained" color="primary">
-          {props.title}
+        <Button
+          type="submit"
+          disabled={props.loading}
+          variant="contained"
+          color="primary"
+        >
+          {!props.loading ? (
+            props.title
+          ) : (
+            <CircularProgress color="inherit" size={25} />
+          )}
         </Button>
       </Card>
     </form>
