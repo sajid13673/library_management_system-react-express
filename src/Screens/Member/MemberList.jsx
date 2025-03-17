@@ -135,13 +135,13 @@ export default function MemberList() {
               id={row.id}
               name={row.name}
               email={row.user.email}
-              phone_number={row.phone_number}
+              phone_number={row.phoneNumber}
               address={row.address}
               path={row?.image?.url || null}
               handleEditMember={(id) => handleEditMember(id)}
               handleDeleteMember={(id) => handleDeleteMember(id)}
               handleBorrowings={(id) => handleBorrowings(id)}
-              activeBorrowings={row.activeBorrowingStatus}
+              activeBorrowings={row.activeBorrowings}
             />
           ))
         ) : (
