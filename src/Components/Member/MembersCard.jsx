@@ -12,7 +12,7 @@ import {
   Typography,
   Box,
 } from "@mui/material";
-import noImagePic from "../../images/no_image.jpg";
+import noImagePic from "../../images/profile_icon.png";
 
 export default function MembersCard(props) {
   return (
