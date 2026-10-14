@@ -78,11 +78,10 @@ function Navbar(props) {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
-  const { setToken, token } = useAuth();
-  const { fetchData, error } = useApi([]);
+  const { user, logout } = useAuth();
 
   const pages =
-    token.role === "admin"
+    user.role === "admin"
       ? ["book list", "member list", "add book", "borrowing list", "fine list"]
       : ["book list", "my borrowings"];
   const navigateToPage = (page) => {
@@ -96,8 +95,6 @@ function Navbar(props) {
   };
 
   const handleCloseNavMenu = (page) => {
-    console.log("page");
-    console.log(page);
     
     setAnchorElNav(null);
     if (page) {
@@ -105,7 +102,6 @@ function Navbar(props) {
     }
   };
   const handleCloseUserMenu = (setting) => {
-    console.log(setting);
     switch (setting) {
       case "logout":
         handleLogout();
@@ -118,22 +114,9 @@ function Navbar(props) {
     }
     setAnchorElUser(null);
   };
-  async function handleLogout() {
-    const refreshToken = token.refreshToken;
-    console.log("logout", refreshToken);
-
-    const res = await fetchData({
-      method: "POST",
-      endPoint: "/logout",
-      data: { refreshToken },
-    });
-    if (res && res.data.status) {
-      setToken(null);
-    }
-    if (error) {
-      console.log(error);
-    }
-  }
+async function handleLogout() {
+  await logout();
+}
   return (
     <AppBar
       position="static"

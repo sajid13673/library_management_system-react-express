@@ -1,12 +1,23 @@
 import { Navigate, Outlet } from "react-router-dom";
 import { useAuth } from "./AuthProvider";
+import { useEffect } from "react";
 
 export const ProtectedRoute = ({roles}) => {
-  const { token } = useAuth();
-  const role = token && token.role;
+  const { user, loading } = useAuth();
+  const role = user && user.role;
+  console.log(user, role);
+  
   roles && console.log(roles.includes(role));
+
+  useEffect(() => {
+    console.log(loading, user);
+    
+  }, loading, user)
+  if (loading) {
+        return <div>Loading...</div>;
+    }
   // Check if the user is authenticated
-  if (!token) {
+  if (!user) {
     // If not authenticated, redirect to the login page
     return <Navigate to="/login" />;
   }

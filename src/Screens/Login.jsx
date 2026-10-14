@@ -18,7 +18,7 @@ import {
 import useApi from "../Hooks/useApi"; 
 
 export default function Login(props) {
-  const { setToken } = useAuth();
+  const { setToken, setUser } = useAuth();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
   const [showPassword, setShowPassword] = React.useState(false);
@@ -58,11 +58,10 @@ export default function Login(props) {
         console.log(res);
         
         if (res && res.data.status) {
-          setToken({
-            token: res.data.access_token,
-            role: res.data.role,
-            refreshToken: res.data.refresh_token
-          });
+          setToken(res.data.access_token);
+          setUser(res.data.user)
+          console.log('user', res.data.user);
+          
           navigate("/");
         }
       });
