@@ -40,7 +40,7 @@ function BorrowingList() {
     setLoading(true);
     fetchData({
       method: "GET",
-      url: `http://localhost:5000/api/borrowings?per_page=${borrowingsPerPage}&page=${borrowingPage}&type=${type}`,
+      endPoint: `/borrowings?per_page=${borrowingsPerPage}&page=${borrowingPage}&type=${type}`,
     })
       .then((res) => {
         if (res.data.status) {

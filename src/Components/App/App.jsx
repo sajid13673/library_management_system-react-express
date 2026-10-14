@@ -88,7 +88,7 @@ function App() {
     [darkMode]
   );
   const getUser = async () => {
-    await fetchUser({ method: "GET", url: "/profile" }).then((res) => {
+    await fetchUser({ method: "GET", endPoint: "/profile" }).then((res) => {
       if (res) {
         console.log(res.data.data);
         setUser(res.data.data);

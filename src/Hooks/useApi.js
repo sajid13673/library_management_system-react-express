@@ -1,20 +1,23 @@
 // hooks/useApi.js
 import { useState, useCallback } from 'react';
 import { get, post, put, del } from '../Services/api';
-import { useAuth } from '../utils/AuthProvider'; // Import useAuth
+import { useAuth } from '../utils/AuthProvider';
 
 const useApi = (initialData = []) => {
-    const { token } = useAuth(); // Get the token from AuthProvider
+    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+    const { token } = useAuth();
     const [data, setData] = useState(initialData);
     const [loading, setLoading] = useState(false);
     const [error, setError] = useState(null);
 
-    const fetchData = useCallback(async (requestConfig) => {
+    const fetchData = useCallback(async (requestConfig = {}) => {
         setLoading(true);
         setError(null);
+
         try {
             let response;
-            const { method, url, data } = requestConfig;
+            const { method, endPoint , data } = requestConfig;
+
             const config = {
                 ...requestConfig,
                 headers: {
@@ -22,6 +25,8 @@ const useApi = (initialData = []) => {
                     ...requestConfig.headers,
                 },
             };
+            const url = baseUrl+endPoint;
+
             switch (method) {
                 case 'GET':
                     response = await get(url, config);
@@ -38,6 +43,7 @@ const useApi = (initialData = []) => {
                 default:
                     throw new Error('Invalid method');
             }
+
             setData(response.data);
             return response;
         } catch (err) {

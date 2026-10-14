@@ -49,7 +49,7 @@ export default function MemberList() {
   async function handleDeleteMember(id) {
     await fetchData({
       method: "DELETE",
-      url: `http://localhost:5000/api/members/${id}`,
+      endPoint: `/members/${id}`,
     })
       .then((res) => {
         if (res.data.status) {

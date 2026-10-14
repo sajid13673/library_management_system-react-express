@@ -8,7 +8,7 @@ function AdminHome() {
   const [bookStats, setBookStats] = useState({});
 
   const getBooksData = async () => {
-    fetchData({ method: 'GET', url: `/books/stats` })
+    fetchData({ method: 'GET', endPoint: `/books/stats` })
     .then((res) => {
       if (res.status) {
         setBookStats(res.data);

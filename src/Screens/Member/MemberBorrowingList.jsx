@@ -38,7 +38,7 @@ function MemberBorrowingList() {
     setLoading(true);
     fetchData({
       method: "GET",
-      url: `/members/${memberId}?borrowings=1&borrowingPage=${borrowingPage}&borrowingsPerPage=${borrowingsPerPage}`,
+      endPoint: `/members/${memberId}?borrowings=1&borrowingPage=${borrowingPage}&borrowingsPerPage=${borrowingsPerPage}`,
     })
       .then((res) => {
         if (res.data.status) {

@@ -51,7 +51,7 @@ function AddBorrowing() {
   };
   const [loading, setLoading] = React.useState(false);
   async function getBookById() {
-    await fetchData({method: "GET", url: `http://localhost:5000/api/books/${bookId}`})
+    await fetchData({method: "GET", endPoint: `/books/${bookId}`})
       .then((res) => {
         if (res.data.status) {
           setBook(res.data.data);
@@ -66,7 +66,7 @@ function AddBorrowing() {
       form.set("status", 0);
       fetchData({
         method: "POST",
-        url: `http://localhost:5000/api/borrowings`,
+        endPoint: `/borrowings`,
         data: formData,
         headers: {'Content-Type' :'application/x-www-form-urlencoded'}
       })
