@@ -15,7 +15,7 @@ function EditBook(props) {
   const getBookById = async (id) => {
     fetchData({
       method: "GET", 
-      url: `http://localhost:5000/api/books/${id}`  
+      endPoint: `/books/${id}`  
     }).then((res) => {
       console.log(res.data);
       if (res.data.status) {
@@ -28,7 +28,7 @@ function EditBook(props) {
     Object.keys(values).map((key) => formData.append(key, values[key]));
     fetchData({
       method: "PUT",
-      url: `http://localhost:5000/api/books/${id}`, 
+      endPoint: `/books/${id}`, 
       data: formData
     })
       .then((res) => {

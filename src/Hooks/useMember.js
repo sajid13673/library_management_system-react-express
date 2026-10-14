@@ -13,7 +13,7 @@ const useMembers = ({ page, perPage, orderBy, searchTerm, all }) => {
       setLoading(true);
       const res = await fetchData({
         method: "GET",
-        url: `/members?page=${page}&perPage=${perPage}&order=${
+        endPoint: `/members?page=${page}&perPage=${perPage}&order=${
           orderBy ? orderBy : "createdAt-desc"
         }&search=${searchTerm}&all=${all}`,
       });

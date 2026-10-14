@@ -46,7 +46,7 @@ export default function BookList() {
   async function handleBookDelete(id) {
     deleteBook({
       method: "DELETE",
-      url: `http://localhost:5000/api/books/${id}`,
+      endPoint: `/books/${id}`,
     });
   }
   function handleAddBrowing(bookId) {

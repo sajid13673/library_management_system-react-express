@@ -51,7 +51,7 @@ export default function Login(props) {
       setErrorMessage(null);
       await fetchData({
         method: "POST",
-        url: "/login",
+        endPoint: "/login",
         data: values,
       }).then((res) => {
         console.log("res");

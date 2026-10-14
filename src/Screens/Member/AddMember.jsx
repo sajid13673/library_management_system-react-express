@@ -11,7 +11,7 @@ function AddMember(props) {
   const handleSubmit = async (formData, formik) => {
     fetchData({
       method: "POST",
-      url: `http://localhost:5000/api/members`,
+      endPoint: `/members`,
       data: formData,
     })
       .then((res) => {

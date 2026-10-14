@@ -124,7 +124,7 @@ export default function SettingsScreen({ user, userLoading, userError }) {
           onSubmit={async (values, { resetForm }) => {
             const response = await fetchData({
               method: "POST",
-              url: "/change-password",
+              endPoint: "/change-password",
               data: values,
             });
             if (response && response.status === 200) {

@@ -53,7 +53,7 @@ function FineList() {
   const getFines = async () => {
     await fetchAllFInes({
       method: "GET",
-      url: `/fines?page=${page}&perPage=${perPage}&type=${type}`,
+      endPoint: `/fines?page=${page}&perPage=${perPage}&type=${type}`,
     });
   };
   function handleChange(e, value) {
@@ -64,7 +64,7 @@ function FineList() {
     console.log(id);
     await fetchFineById({
       method: "GET",
-      url: `/fines/${id}`,
+      endPoint: `/fines/${id}`,
     });
   };
   const handlePaymentTypeChange = (event) => {
@@ -73,7 +73,7 @@ function FineList() {
   const handlePayment = async () => {
     await makePayment({
       method: "POST",
-      url: `/payments`,
+      endPoint: `/payments`,
       data: { fineId: fine.id, amount: fine.amount, type: paymentType },
     });
   };

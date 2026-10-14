@@ -15,7 +15,7 @@ function AddBook(props) {
     Object.keys(values).forEach((key) => formData.append(key, values[key]));
     fetchData({
       method: "POST",
-      url: `http://localhost:5000/api/books`,
+      endPoint: `/books`,
       data: formData,
     });
   }

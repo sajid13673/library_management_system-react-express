@@ -17,7 +17,7 @@ function EditMember(props) {
   const getMember = async () => {
     fetchData({
       method: "GET",
-      url: `http://localhost:5000/api/members/${memberId}`,
+      endPoint: `/members/${memberId}`,
     })
       .then((res) => {
         if (res.data.status) {
@@ -29,7 +29,7 @@ function EditMember(props) {
   const handleSubmit = async (formData) => {
     fetchData({
       method: "PUT",
-      url: `http://localhost:5000/api/members/${memberId}`,
+      endPoint: `/members/${memberId}`,
       data: formData,
     }).then((res) => {
       if (res.data.status) {

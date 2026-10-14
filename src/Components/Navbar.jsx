@@ -124,7 +124,7 @@ function Navbar(props) {
 
     const res = await fetchData({
       method: "POST",
-      url: "/logout",
+      endPoint: "/logout",
       data: { refreshToken },
     });
     if (res && res.data.status) {

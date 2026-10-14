@@ -17,13 +17,13 @@ const useBorrowing = () => {
   const deleteBorrowing = async (id) => {
     await removeBorrowing({
       method: "DELETE",
-      url: `/borrowings/${id}`,
+      endPoint: `/borrowings/${id}`,
     });
   };
   const confirmReturn = async (id, formData) => {
     returnBorrowing({
       method: "PUT",
-      url: `http://localhost:5000/api/borrowings/${id}`,
+      endPoint: `/borrowings/${id}`,
       data: formData,
     });
   };

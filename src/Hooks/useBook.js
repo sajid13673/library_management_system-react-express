@@ -10,7 +10,7 @@ const useBooks = (page, perPage, orderBy, searchTerm) => {
     const getBooks = async () => {
         try {
             setLoading(true);
-            const res = await fetchData({method: 'GET', url: `/books?page=${page}&perPage=${perPage}&order=${orderBy ? orderBy : 'createdAt-desc'}&search=${searchTerm}`});
+            const res = await fetchData({method: 'GET', endPoint: `/books?page=${page}&perPage=${perPage}&order=${orderBy ? orderBy : 'createdAt-desc'}&search=${searchTerm}`});
             if(res){
                 setBooks(res.data);
                 setLoading(false);	
