@@ -18,6 +18,7 @@ import Loading from "../../Components/Loading";
 import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 import SearchIcon from "@mui/icons-material/Search";
+import { API_CONFIG } from "../../config/api";
 
 export default function BookList() {
   const {
@@ -40,6 +41,8 @@ export default function BookList() {
   const totalPages = books?.totalPages || 1;
 
   const navigate = useNavigate();
+  const baseUrl = API_CONFIG.baseUrl;
+
   function handleBookEdit(id) {
     navigate("/edit-book", { state: { id: id } });
   }
@@ -137,7 +140,7 @@ export default function BookList() {
                 author={row.author}
                 publisher={row.publisher}
                 year={row.year}
-                path={row.images[0]?.url || null}
+                image={row.images[0]?.url ? baseUrl+row.images[0]?.url : null}
                 status={row.status}
                 activeBorrowings={row.activeBorrowings}
                 handleBookEdit={(id) => handleBookEdit(id)}

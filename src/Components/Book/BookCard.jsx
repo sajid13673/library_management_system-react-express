@@ -46,11 +46,7 @@ export default function BookCard(props) {
               mb: 1,
               boxShadow: "0px 4px 6px rgba(0, 0, 0, 0.41)",
             }}
-            src={
-              props.path !== null
-                ? `http://localhost:5000${props.path}`
-                : noImagePic
-            }
+            src={props.image ? props.image : noImagePic}
             alt="productImage"
           />
           <Typography variant="h5" component="div">
