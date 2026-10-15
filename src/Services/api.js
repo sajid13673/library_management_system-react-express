@@ -1,6 +1,7 @@
 import axios from 'axios';
+import { API_CONFIG } from '../config/api';
 
-const baseURL = process.env.REACT_APP_API_BASE_URL;
+const baseURL = API_CONFIG.baseApiUrl;
 
 // Keep the access token in memory only.
 let accessToken = null;
