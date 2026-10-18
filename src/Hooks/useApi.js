@@ -2,9 +2,10 @@
 import { useState, useCallback } from 'react';
 import { get, post, put, del } from '../Services/api';
 import { useAuth } from '../utils/AuthProvider';
+import { API_CONFIG } from '../config/api';
 
 const useApi = (initialData = []) => {
-    const baseUrl = process.env.REACT_APP_API_BASE_URL;
+    const baseUrl = API_CONFIG.baseApiUrl;
     const { token } = useAuth();
     const [data, setData] = useState(initialData);
     const [loading, setLoading] = useState(false);
