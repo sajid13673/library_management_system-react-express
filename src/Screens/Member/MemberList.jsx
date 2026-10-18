@@ -1,12 +1,9 @@
 import React, { useState } from "react";
-import MembersCard from "../../Components/Member/MembersCard";
 import { useNavigate } from "react-router-dom";
 import {
   Pagination,
   Stack,
   Button,
-  Container,
-  Grid,
   Typography,
   Box,
   FormControl,
@@ -16,13 +13,14 @@ import {
   InputBase,
 } from "@mui/material";
 import AddCircleIcon from "@mui/icons-material/AddCircle";
-import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 import SearchIcon from "@mui/icons-material/Search";
+import MembersTable from "../../Components/Member/MembersTable";
 
 export default function MemberList() {
-  const { fetchData } = useApi();
+  const { fetchData:deleteMember } = useApi();
+  const { fetchData:toggleStatus,  loading:toggleLoading} = useApi();
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState("createdAt-desc");
   const [searchTerm, setSearchTerm] = useState("");
@@ -30,12 +28,10 @@ export default function MemberList() {
     page,
     perPage: 12,
     orderBy,
-    searchTerm
+    searchTerm,
   });
   const data = Array.from(members?.data || []);
   const totalPages = members?.totalPages || 1;
-  console.log(data);
-
   const navigate = useNavigate();
   function handleBorrowings(id) {
     navigate("/member-borrowing-list", { state: { memberId: id } });
@@ -47,7 +43,7 @@ export default function MemberList() {
     navigate("/edit-member", { state: { id: id } });
   }
   async function handleDeleteMember(id) {
-    await fetchData({
+    await deleteMember({
       method: "DELETE",
       endPoint: `/members/${id}`,
     })
@@ -72,6 +68,17 @@ export default function MemberList() {
     e.preventDefault();
     setPage(1);
     getMembers();
+  };
+  const handleStatusChange = async (id) => {
+    try {
+      await toggleStatus({
+        method: "PUT",
+        endPoint: `/members/${id}/status`,
+      });
+    getMembers();
+    } catch (error) {
+      console.error("Failed to update member status:", error);
+    }
   };
   return (
     <Box flex={1} display="flex" flexDirection="column" p={2} gap={2}>
@@ -127,33 +134,14 @@ export default function MemberList() {
           <option value={"name-desc"}>Name descending</option>
         </NativeSelect>
       </FormControl>
-      <Grid container spacing={2}>
-        {data.length > 0 ? (
-          data.map((row) => (
-            <MembersCard
-              key={row.id}
-              id={row.id}
-              name={row.name}
-              email={row.user.email}
-              phone_number={row.phoneNumber}
-              address={row.address}
-              path={row?.image?.url || null}
-              handleEditMember={(id) => handleEditMember(id)}
-              handleDeleteMember={(id) => handleDeleteMember(id)}
-              handleBorrowings={(id) => handleBorrowings(id)}
-              activeBorrowings={row.activeBorrowings}
-            />
-          ))
-        ) : (
-          <Container className="keyMessage">
-            {!loading ? (
-              <Typography variant="h3">Nothing to show</Typography>
-            ) : (
-              <Loading />
-            )}
-          </Container>
-        )}
-      </Grid>
+      <MembersTable
+        members={data}
+        handleEditMember={handleEditMember}
+        handleDeleteMember={handleDeleteMember}
+        handleBorrowings={handleBorrowings}
+        handleStatusChange={handleStatusChange}
+        toggleLoading={toggleLoading}
+      />
       {data.length > 0 && !loading && (
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
