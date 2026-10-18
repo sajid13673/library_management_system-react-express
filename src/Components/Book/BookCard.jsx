@@ -17,7 +17,7 @@ import { useAuth } from "../../utils/AuthProvider";
 import noImagePic from "../../images/no_image.jpg";
 
 export default function BookCard(props) {
-  const { token } = useAuth();
+  const { user } = useAuth();
 
   return (
     <Grid item xs={12} sm={6} md={4} lg={3}>
@@ -61,7 +61,7 @@ export default function BookCard(props) {
           <Typography variant="body2">{props.year}</Typography>
         </CardContent>
         <CardActions sx={{ justifyContent: "center", mt: "auto" }}>
-          {token.role === "admin" && (
+          {user.role === "admin" && (
             <>
               <Tooltip title="Edit" placement="top-start">
                 <>
@@ -104,7 +104,7 @@ export default function BookCard(props) {
             </>
           )}
           {!props.activeBorrowings ? (
-            token.role === "admin" ? (
+            user.role === "admin" ? (
               <Button
                 onClick={() => props.handleAddBrowing(props.id)}
                 size="small"

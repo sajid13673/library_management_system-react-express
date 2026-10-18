@@ -48,7 +48,7 @@ const useStyles = makeStyles({
 
 function BorrowingCard(props) {
   const classes = useStyles();
-  const { token } = useAuth();
+  const { user } = useAuth();
   const [error, setError] = useState(false);
   const [errorMsg, setErrorMsg] = useState("");
   const [formData, setFormData] = useState({
@@ -98,7 +98,7 @@ function BorrowingCard(props) {
     <Grid item xs={12} md={6} sx={{ display: "flex" }}>
       <Card sx={{ width: "100%" }} className={classes.card}>
         <CardContent className={classes.cardContent}>
-          {token.role === "admin" && (
+          {user.role === "admin" && (
             <Typography
               gutterBottom
               variant="h6"
@@ -159,7 +159,7 @@ function BorrowingCard(props) {
                     </Grid>
                   ) : (
                     <Grid item xs={6}>
-                      {token.role === "admin" ? (
+                      {user.role === "admin" ? (
                         <Button
                           onClick={() => handleSetReturnDate(props.id)}
                           size="small"
@@ -298,7 +298,7 @@ function BorrowingCard(props) {
             </Grid>
           </Grid>
         </CardContent>
-        {token.role === "admin" && (
+        {user.role === "admin" && (
           <CardActions sx={{ justifyContent: "flex-end" }}>
             {!props.status && (
               <Button
