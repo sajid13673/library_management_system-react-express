@@ -1,5 +1,14 @@
-import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
-import React from "react";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  FormControl,
+  Input,
+  InputLabel,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import useApi from "../Hooks/useApi";
@@ -9,13 +18,15 @@ import {
   validateOnlyNumbers,
 } from "../utils/validators";
 import PasswordField from "../Components/Form/PasswordField";
-
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 function SignUp() {
   const navigate = useNavigate();
   const { fetchData, error, loading } = useApi([]);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
   const register = async (values, actions) => {
     try {
       await fetchData({ method: "POST", endPoint: "/register", data: values });
+      setRegisterSuccess(true);
     } catch (err) {
       // Check if the backend returned validation errors
       if (err.response && err.response.data.errors) {
@@ -77,8 +88,50 @@ function SignUp() {
       await register(values, actions);
     },
   });
+  if (registerSuccess) {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+        p={4}
+        gap={2}
+      >
+        <CheckCircleOutlineIcon color="success" sx={{ fontSize: 72 }} />
+
+        <Typography variant="h5" fontWeight={600}>
+          Registration Successful!
+        </Typography>
+
+        <Typography color="text.secondary" maxWidth={450}>
+          Your account has been created successfully and is awaiting
+          administrator approval. You will be able to log in once your account
+          has been activated.
+        </Typography>
+
+        <Button
+          variant="contained"
+          onClick={() => navigate("/login")}
+          sx={{ mt: 2 }}
+        >
+          Back to Login
+        </Button>
+      </Box>
+    );
+  }
   return (
     <form onSubmit={formik.handleSubmit}>
+      {registerSuccess && (
+        <Alert severity="success">
+          <AlertTitle>Registration Successful!</AlertTitle>
+          Your account has been created successfully. Please wait while an
+          administrator reviews and activates your account. You will be able to
+          log in once your account has been activated. Thank you for your
+          patience!
+        </Alert>
+      )}
       <Box
         sx={{
           height: "100vh",
