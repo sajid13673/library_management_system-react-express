@@ -12,6 +12,7 @@ import {
 import { useFormik } from "formik";
 import React from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
+import { validateOnlyNumbers } from "../../utils/validators";
 
 const VisuallyHiddenInput = styled("input")({
   clip: "rect(0 0 0 0)",
@@ -46,7 +47,7 @@ export default function BookForm(props) {
     }
     if (!values.year) {
       errors.year = "Required";
-    } else if (!props.validateOnlyNumbers(values.year)) {
+    } else if (!validateOnlyNumbers(values.year)) {
       errors.year = "Invalid year";
     } else if (values.year.length !== 4) {
       if (currentYear !== "") {

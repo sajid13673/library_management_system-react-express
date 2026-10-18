@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { Box } from "@mui/material";
 import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
-function AddMember(props) {
+function AddMember() {
   const { fetchData } = useApi([]);
   const { getMembers } = useMembers({});
   const navigate = useNavigate();
@@ -40,8 +40,6 @@ function AddMember(props) {
       minHeight="calc(100vh - 69px)"
     >
       <MemberForm
-        validateEmail={(str) => props.validateEmail(str)}
-        validateOnlyNumbers={(str) => props.validateOnlyNumbers(str)}
         handleSubmit={(formData, formik) => handleSubmit(formData, formik)}
         type={"add"}
       />

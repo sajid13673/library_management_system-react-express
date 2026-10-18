@@ -1,11 +1,79 @@
-import { Box, Button, FormControl, Input, InputLabel } from "@mui/material";
-import React from "react";
+import {
+  Alert,
+  AlertTitle,
+  Box,
+  Button,
+  FormControl,
+  Input,
+  InputLabel,
+  Typography,
+} from "@mui/material";
+import React, { useState } from "react";
 import { useFormik } from "formik";
-import axios from "axios";
 import { useNavigate } from "react-router-dom";
-
+import useApi from "../Hooks/useApi";
+import {
+  validateAdderess,
+  validateEmail,
+  validateOnlyNumbers,
+} from "../utils/validators";
+import PasswordField from "../Components/Form/PasswordField";
+import CheckCircleOutlineIcon from "@mui/icons-material/CheckCircleOutline";
 function SignUp() {
   const navigate = useNavigate();
+  const { fetchData, error, loading } = useApi([]);
+  const [registerSuccess, setRegisterSuccess] = useState(false);
+  const register = async (values, actions) => {
+    try {
+      await fetchData({ method: "POST", endPoint: "/register", data: values });
+      setRegisterSuccess(true);
+    } catch (err) {
+      // Check if the backend returned validation errors
+      if (err.response && err.response.data.errors) {
+        const backendErrors = err.response.data.errors;
+        const formikErrors = {};
+        // Convert backend array format to Formik object format
+        backendErrors.forEach((err) => {
+          formikErrors[err.path] = err.msg;
+        });
+        // Update Formik state
+        actions.setErrors(formikErrors);
+      }
+    }
+  };
+  const validate = (values) => {
+    let errors = {};
+    if (!values.email) {
+      errors.email = "Required";
+    } else if (validateEmail(values.email)) {
+      errors.email = "Invalid email address";
+    }
+    if (!values.password) {
+      errors.password = "Required";
+    } else if (values.password.length < 8) {
+      errors.password = "Password must be at least 8 characters long";
+    } else if (!values.password_confirmation) {
+      errors.password_confirmation = "Required";
+    } else if (values.password_confirmation !== values.password) {
+      errors.password_confirmation = "Passwords do not match";
+    }
+    if (!values.name) {
+      errors.name = "Required";
+    }
+    if (!values.phone_number) {
+      errors.phone_number = "Required";
+    } else if (!validateOnlyNumbers(values.phone_number)) {
+      errors.phone_number = "Invalid phone number";
+    } else if (values.phone_number.length !== 10) {
+      errors.phone_number = "Phone number must 10 digits long";
+    }
+    if (!values.address) {
+      errors.address = "Required";
+    } else if (!validateAdderess(values.address)) {
+      errors.address = "Invalid Address";
+    }
+    return errors;
+  };
   const formik = useFormik({
     initialValues: {
       email: "",
@@ -15,21 +83,55 @@ function SignUp() {
       address: "",
       phone_number: "",
     },
-    onSubmit: (values) => {
-      console.log(values);
-
-      axios
-        .post(`http://localhost:5000/api/register`, values)
-        .then((res) => {
-          res.status && navigate("/login");
-        })
-        .catch((err) => {
-          console.log(err);
-        });
+    validate: validate,
+    onSubmit: async (values, actions) => {
+      await register(values, actions);
     },
   });
+  if (registerSuccess) {
+    return (
+      <Box
+        display="flex"
+        flexDirection="column"
+        alignItems="center"
+        justifyContent="center"
+        textAlign="center"
+        p={4}
+        gap={2}
+      >
+        <CheckCircleOutlineIcon color="success" sx={{ fontSize: 72 }} />
+
+        <Typography variant="h5" fontWeight={600}>
+          Registration Successful!
+        </Typography>
+
+        <Typography color="text.secondary" maxWidth={450}>
+          Your account has been created successfully and is awaiting
+          administrator approval. You will be able to log in once your account
+          has been activated.
+        </Typography>
+
+        <Button
+          variant="contained"
+          onClick={() => navigate("/login")}
+          sx={{ mt: 2 }}
+        >
+          Back to Login
+        </Button>
+      </Box>
+    );
+  }
   return (
     <form onSubmit={formik.handleSubmit}>
+      {registerSuccess && (
+        <Alert severity="success">
+          <AlertTitle>Registration Successful!</AlertTitle>
+          Your account has been created successfully. Please wait while an
+          administrator reviews and activates your account. You will be able to
+          log in once your account has been activated. Thank you for your
+          patience!
+        </Alert>
+      )}
       <Box
         sx={{
           height: "100vh",
@@ -60,35 +162,24 @@ function SignUp() {
               value={formik.values.email}
               onChange={formik.handleChange}
             />
+            {formik.errors.email ? (
+              <div className="error">{formik.errors.email}</div>
+            ) : null}
           </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="my-input">Password</InputLabel>
-            <Input
-              error={formik.errors.password}
-              name="password"
-              type="text"
-              aria-describedby="my-helper-text"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-            />
-            {/* {formik.errors.password ? (
-                    <ErrorMessage>{formik.errors.password}</ErrorMessage>
-                  ) : null} */}
-          </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="my-input">Confirm Password</InputLabel>
-            <Input
-              error={formik.errors.password_confirmation}
-              name="password_confirmation"
-              type="text"
-              aria-describedby="my-helper-text"
-              value={formik.values.password_confirmation}
-              onChange={formik.handleChange}
-            />
-            {/* {formik.errors.password ? (
-                    <ErrorMessage>{formik.errors.password}</ErrorMessage>
-                  ) : null} */}
-          </FormControl>
+          <PasswordField
+            label={"Password"}
+            name={"password"}
+            value={formik.values.password}
+            error={formik.errors.password}
+            onChange={formik.handleChange}
+          />
+          <PasswordField
+            label={"Confirm Password"}
+            name={"password_confirmation"}
+            value={formik.values.password_confirmation}
+            error={formik.errors.password_confirmation}
+            onChange={formik.handleChange}
+          />
           <FormControl>
             <InputLabel>Name</InputLabel>
             <Input
@@ -98,6 +189,9 @@ function SignUp() {
               value={formik.values.name}
               onChange={formik.handleChange}
             />
+            {formik.errors.name ? (
+              <div className="error">{formik.errors.name}</div>
+            ) : null}
           </FormControl>
           <FormControl>
             <InputLabel>Address</InputLabel>
@@ -108,6 +202,9 @@ function SignUp() {
               value={formik.values.address}
               onChange={formik.handleChange}
             />
+            {formik.errors.address ? (
+              <div className="error">{formik.errors.address}</div>
+            ) : null}
           </FormControl>
           <FormControl>
             <InputLabel>Phone Number</InputLabel>
@@ -118,6 +215,9 @@ function SignUp() {
               value={formik.values.phone_number}
               onChange={formik.handleChange}
             />
+            {formik.errors.phone_number ? (
+              <div className="error">{formik.errors.phone_number}</div>
+            ) : null}
           </FormControl>
           <Button
             sx={{ width: { sm: "80%" }, mx: "auto" }}
@@ -126,7 +226,18 @@ function SignUp() {
           >
             Register
           </Button>
-          <Button onClick={()=>navigate('/login')} variant="text" size="small" sx={{ fontSize: 10, textTransform: "inherit", width: { sm: "80%" }, mx: "auto" }}>
+          <Button
+            onClick={() => navigate("/login")}
+            disabled={loading}
+            variant="text"
+            size="small"
+            sx={{
+              fontSize: 10,
+              textTransform: "inherit",
+              width: { sm: "80%" },
+              mx: "auto",
+            }}
+          >
             Back to Login
           </Button>
         </Box>

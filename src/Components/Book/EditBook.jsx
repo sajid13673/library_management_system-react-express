@@ -5,7 +5,7 @@ import { Box } from "@mui/material";
 import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 
-function EditBook(props) {
+function EditBook() {
   const {fetchData} = useApi([]);
   const {getBooks} = useBooks();
   const navigate = useNavigate();
@@ -53,7 +53,6 @@ function EditBook(props) {
     >
       <BookForm
         handleSubmit={(values) => handleSubmit(values)}
-        validateOnlyNumbers={(str) => props.validateOnlyNumbers(str)}
         book={book}
         title="update book"
       />

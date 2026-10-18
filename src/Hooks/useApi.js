@@ -48,8 +48,8 @@ const useApi = (initialData = []) => {
             setData(response.data);
             return response;
         } catch (err) {
-            console.error('Fetch Data Error:', err);
             setError(err);
+            throw err;
             return null;
         } finally {
             setLoading(false);

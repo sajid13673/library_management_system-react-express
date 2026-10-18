@@ -6,7 +6,7 @@ import { Box } from "@mui/material";
 import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 
-function EditMember(props) {
+function EditMember() {
   const { getMembers } = useMembers({});
   const { fetchData } = useApi([]);
   const navigate = useNavigate();
@@ -51,8 +51,6 @@ function EditMember(props) {
       minHeight="calc(100vh - 69px)"
     >
       <MemberForm
-        validateEmail={(str) => props.validateEmail(str)}
-        validateOnlyNumbers={(str) => props.validateOnlyNumbers(str)}
         member={member}
         handleSubmit={(formData) => handleSubmit(formData)}
         type={"update"}
