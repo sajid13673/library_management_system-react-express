@@ -3,28 +3,28 @@ import React from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import useApi from "../Hooks/useApi";
-import { validateAdderess, validateEmail, validateOnlyNumbers } from "../utils/validators";
+import {
+  validateAdderess,
+  validateEmail,
+  validateOnlyNumbers,
+} from "../utils/validators";
+import PasswordField from "../Components/Form/PasswordField";
 
 function SignUp() {
   const navigate = useNavigate();
   const { fetchData, error, loading } = useApi([]);
-  
   const register = async (values, actions) => {
     try {
       await fetchData({ method: "POST", endPoint: "/register", data: values });
     } catch (err) {
-            // Check if the backend returned validation errors
+      // Check if the backend returned validation errors
       if (err.response && err.response.data.errors) {
         const backendErrors = err.response.data.errors;
         const formikErrors = {};
-        console.log('backend err', backendErrors);
-        
         // Convert backend array format to Formik object format
         backendErrors.forEach((err) => {
           formikErrors[err.path] = err.msg;
         });
-        console.log('formik errords', formikErrors);
-        
         // Update Formik state
         actions.setErrors(formikErrors);
       }
@@ -39,11 +39,9 @@ function SignUp() {
     }
     if (!values.password) {
       errors.password = "Required";
-    }
-    else if (values.password.length < 8) {
+    } else if (values.password.length < 8) {
       errors.password = "Password must be at least 8 characters long";
-    }
-    else if (!values.password_confirmation) {
+    } else if (!values.password_confirmation) {
       errors.password_confirmation = "Required";
     } else if (values.password_confirmation !== values.password) {
       errors.password_confirmation = "Passwords do not match";
@@ -56,7 +54,7 @@ function SignUp() {
     } else if (!validateOnlyNumbers(values.phone_number)) {
       errors.phone_number = "Invalid phone number";
     } else if (values.phone_number.length !== 10) {
-        errors.phone_number = "Phone number must 10 digits long";
+      errors.phone_number = "Phone number must 10 digits long";
     }
     if (!values.address) {
       errors.address = "Required";
@@ -112,37 +110,23 @@ function SignUp() {
               onChange={formik.handleChange}
             />
             {formik.errors.email ? (
-            <div className="error">{formik.errors.email}</div>
-          ) : null}
+              <div className="error">{formik.errors.email}</div>
+            ) : null}
           </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="my-input">Password</InputLabel>
-            <Input
-              error={formik.errors.password}
-              name="password"
-              type="text"
-              aria-describedby="my-helper-text"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-            />
-            {formik.errors.password ? (
-            <div className="error">{formik.errors.password}</div>
-          ) : null}
-          </FormControl>
-          <FormControl>
-            <InputLabel htmlFor="my-input">Confirm Password</InputLabel>
-            <Input
-              error={formik.errors.password_confirmation}
-              name="password_confirmation"
-              type="text"
-              aria-describedby="my-helper-text"
-              value={formik.values.password_confirmation}
-              onChange={formik.handleChange}
-            />
-            {formik.errors.password_confirmation ? (
-            <div className="error">{formik.errors.password_confirmation}</div>
-          ) : null}
-          </FormControl>
+          <PasswordField
+            label={"Password"}
+            name={"password"}
+            value={formik.values.password}
+            error={formik.errors.password}
+            onChange={formik.handleChange}
+          />
+          <PasswordField
+            label={"Confirm Password"}
+            name={"password_confirmation"}
+            value={formik.values.password_confirmation}
+            error={formik.errors.password_confirmation}
+            onChange={formik.handleChange}
+          />
           <FormControl>
             <InputLabel>Name</InputLabel>
             <Input
@@ -153,8 +137,8 @@ function SignUp() {
               onChange={formik.handleChange}
             />
             {formik.errors.name ? (
-            <div className="error">{formik.errors.name}</div>
-          ) : null}
+              <div className="error">{formik.errors.name}</div>
+            ) : null}
           </FormControl>
           <FormControl>
             <InputLabel>Address</InputLabel>
@@ -166,8 +150,8 @@ function SignUp() {
               onChange={formik.handleChange}
             />
             {formik.errors.address ? (
-            <div className="error">{formik.errors.address}</div>
-          ) : null}
+              <div className="error">{formik.errors.address}</div>
+            ) : null}
           </FormControl>
           <FormControl>
             <InputLabel>Phone Number</InputLabel>
@@ -179,8 +163,8 @@ function SignUp() {
               onChange={formik.handleChange}
             />
             {formik.errors.phone_number ? (
-            <div className="error">{formik.errors.phone_number}</div>
-          ) : null}
+              <div className="error">{formik.errors.phone_number}</div>
+            ) : null}
           </FormControl>
           <Button
             sx={{ width: { sm: "80%" }, mx: "auto" }}
