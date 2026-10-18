@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@material-ui/icons";
 import CloudUploadIcon from '@mui/icons-material/CloudUpload';
+import { validateEmail, validateOnlyNumbers } from "../../utils/validators";
 
 const VisuallyHiddenInput = styled('input')({
   clip: 'rect(0 0 0 0)',
@@ -56,7 +57,7 @@ export default function MemberForm(props) {
     if (props.type === "add") {
     if (!values.email) {
       errors.email = "Required";
-    } else if (props.validateEmail(values.email)) {
+    } else if (validateEmail(values.email)) {
       errors.email = "Invalid email address";
     }
     if (!values.password) {
@@ -75,7 +76,7 @@ export default function MemberForm(props) {
     }
     if (!values.phoneNumber) {
       errors.phoneNumber = "Required";
-    } else if (!props.validateOnlyNumbers(values.phoneNumber)) {
+    } else if (!validateOnlyNumbers(values.phoneNumber)) {
       errors.phoneNumber = "Invalid phone number";
     } else if (values.phoneNumber.length !== 10) {
       if (currentPhoneNumber !== "") {

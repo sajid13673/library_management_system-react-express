@@ -28,12 +28,6 @@ import Settings from "../../Screens/Settings";
 
 function App() {
   const [loading, setLoading] = React.useState(false);
-  function validateEmail(str) {
-    return !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,4}$/i.test(str);
-  }
-  function validateOnlyNumbers(str) {
-    return /^[0-9]*$/.test(str);
-  }
   const [memberPage, setMemberPage] = React.useState(1);
   const { darkMode } = useTheme();
   const [user, setUser] = React.useState({});
@@ -79,13 +73,14 @@ function App() {
                 background:
                   darkMode &&
                   "linear-gradient(45deg, rgb(35, 35, 35) 48%, rgba(46, 46, 46, 0.78) 95%)",
-                  boxShadow: "2px 5px 8px rgba(0, 0, 0, 0.41),  -0px -2px rgba(0, 0, 0, 0.07)",
+                boxShadow:
+                  "2px 5px 8px rgba(0, 0, 0, 0.41),  -0px -2px rgba(0, 0, 0, 0.07)",
               },
             },
           },
         },
       }),
-    [darkMode]
+    [darkMode],
   );
   const getUser = async () => {
     await fetchUser({ method: "GET", endPoint: "/profile" }).then((res) => {
@@ -146,9 +141,7 @@ function App() {
                 exact
                 element={
                   <Layout>
-                    <AddBook
-                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                    />
+                    <AddBook />
                   </Layout>
                 }
               />
@@ -168,9 +161,7 @@ function App() {
                 path="/edit-book"
                 element={
                   <Layout>
-                    <EditBook
-                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                    />
+                    <EditBook />
                   </Layout>
                 }
               />
@@ -178,10 +169,7 @@ function App() {
                 path="/edit-member"
                 element={
                   <Layout>
-                    <EditMember
-                      validateEmail={(str) => validateEmail(str)}
-                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                    />
+                    <EditMember />
                   </Layout>
                 }
               />
@@ -213,10 +201,7 @@ function App() {
                 path="/add-member"
                 element={
                   <Layout>
-                    <AddMember
-                      validateEmail={(str) => validateEmail(str)}
-                      validateOnlyNumbers={(str) => validateOnlyNumbers(str)}
-                    />
+                    <AddMember />
                   </Layout>
                 }
               />
@@ -229,10 +214,7 @@ function App() {
                 }
               />
             </Route>
-            <Route
-              path="/login"
-              element={<Login validateEmail={(str) => validateEmail(str)} />}
-            />
+            <Route path="/login" element={<Login />} />
             <Route
               path="settings"
               element={

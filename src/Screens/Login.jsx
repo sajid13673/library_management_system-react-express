@@ -16,8 +16,9 @@ import {
   InputLabel,
 } from "@mui/material";
 import useApi from "../Hooks/useApi"; 
+import { validateEmail } from "../utils/validators";
 
-export default function Login(props) {
+export default function Login() {
   const { setToken, setUser } = useAuth();
   const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState(null);
@@ -30,7 +31,7 @@ export default function Login(props) {
     let errors = {};
     if (!values.email) {
       errors.email = "Required";
-    } else if (props.validateEmail(values.email)) {
+    } else if (validateEmail(values.email)) {
       errors.email = "Invalid email address";
     }
     if (!values.password) {
