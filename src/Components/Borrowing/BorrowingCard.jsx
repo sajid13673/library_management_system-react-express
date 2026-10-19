@@ -56,6 +56,8 @@ function BorrowingCard(props) {
     returnDate: null,
     _method: "put",
   });
+  const isAdmin = user.role === "admin";
+  const isEditingThis = props.currentId === props.id;
 
   function handleChange(value) {
     const returnDate =
@@ -94,225 +96,318 @@ function BorrowingCard(props) {
       props.handleConfirmReturn(id, formData);
     }
   }
+
   return (
     <Grid item xs={12} md={6} sx={{ display: "flex" }}>
-      <Card sx={{ width: "100%" }} className={classes.card}>
-        <CardContent className={classes.cardContent}>
-          {user.role === "admin" && (
+      <Card
+        elevation={2}
+        sx={{
+          width: "100%",
+          borderRadius: 3,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "space-between",
+        }}
+        className={classes.card}
+      >
+        <CardContent className={classes.cardContent} sx={{ p: 3, flexGrow: 1 }}>
+          {isAdmin && (
             <Typography
               gutterBottom
               variant="h6"
               fontWeight="600"
-              color="#1976d2"
-              textTransform="capitalize"
+              color="primary.main"
+              sx={{ textTransform: "capitalize", mb: 1.5 }}
             >
-              {props.memberName} (ID: {props.memberId})
+              {props.memberName}{" "}
+              <Typography
+                component="span"
+                variant="body2"
+                color="text.secondary"
+              >
+                (ID: {props.memberId})
+              </Typography>
             </Typography>
           )}
-          <Divider className={classes.detailsSection} />
-          <Grid container spacing={1}>
+
+          <Divider sx={{ mb: 2 }} className={classes.detailsSection} />
+
+          <Grid container spacing={3}>
             <Grid
               item
               xs={12}
               sm={7}
-              sx={{ pr: "30px", alignContent: "center" }}
+              sx={{ display: "flex", flexDirection: "column", gap: 1.5 }}
             >
-              <Grid container spacing={1} className={classes.detailsSection}>
-                <Grid item xs={6}>
-                  <Typography variant="body1">Borrowed Date:</Typography>
-                </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body1" color="textSecondary">
-                    {moment(props.borrowedDate).format(
-                      "DD MMMM YYYY, hh:mm:ss A"
-                    )}
+              <Grid container spacing={1}>
+                <Grid item xs={5}>
+                  <Typography variant="body2" fontWeight="500">
+                    Borrowed Date:
                   </Typography>
                 </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body1">Due Date:</Typography>
+                <Grid item xs={7}>
+                  <Typography variant="body2" color="text.secondary">
+                    {moment(props.borrowedDate).format("DD MMMM YYYY, hh:mm A")}
+                  </Typography>
                 </Grid>
-                <Grid item xs={6}>
-                  <Typography variant="body1" color="error">
-                    {moment(props.dueDate).format("DD MMMM YYYY, hh:mm:ss A")}
+
+                <Grid item xs={5}>
+                  <Typography variant="body2" fontWeight="500">
+                    Due Date:
+                  </Typography>
+                </Grid>
+                <Grid item xs={7}>
+                  <Typography
+                    variant="body2"
+                    color="error.main"
+                    fontWeight="500"
+                  >
+                    {moment(props.dueDate).format("DD MMMM YYYY, hh:mm A")}
                   </Typography>
                 </Grid>
               </Grid>
-              {props.status ? (
-                <Grid container spacing={1} alignItems="center">
-                  <Grid item xs={props.currentId === props.id ? 4 : 6}>
-                    <Typography variant="body1">Return Date:</Typography>
-                  </Grid>
-                  {props.currentId === props.id ? (
-                    <Grid item xs={8}>
-                      <FormControl>
-                        <LocalizationProvider dateAdapter={AdapterDayjs}>
-                          <DateTimePicker
-                            className={classes.root}
-                            onChange={(newValue) => handleChange(newValue)}
-                            slotProps={{
-                              textField: { size: "small", fontSize: "sm" },
-                            }}
-                          />
-                        </LocalizationProvider>
-                        {error && <div className="error">{errorMsg}</div>}
-                      </FormControl>
-                    </Grid>
-                  ) : (
-                    <Grid item xs={6}>
-                      {user.role === "admin" ? (
-                        <Button
-                          onClick={() => handleSetReturnDate(props.id)}
-                          size="small"
-                          variant="contained"
-                          color="primary"
-                        >
-                          Set Return Date
-                        </Button>
-                      ) : (
-                        <Typography
-                          textTransform="uppercase"
-                          variant="body2"
-                          color="error"
-                        >
-                          Not Returned
-                        </Typography>
-                      )}
-                    </Grid>
-                  )}
-                  {props.currentId === props.id && (
-                    <Grid item xs={2}>
-                      <Tooltip
-                        title="CONFIRM RETURNED"
-                        placement="top-start"
-                        TransitionComponent={Zoom}
+
+              <Divider sx={{ my: 0.5, borderStyle: "dashed" }} />
+
+              <Grid container spacing={1} alignItems="center">
+                <Grid item xs={5}>
+                  <Typography variant="body2" fontWeight="500">
+                    Return Date:
+                  </Typography>
+                </Grid>
+                <Grid item xs={7}>
+                  {props.status ? (
+                    isEditingThis ? (
+                      <Box
+                        sx={{
+                          display: "flex",
+                          flexDirection: "column",
+                          gap: 1,
+                          width: "100%",
+                        }}
                       >
-                        <ButtonGroup>
-                          <Button
-                            onClick={() =>
-                              handleSubmit(props.id, formData)
-                            }
-                            variant="contained"
-                            color="primary"
-                            size="small"
+                        <FormControl fullWidth error={error}>
+                          <LocalizationProvider dateAdapter={AdapterDayjs}>
+                            <DateTimePicker
+                              className={classes.root}
+                              onChange={(newValue) => handleChange(newValue)}
+                              slotProps={{
+                                textField: { size: "small", fullWidth: true },
+                              }}
+                            />
+                          </LocalizationProvider>
+                        </FormControl>
+                        {error && (
+                          <Typography
+                            variant="caption"
+                            color="error.main"
+                            sx={{ mt: 0.5 }}
                           >
-                            <DoneOutlineIcon />
-                          </Button>
-                          <Button
-                            sx={{ ml: 4 }}
-                            color="error"
-                            variant="contained"
-                            onClick={() => props.setCurrentId(null)}
-                          >
-                            <CloseIcon />
-                          </Button>
-                        </ButtonGroup>
-                      </Tooltip>
-                    </Grid>
+                            {errorMsg}
+                          </Typography>
+                        )}
+                      </Box>
+                    ) : isAdmin ? (
+                      <Button
+                        onClick={() => handleSetReturnDate(props.id)}
+                        size="small"
+                        variant="outlined"
+                        color="primary"
+                        sx={{ textTransform: "none", borderRadius: 1.5 }}
+                      >
+                        Set Return Date
+                      </Button>
+                    ) : (
+                      <Typography
+                        textTransform="uppercase"
+                        variant="caption"
+                        fontWeight="600"
+                        color="error.main"
+                      >
+                        Not Returned
+                      </Typography>
+                    )
+                  ) : (
+                    <Typography variant="body2" color="text.secondary">
+                      {moment(props.returnDate).format("DD MMMM YYYY, hh:mm A")}
+                    </Typography>
                   )}
                 </Grid>
-              ) : (
-                <Grid container spacing={1}>
-                  <Grid item xs={6}>
-                    <Typography variant="body1">Return Date:</Typography>
-                  </Grid>
-                  <Grid item xs={6}>
-                    <Typography variant="body1" color="textSecondary">
-                      {moment(props.returnDate).format(
-                        "DD MMMM YYYY, hh:mm:ss A"
-                      )}
-                    </Typography>
-                  </Grid>
-                </Grid>
+              </Grid>
+
+              {props.status && isEditingThis && (
+                <Box
+                  sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}
+                >
+                  <Tooltip
+                    title="Confirm Return"
+                    placement="top"
+                    TransitionComponent={Zoom}
+                  >
+                    <ButtonGroup size="small" variant="contained">
+                      <Button
+                        onClick={() => handleSubmit(props.id, formData)}
+                        color="success"
+                      >
+                        <DoneOutlineIcon fontSize="small" />
+                      </Button>
+                      <Button
+                        color="error"
+                        onClick={() => props.setCurrentId(null)}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </Button>
+                    </ButtonGroup>
+                  </Tooltip>
+                </Box>
               )}
             </Grid>
+
+            {/* Right Side: Micro Book Profile Card */}
             <Grid item xs={12} sm={5} className={classes.bookDetails}>
-                <Box display="grid" gridTemplateColumns="repeat(12, 1fr)">
-                  <Typography variant="h6" gridColumn="span 12">
-                    Book Details
-                  </Typography>
-              {props.book ? (
-                <>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gridColumn="span 4"
-                  >
-                    Title:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gridColumn="span 8"
-                  >
-                    {props.book.title}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gridColumn="span 4"
-                  >
-                    Author:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gridColumn="span 8"
-                  >
-                    {props.book.author}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gridColumn="span 4"
-                  >
-                    Publisher:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gridColumn="span 8"
-                  >
-                    {props.book.publisher}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gridColumn="span 4"
-                  >
-                    Year:
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="textSecondary"
-                    gridColumn="span 8"
-                  >
-                    {props.book.year}
-                  </Typography>
-                  </>
-              ) : (
-                <Typography variant="body2" color="textSecondary" gridColumn="span 12">
-                  Book details not available
+              <Box
+                sx={{
+                  p: 2,
+                  borderRadius: 2,
+                  backgroundColor: "action.hover",
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: 1.5,
+                }}
+              >
+                <Typography
+                  variant="subtitle2"
+                  fontWeight="600"
+                  sx={{
+                    color: "text.primary",
+                    borderBottom: "1px solid",
+                    borderColor: "divider",
+                    pb: 0.5,
+                  }}
+                >
+                  Book Details
                 </Typography>
-              )}
-                </Box>
+
+                {props.book ? (
+                  <Box
+                    sx={{ display: "flex", flexDirection: "column", gap: 1 }}
+                  >
+                    {/* Title Block - Wraps up to 2 lines, then adds an ellipsis */}
+                    <Box title={props.book.title}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        display="block"
+                        sx={{ fontWeight: 500 }}
+                      >
+                        Title:
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        fontWeight="600"
+                        sx={{
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          lineHeight: 1.3,
+                          color: "text.primary",
+                        }}
+                      >
+                        {props.book.title}
+                      </Typography>
+                    </Box>
+
+                    {/* Author Block - Wraps up to 2 lines, then adds an ellipsis */}
+                    <Box title={props.book.author}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        display="block"
+                        sx={{ fontWeight: 500 }}
+                      >
+                        Author:
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          display: "-webkit-box",
+                          WebkitLineClamp: 2,
+                          WebkitBoxOrient: "vertical",
+                          overflow: "hidden",
+                          lineHeight: 1.3,
+                          color: "text.primary",
+                        }}
+                      >
+                        {props.book.author}
+                      </Typography>
+                    </Box>
+
+                    {/* Publisher Block - Single line truncation */}
+                    <Box title={props.book.publisher}>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        display="block"
+                        sx={{ fontWeight: 500 }}
+                      >
+                        Publisher:
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{
+                          display: "block",
+                          overflow: "hidden",
+                          textOverflow: "ellipsis",
+                          whiteSpace: "nowrap",
+                          color: "text.primary",
+                        }}
+                      >
+                        {props.book.publisher}
+                      </Typography>
+                    </Box>
+
+                    {/* Year Block */}
+                    <Box>
+                      <Typography
+                        variant="caption"
+                        color="text.secondary"
+                        display="block"
+                        sx={{ fontWeight: 500 }}
+                      >
+                        Year:
+                      </Typography>
+                      <Typography
+                        variant="caption"
+                        sx={{ color: "text.primary" }}
+                      >
+                        {props.book.year || "N/A"}
+                      </Typography>
+                    </Box>
+                  </Box>
+                ) : (
+                  <Typography variant="caption" color="text.secondary">
+                    Book details unavailable
+                  </Typography>
+                )}
+              </Box>
             </Grid>
           </Grid>
         </CardContent>
-        {user.role === "admin" && (
-          <CardActions sx={{ justifyContent: "flex-end" }}>
-            {!props.status && (
-              <Button
-                onClick={() => props.handleDelete(props.id)}
-                size="small"
-                variant="contained"
-                color="secondary"
-                sx={{ background: "#E71919" }}
-                disabled={props.hasPendingFine}
-              >
-                {!props.hasPendingFine ?  "delete" : "has unpaid fine"}
-                <DeleteForeverIcon sx={{ ml: 1 }} />
-              </Button>
-            )}
+
+        {/* Outer Managed Card Actions Container */}
+        {isAdmin && !props.status && (
+          <CardActions sx={{ justifyContent: "flex-end", px: 3, pb: 2, pt: 0 }}>
+            <Button
+              onClick={() => props.handleDelete(props.id)}
+              size="small"
+              variant="contained"
+              color="error"
+              disabled={props.hasPendingFine}
+              sx={{ textTransform: "none", borderRadius: 1.5 }}
+            >
+              Delete Record
+            </Button>
           </CardActions>
         )}
       </Card>
