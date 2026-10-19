@@ -49,7 +49,6 @@ export default function Login() {
     },
     validate: validate,
     onSubmit: async (values) => {
-      setErrorMessage(null);
       await fetchData({
         method: "POST",
         endPoint: "/login",
@@ -66,11 +65,6 @@ export default function Login() {
           navigate("/");
         }
       });
-      if(error){
-        console.log(error);
-        console.log(error.response.data.message);
-        setErrorMessage(error.response.data.message);
-      }
     },
   });
 
@@ -93,8 +87,8 @@ export default function Login() {
         <Card
           sx={{ display: "flex", flexDirection: "column", p: 3, gap: 3 }}
         >
-          {errorMessage &&
-          <Alert severity="error">{errorMessage}</Alert>
+          {error &&
+          <Alert severity="error">{error.response?.data?.message || "Something went wrong. Please try again."}</Alert>
           }
           <FormControl>
             <InputLabel htmlFor="my-input">Email address</InputLabel>
