@@ -1,6 +1,5 @@
 // Screens/Login.jsx
-import React, { useState } from "react";
-import { Visibility, VisibilityOff } from "@material-ui/icons";
+import React from "react";
 import { useFormik } from "formik";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../utils/AuthProvider";
@@ -10,23 +9,16 @@ import {
   Button,
   Card,
   FormControl,
-  IconButton,
   Input,
-  InputAdornment,
   InputLabel,
 } from "@mui/material";
-import useApi from "../Hooks/useApi"; 
+import useApi from "../Hooks/useApi";
 import { validateEmail } from "../utils/validators";
+import PasswordField from "../Components/Form/PasswordField";
 
 export default function Login() {
   const { setToken, setUser } = useAuth();
   const navigate = useNavigate();
-  const [errorMessage, setErrorMessage] = useState(null);
-  const [showPassword, setShowPassword] = React.useState(false);
-  const handleClickShowPassword = () => setShowPassword((show) => !show);
-  const handleMouseDownPassword = (event) => {
-    event.preventDefault();
-  };
   const validate = (values) => {
     let errors = {};
     if (!values.email) {
@@ -56,12 +48,10 @@ export default function Login() {
       }).then((res) => {
         console.log("res");
         console.log(res);
-        
+
         if (res && res.data.status) {
           setToken(res.data.access_token);
-          setUser(res.data.user)
-          console.log('user', res.data.user);
-          
+          setUser(res.data.user);
           navigate("/");
         }
       });
@@ -84,12 +74,13 @@ export default function Login() {
       }}
     >
       <form onSubmit={formik.handleSubmit}>
-        <Card
-          sx={{ display: "flex", flexDirection: "column", p: 3, gap: 3 }}
-        >
-          {error &&
-          <Alert severity="error">{error.response?.data?.message || "Something went wrong. Please try again."}</Alert>
-          }
+        <Card sx={{ display: "flex", flexDirection: "column", p: 3, gap: 3 }}>
+          {error && (
+            <Alert severity="error">
+              {error.response?.data?.message ||
+                "Something went wrong. Please try again."}
+            </Alert>
+          )}
           <FormControl>
             <InputLabel htmlFor="my-input">Email address</InputLabel>
             <Input
@@ -104,32 +95,13 @@ export default function Login() {
               <div className="error">{formik.errors.email}</div>
             ) : null}
           </FormControl>
-          <FormControl variant="standard">
-            <InputLabel htmlFor="standard-adornment-password">
-              Password
-            </InputLabel>
-            <Input
-              id="standard-adornment-password"
-              type={showPassword ? "text" : "password"}
-              name="password"
-              value={formik.values.password}
-              onChange={formik.handleChange}
-              endAdornment={
-                <InputAdornment position="end">
-                  <IconButton
-                    aria-label="toggle password visibility"
-                    onClick={handleClickShowPassword}
-                    onMouseDown={handleMouseDownPassword}
-                  >
-                    {showPassword ? <VisibilityOff /> : <Visibility />}
-                  </IconButton>
-                </InputAdornment>
-              }
-            />
-            {formik.errors.password ? (
-              <div className="error">{formik.errors.password}</div>
-            ) : null}
-          </FormControl>
+          <PasswordField
+            label={"Password"}
+            name={"password"}
+            value={formik.values.password}
+            onChange={formik.handleChange}
+            error={formik.errors.password}
+          />
           <Button
             variant="contained"
             type="submit"
