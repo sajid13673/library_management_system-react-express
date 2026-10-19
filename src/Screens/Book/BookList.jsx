@@ -35,7 +35,7 @@ export default function BookList() {
     page,
     perPage,
     orderBy,
-    searchTerm
+    searchTerm,
   );
   const data = Array.from(books?.data || []);
   const totalPages = books?.totalPages || 1;
@@ -86,51 +86,55 @@ export default function BookList() {
   return (
     <Box p={3} flex={1} display="flex" flexDirection="column" gap={2}>
       {!loading && (
-        <Box
-          component="form"
-          onSubmit={handleSearch}
-          noValidate
-          sx={{
-            display: "flex",
-            flexDirection: "row",
-            width: "10rem",
-            ml: "auto",
-            mr: 3,
-          }}
-        >
-          <InputBase
-            sx={{ ml: 1, flex: 1 }}
-            placeholder="Search"
-            inputProps={{ "aria-label": "search google maps" }}
-            onChange={handleSearchChange}
-            value={searchTerm}
-          />
-          <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-            <SearchIcon />
-          </IconButton>
+        <Box display="flex">
+          {data.length > 0 && (
+            <FormControl>
+              <InputLabel variant="standard" htmlFor="uncontrolled-native">
+                Sort by
+              </InputLabel>
+              <NativeSelect
+                inputProps={{
+                  name: "filter",
+                  id: "uncontrolled-native",
+                }}
+                onChange={handleOrderByChange}
+              >
+                <option value={"createdAt-desc"}>New to old</option>
+                <option value={"createdAt-asc"}>Old to new</option>
+                <option value={"title-asc"}>Title ascending</option>
+                <option value={"title-desc"}>Title descending</option>
+                <option value={"year-desc"}>Year descending</option>
+                <option value={"year-asc"}>Year ascending</option>
+              </NativeSelect>
+            </FormControl>
+          )}
+          <Box
+            component="form"
+            onSubmit={handleSearch}
+            noValidate
+            sx={{
+              display: "flex",
+              flexDirection: "row",
+              width: "10rem",
+              ml: "auto",
+              mr: 3,
+            }}
+          >
+            <InputBase
+              sx={{ ml: 1, flex: 1 }}
+              placeholder="Search"
+              inputProps={{ "aria-label": "search google maps" }}
+              onChange={handleSearchChange}
+              value={searchTerm}
+            />
+            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
+              <SearchIcon />
+            </IconButton>
+          </Box>
         </Box>
       )}
       {data.length > 0 ? (
         <>
-          <FormControl sx={{ ml: "auto", mr: 3 }}>
-            <InputLabel variant="standard" htmlFor="uncontrolled-native">
-              Sort by
-            </InputLabel>
-            <NativeSelect
-              inputProps={{
-                name: "filter",
-                id: "uncontrolled-native",
-              }}
-              onChange={handleOrderByChange}
-            >
-              <option value={"createdAt-desc"}>New to old</option>
-              <option value={"createdAt-asc"}>Old to new</option>
-              <option value={"title-asc"}>Title ascending</option>
-              <option value={"title-desc"}>Title descending</option>
-              <option value={"year-desc"}>Year descending</option>
-              <option value={"year-asc"}>Year ascending</option>
-            </NativeSelect>
-          </FormControl>
           <Grid container spacing={2}>
             {data.map((row) => (
               <BookCard
@@ -140,7 +144,7 @@ export default function BookList() {
                 author={row.author}
                 publisher={row.publisher}
                 year={row.year}
-                image={row.images[0]?.url ? baseUrl+row.images[0]?.url : null}
+                image={row.images[0]?.url ? baseUrl + row.images[0]?.url : null}
                 status={row.status}
                 activeBorrowings={row.activeBorrowings}
                 handleBookEdit={(id) => handleBookEdit(id)}

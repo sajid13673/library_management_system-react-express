@@ -19,8 +19,8 @@ import SearchIcon from "@mui/icons-material/Search";
 import MembersTable from "../../Components/Member/MembersTable";
 
 export default function MemberList() {
-  const { fetchData:deleteMember } = useApi();
-  const { fetchData:toggleStatus,  loading:toggleLoading} = useApi();
+  const { fetchData: deleteMember } = useApi();
+  const { fetchData: toggleStatus, loading: toggleLoading } = useApi();
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState("createdAt-desc");
   const [searchTerm, setSearchTerm] = useState("");
@@ -75,7 +75,7 @@ export default function MemberList() {
         method: "PUT",
         endPoint: `/members/${id}/status`,
       });
-    getMembers();
+      getMembers();
     } catch (error) {
       console.error("Failed to update member status:", error);
     }
@@ -86,7 +86,8 @@ export default function MemberList() {
       <Box display="flex">
         <Button
           variant="contained"
-          sx={{ maxWidth: "15rem" }}
+          size="small"
+          sx={{ maxWidth: "12rem" }}
           color="primary"
           onClick={handleAddMember}
         >

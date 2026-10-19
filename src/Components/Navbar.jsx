@@ -19,8 +19,8 @@ import useApi from "../Hooks/useApi";
 
 const settings = ["profile", "settings", "logout"];
 const MaterialUISwitch = styled(Switch)(({ theme }) => ({
-  width: 62,
-  height: 34,
+  width: 58,
+  height: 32,
   padding: 7,
   "& .MuiSwitch-switchBase": {
     margin: 1,
@@ -45,8 +45,8 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
   },
   "& .MuiSwitch-thumb": {
     backgroundColor: "#001e3c",
-    width: 32,
-    height: 32,
+    width: 30,
+    height: 30,
     "&::before": {
       content: "''",
       position: "absolute",
@@ -124,6 +124,10 @@ async function handleLogout() {
         {
           background:
             "linear-gradient(45deg, rgba(25,118,220,1) 0%, rgba(112,217,241,1) 45%, rgba(0,207,255,1) 98%)",
+            height: 45,
+            display: 'flex',
+            justifyContent:'center',
+            py:1
         },
         (theme) =>
           theme.applyStyles("dark", {
@@ -135,7 +139,7 @@ async function handleLogout() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <LocalLibraryIcon
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1 }}
+            sx={{ display: { xs: "none", md: "flex" }, mr: 1, width: 20, height: 20 }}
           />
           <Typography
             variant="h6"
@@ -159,7 +163,7 @@ async function handleLogout() {
 
           <Box sx={{ flexGrow: 1, display: { xs: "flex", md: "none" } }}>
             <IconButton
-              size="large"
+              size="medium"
               aria-label="account of current user"
               aria-controls="menu-appbar"
               aria-haspopup="true"
@@ -192,7 +196,7 @@ async function handleLogout() {
             </Menu>
           </Box>
           <LocalLibraryIcon
-            sx={{ display: { xs: "flex", md: "none" }, mr: 1 }}
+            sx={{ display: { xs: "flex", md: "none" }, mr: 1, width: 20, height: 20  }}
           />
           <Typography
             variant="h5"
@@ -219,7 +223,7 @@ async function handleLogout() {
               <Button
                 key={page}
                 onClick={() => handleCloseNavMenu(page)}
-                sx={{ my: 2, color: "white", display: "block" }}
+                sx={{ my: 2, color: "white", display: "block", fontSize: 12, fontWeight: 'bold' }}
               >
                 {page}
               </Button>
@@ -236,8 +240,8 @@ async function handleLogout() {
           />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
-                <Avatar alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0}}>
+                <Avatar sx={{ p: 0, height: 35, width:35 }} alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
               </IconButton>
             </Tooltip>
             <Menu
