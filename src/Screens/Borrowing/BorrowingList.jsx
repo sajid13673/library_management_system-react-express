@@ -1,12 +1,6 @@
 import React, { useEffect, useState } from "react";
 import BorrowingCard from "../../Components/Borrowing/BorrowingCard";
-import {
-  Pagination,
-  Stack,
-  Grid,
-  Typography,
-  Box,
-} from "@mui/material";
+import { Pagination, Stack, Grid, Typography, Box } from "@mui/material";
 import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useBooks from "../../Hooks/useBook";
@@ -97,9 +91,9 @@ function BorrowingList() {
         label={"Filter"}
         sx={{ ml: "auto", mr: 5 }}
       />
-      <Grid container xs={12} spacing={2}>
-        {borrowingsArray.length > 0 ? (
-          borrowingsArray.map((row) => (
+      {borrowingsArray.length > 0 ? (
+        <Grid container xs={12} spacing={2}>
+          {borrowingsArray.map((row) => (
             <BorrowingCard
               key={row.id}
               id={row.id}
@@ -118,17 +112,17 @@ function BorrowingList() {
               setCurrentId={(id) => setCurrentId(id)}
               handleDelete={(id) => deleteBorrowing(id)}
             />
-          ))
-        ) : (
-          <Box>
-            {!loading ? (
-              <Typography variant="h3">Nothing to show</Typography>
-            ) : (
-              <Loading />
-            )}
-          </Box>
-        )}
-      </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Box>
+          {!loading ? (
+            <Typography variant="h3">Nothing to show</Typography>
+          ) : (
+            <Loading />
+          )}
+        </Box>
+      )}
       {!loading && borrowingsArray.length > 0 && (
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination

@@ -127,14 +127,16 @@ export default function MemberList() {
           "& .MuiInputLabel-root": { fontSize: "0.875rem" },
         }}
       />
-      <MembersTable
-        members={data}
-        handleEditMember={handleEditMember}
-        handleDeleteMember={handleDeleteMember}
-        handleBorrowings={handleBorrowings}
-        handleStatusChange={handleStatusChange}
-        toggleLoading={toggleLoading}
-      />
+      {
+        <MembersTable
+          members={data}
+          handleEditMember={handleEditMember}
+          handleDeleteMember={handleDeleteMember}
+          handleBorrowings={handleBorrowings}
+          handleStatusChange={handleStatusChange}
+          toggleLoading={toggleLoading}
+        />
+      }
       {data.length > 0 && !loading && (
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
