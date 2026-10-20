@@ -386,9 +386,9 @@ function FineList() {
           )}
         </Dialog>
       </Dialog>
-      <Grid container spacing={2}>
-        {fines?.length > 0 ? (
-          fines.map((fine) => (
+      {fines?.length > 0 ? (
+        <Grid container spacing={2}>
+          {fines.map((fine) => (
             <FineCard
               key={fine.id}
               memberId={fine.member?.id}
@@ -399,17 +399,17 @@ function FineList() {
               borrowingStatus={fine.borrowing?.status}
               openProcessPayment={() => openProcessPayment(fine.id)}
             />
-          ))
-        ) : (
-          <Box>
-            {!loadingAllFines ? (
-              <Typography variant="h3">Nothing to show</Typography>
-            ) : (
-              <Loading />
-            )}
-          </Box>
-        )}
-      </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Box>
+          {!loadingAllFines ? (
+            <Typography variant="h3">Nothing to show</Typography>
+          ) : (
+            <Loading />
+          )}
+        </Box>
+      )}
       {!loadingAllFines && fines?.length > 0 && (
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
