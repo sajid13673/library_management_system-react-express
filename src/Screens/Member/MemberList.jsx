@@ -6,9 +6,6 @@ import {
   Button,
   Typography,
   Box,
-  FormControl,
-  InputLabel,
-  NativeSelect,
   IconButton,
   InputBase,
 } from "@mui/material";
@@ -17,7 +14,7 @@ import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 import SearchIcon from "@mui/icons-material/Search";
 import MembersTable from "../../Components/Member/MembersTable";
-
+import CustomSelect from "../../Components/CustomSelect";
 export default function MemberList() {
   const { fetchData: deleteMember } = useApi();
   const { fetchData: toggleStatus, loading: toggleLoading } = useApi();
@@ -58,9 +55,6 @@ export default function MemberList() {
   function handleChange(e, value) {
     setPage(value);
   }
-  const handleOrderByChange = (event) => {
-    setOrderBy(event.target.value);
-  };
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -118,23 +112,21 @@ export default function MemberList() {
           </IconButton>
         </Box>
       </Box>
-      <FormControl sx={{ ml: "auto", mr: 3 }}>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Sort by
-        </InputLabel>
-        <NativeSelect
-          inputProps={{
-            name: "filter",
-            id: "uncontrolled-native",
-          }}
-          onChange={handleOrderByChange}
-        >
-          <option value={"createdAt-desc"}>New to old</option>
-          <option value={"createdAt-asc"}>Old to new</option>
-          <option value={"name-asc"}>Name ascending</option>
-          <option value={"name-desc"}>Name descending</option>
-        </NativeSelect>
-      </FormControl>
+      <CustomSelect
+        value={orderBy}
+        onChange={(value) => setOrderBy(value)}
+        options={[
+          { value: "createdAt-desc", label: "New to old" },
+          { value: "createdAt-asc", label: "Old to new" },
+          { value: "name-asc", label: "Name ascending" },
+          { value: "name-desc", label: "Name descending" },
+        ]}
+        sx={{
+          ml: "auto",
+          mr: 3,
+          "& .MuiInputLabel-root": { fontSize: "0.875rem" },
+        }}
+      />
       <MembersTable
         members={data}
         handleEditMember={handleEditMember}

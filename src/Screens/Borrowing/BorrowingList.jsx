@@ -6,15 +6,13 @@ import {
   Grid,
   Typography,
   Box,
-  FormControl,
-  InputLabel,
-  NativeSelect,
 } from "@mui/material";
 import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 import useBorrowing from "../../Hooks/useBorrowing";
+import CustomSelect from "../../Components/CustomSelect";
 
 function BorrowingList() {
   const { getMembers } = useMembers({});
@@ -57,9 +55,9 @@ function BorrowingList() {
   }
   const [type, setType] = useState("all");
   const [currentId, setCurrentId] = useState();
-  const handleTypeChange = (event) => {
+  const handleTypeChange = (val) => {
     setBorrowingPage(1);
-    setType(event.target.value);
+    setType(val);
   };
   useEffect(() => {
     getBorrowings();
@@ -85,25 +83,20 @@ function BorrowingList() {
     if (returnError) {
       console.error(returnError);
     }
-  }, [returnData, returnError])
+  }, [returnData, returnError]);
   return (
     <Box display="flex" flexDirection="column" p={3} flex={1} gap={2}>
-      <FormControl sx={{ ml: "auto", mr: 5 }}>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Filter
-        </InputLabel>
-        <NativeSelect
-          inputProps={{
-            name: "filter",
-            id: "uncontrolled-native",
-          }}
-          onChange={handleTypeChange}
-        >
-          <option value={"all"}>All</option>
-          <option value={"active"}>Active</option>
-          <option value={"returned"}>Returned</option>
-        </NativeSelect>
-      </FormControl>
+      <CustomSelect
+        onChange={(val) => handleTypeChange(val)}
+        value={type}
+        options={[
+          { value: "all", label: "All" },
+          { value: "active", label: "Active" },
+          { value: "returned", label: "Returned" },
+        ]}
+        label={"Filter"}
+        sx={{ ml: "auto", mr: 5 }}
+      />
       <Grid container xs={12} spacing={2}>
         {borrowingsArray.length > 0 ? (
           borrowingsArray.map((row) => (

@@ -8,9 +8,6 @@ import {
   Container,
   Grid,
   Typography,
-  FormControl,
-  InputLabel,
-  NativeSelect,
   InputBase,
   IconButton,
 } from "@mui/material";
@@ -19,6 +16,7 @@ import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
 import SearchIcon from "@mui/icons-material/Search";
 import { API_CONFIG } from "../../config/api";
+import CustomSelect from "../../Components/CustomSelect";
 
 export default function BookList() {
   const {
@@ -88,25 +86,19 @@ export default function BookList() {
       {!loading && (
         <Box display="flex">
           {data.length > 0 && (
-            <FormControl>
-              <InputLabel variant="standard" htmlFor="uncontrolled-native">
-                Sort by
-              </InputLabel>
-              <NativeSelect
-                inputProps={{
-                  name: "filter",
-                  id: "uncontrolled-native",
-                }}
-                onChange={handleOrderByChange}
-              >
-                <option value={"createdAt-desc"}>New to old</option>
-                <option value={"createdAt-asc"}>Old to new</option>
-                <option value={"title-asc"}>Title ascending</option>
-                <option value={"title-desc"}>Title descending</option>
-                <option value={"year-desc"}>Year descending</option>
-                <option value={"year-asc"}>Year ascending</option>
-              </NativeSelect>
-            </FormControl>
+            <CustomSelect
+              value={orderBy}
+              onChange={(val) => setOrderBy(val)}
+              options={[
+                { value: "createdAt-desc", label: "New to old" },
+                { value: "createdAt-asc", label: "Old to new" },
+                { value: "title-asc", label: "Title ascending" },
+                { value: "title-desc", label: "Title descending" },
+                { value: "year-desc", label: "Year descending" },
+                { value: "year-asc", label: "Year ascending" },
+              ]}
+              lablel={"Sort By"}
+            />
           )}
           <Box
             component="form"
