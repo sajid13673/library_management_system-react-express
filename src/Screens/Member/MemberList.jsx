@@ -15,6 +15,7 @@ import useApi from "../../Hooks/useApi";
 import SearchIcon from "@mui/icons-material/Search";
 import MembersTable from "../../Components/Member/MembersTable";
 import CustomSelect from "../../Components/CustomSelect";
+import Loading from "../../Components/Loading";
 export default function MemberList() {
   const { fetchData: deleteMember } = useApi();
   const { fetchData: toggleStatus, loading: toggleLoading } = useApi();
@@ -127,7 +128,7 @@ export default function MemberList() {
           "& .MuiInputLabel-root": { fontSize: "0.875rem" },
         }}
       />
-      {
+      {data.length > 0 && !loading ? (
         <MembersTable
           members={data}
           handleEditMember={handleEditMember}
@@ -136,7 +137,15 @@ export default function MemberList() {
           handleStatusChange={handleStatusChange}
           toggleLoading={toggleLoading}
         />
-      }
+      ) : (
+        <>
+          {!loading ? (
+            <Typography variant="h3">Nothing to show</Typography>
+          ) : (
+            <Loading />
+          )}
+        </>
+      )}
       {data.length > 0 && !loading && (
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
