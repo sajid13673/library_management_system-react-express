@@ -6,9 +6,6 @@ import {
   Button,
   Typography,
   Box,
-  FormControl,
-  InputLabel,
-  NativeSelect,
   IconButton,
   InputBase,
 } from "@mui/material";
@@ -17,10 +14,11 @@ import useMembers from "../../Hooks/useMember";
 import useApi from "../../Hooks/useApi";
 import SearchIcon from "@mui/icons-material/Search";
 import MembersTable from "../../Components/Member/MembersTable";
-
+import CustomSelect from "../../Components/CustomSelect";
+import Loading from "../../Components/Loading";
 export default function MemberList() {
-  const { fetchData:deleteMember } = useApi();
-  const { fetchData:toggleStatus,  loading:toggleLoading} = useApi();
+  const { fetchData: deleteMember } = useApi();
+  const { fetchData: toggleStatus, loading: toggleLoading } = useApi();
   const [page, setPage] = useState(1);
   const [orderBy, setOrderBy] = useState("createdAt-desc");
   const [searchTerm, setSearchTerm] = useState("");
@@ -58,9 +56,6 @@ export default function MemberList() {
   function handleChange(e, value) {
     setPage(value);
   }
-  const handleOrderByChange = (event) => {
-    setOrderBy(event.target.value);
-  };
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
@@ -75,7 +70,7 @@ export default function MemberList() {
         method: "PUT",
         endPoint: `/members/${id}/status`,
       });
-    getMembers();
+      getMembers();
     } catch (error) {
       console.error("Failed to update member status:", error);
     }
@@ -86,7 +81,8 @@ export default function MemberList() {
       <Box display="flex">
         <Button
           variant="contained"
-          sx={{ maxWidth: "15rem" }}
+          size="small"
+          sx={{ maxWidth: "12rem" }}
           color="primary"
           onClick={handleAddMember}
         >
@@ -117,31 +113,39 @@ export default function MemberList() {
           </IconButton>
         </Box>
       </Box>
-      <FormControl sx={{ ml: "auto", mr: 3 }}>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Sort by
-        </InputLabel>
-        <NativeSelect
-          inputProps={{
-            name: "filter",
-            id: "uncontrolled-native",
-          }}
-          onChange={handleOrderByChange}
-        >
-          <option value={"createdAt-desc"}>New to old</option>
-          <option value={"createdAt-asc"}>Old to new</option>
-          <option value={"name-asc"}>Name ascending</option>
-          <option value={"name-desc"}>Name descending</option>
-        </NativeSelect>
-      </FormControl>
-      <MembersTable
-        members={data}
-        handleEditMember={handleEditMember}
-        handleDeleteMember={handleDeleteMember}
-        handleBorrowings={handleBorrowings}
-        handleStatusChange={handleStatusChange}
-        toggleLoading={toggleLoading}
+      <CustomSelect
+        value={orderBy}
+        onChange={(value) => setOrderBy(value)}
+        options={[
+          { value: "createdAt-desc", label: "New to old" },
+          { value: "createdAt-asc", label: "Old to new" },
+          { value: "name-asc", label: "Name ascending" },
+          { value: "name-desc", label: "Name descending" },
+        ]}
+        sx={{
+          ml: "auto",
+          mr: 3,
+          "& .MuiInputLabel-root": { fontSize: "0.875rem" },
+        }}
       />
+      {data.length > 0 && !loading ? (
+        <MembersTable
+          members={data}
+          handleEditMember={handleEditMember}
+          handleDeleteMember={handleDeleteMember}
+          handleBorrowings={handleBorrowings}
+          handleStatusChange={handleStatusChange}
+          toggleLoading={toggleLoading}
+        />
+      ) : (
+        <>
+          {!loading ? (
+            <Typography variant="h3">Nothing to show</Typography>
+          ) : (
+            <Loading />
+          )}
+        </>
+      )}
       {data.length > 0 && !loading && (
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination

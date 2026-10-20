@@ -26,10 +26,9 @@ function MembersTable({
   handleDeleteMember,
   handleBorrowings,
   handleStatusChange,
-  toggleLoading
+  toggleLoading,
 }) {
-    console.log("member table", members);
-    
+
   return (
     <TableContainer
       component={Paper}
@@ -39,19 +38,29 @@ function MembersTable({
         borderColor: "divider",
         borderRadius: 3,
         overflowX: "auto",
+        minHeight: 400,
+        display: "flex",
+        flexDirection: "column",
+        justifyContent: "space-between",
       }}
     >
       <Table sx={{ minWidth: 1000 }}>
         <TableHead>
           <TableRow
-            sx={{
-              bgcolor: "grey.50",
-              "& th": {
-                fontWeight: 600,
-                color: "text.secondary",
-                whiteSpace: "nowrap",
+            sx={[
+              {
+                bgcolor: "#80e6ff",
+                "& th": {
+                  fontWeight: 600,
+                  color: "text.secondary",
+                  whiteSpace: "nowrap",
+                },
               },
-            }}
+              (theme) =>
+                theme.applyStyles("dark", {
+                  background: "#014e62",
+                }),
+            ]}
           >
             <TableCell>ID</TableCell>
             <TableCell>Member</TableCell>
@@ -106,9 +115,7 @@ function MembersTable({
                 <TableCell>{row.user?.email || "-"}</TableCell>
 
                 {/* Phone */}
-                <TableCell>
-                  {row.phoneNumber || "-"}
-                </TableCell>
+                <TableCell>{row.phoneNumber || "-"}</TableCell>
 
                 {/* Address */}
                 <TableCell>
@@ -126,11 +133,7 @@ function MembersTable({
                     <Switch
                       disabled={toggleLoading}
                       checked={Boolean(row.status)}
-                      onChange={(event) =>
-                        handleStatusChange(
-                          row.id,
-                        )
-                      }
+                      onChange={(event) => handleStatusChange(row.id)}
                       color="success"
                       size="small"
                       inputProps={{
@@ -175,7 +178,14 @@ function MembersTable({
                       </IconButton>
                     </Tooltip>
 
-                    <Tooltip title={!row.activeBorrowings ? "Delete" : "Has active borrowings"}  placement="top-start">
+                    <Tooltip
+                      title={
+                        !row.activeBorrowings
+                          ? "Delete"
+                          : "Has active borrowings"
+                      }
+                      placement="top-start"
+                    >
                       <IconButton
                         disabled={row.activeBorrowings}
                         size="small"

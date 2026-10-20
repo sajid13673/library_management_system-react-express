@@ -8,12 +8,9 @@ import {
   DialogActions,
   DialogContent,
   DialogTitle,
-  FormControl,
   Grid,
-  InputLabel,
   LinearProgress,
   MenuItem,
-  NativeSelect,
   Pagination,
   Select,
   Stack,
@@ -21,6 +18,7 @@ import {
 } from "@mui/material";
 import Loading from "../Components/Loading";
 import FineCard from "../Components/FineCard";
+import CustomSelect from "../Components/CustomSelect";
 function FineList() {
   const {
     fetchData: fetchAllFInes,
@@ -49,7 +47,7 @@ function FineList() {
   const [confirmPaymentDialog, setConfirmPaymentDialog] = useState(false);
   const [paymentType, setPaymentType] = useState("cash");
   const [paymentMessage, setPaymentMessage] = useState(null);
-  const [type, setType] = useState('all');
+  const [type, setType] = useState("all");
   const getFines = async () => {
     await fetchAllFInes({
       method: "GET",
@@ -88,9 +86,9 @@ function FineList() {
     setPaymentMessage(null);
     setConfirmPaymentDialog(true);
   };
-  const handleTypeChange = (event) => {
+  const handleTypeChange = (val) => {
     setPage(1);
-    setType(event.target.value);
+    setType(val);
   };
   useEffect(() => {
     getFines();
@@ -212,33 +210,28 @@ function FineList() {
         color: "white",
       }),
   ];
-  
+
   useEffect(() => {
     console.log("payment message");
 
     console.log(paymentMessage);
   }, [paymentMessage]);
-   useEffect(() => {
-      getFines();
-    }, [type]);
+  useEffect(() => {
+    getFines();
+  }, [type]);
   return (
     <Box display="flex" flexDirection="column" p={3} flex={1} gap={2}>
-      <FormControl sx={{ ml: "auto", mr: 5 }}>
-        <InputLabel variant="standard" htmlFor="uncontrolled-native">
-          Filter
-        </InputLabel>
-        <NativeSelect
-          inputProps={{
-            name: "filter",
-            id: "uncontrolled-native",
-          }}
-          onChange={handleTypeChange}
-        >
-          <option value={"all"}>All</option>
-          <option value={"paid"}>Paid</option>
-          <option value={"unpaid"}>Unpaid</option>
-        </NativeSelect>
-      </FormControl>
+      <CustomSelect
+        onChange={(val) => handleTypeChange(val)}
+        value={type}
+        options={[
+          { value: "all", label: "All" },
+          { value: "paid", label: "Paid" },
+          { value: "unpaid", label: "Unpaid" },
+        ]}
+        label={"Filter"}
+        sx={{ ml: "auto", mr: 5 }}
+      />
       <Dialog
         open={processPaymentDialog}
         onClose={() => setProcessPaymentDialog(false)}
@@ -250,7 +243,11 @@ function FineList() {
           {fine && (
             <>
               <Box sx={memberBoxStyle}>
-                <Typography variant="h6" textAlign={'center'} sx={{ fontWeight: "bold" }}>
+                <Typography
+                  variant="h6"
+                  textAlign={"center"}
+                  sx={{ fontWeight: "bold" }}
+                >
                   Member: {fine.member?.name} (ID: {fine.member?.id})
                 </Typography>
               </Box>
@@ -389,9 +386,9 @@ function FineList() {
           )}
         </Dialog>
       </Dialog>
-      <Grid container spacing={2}>
-        {fines?.length > 0 ? (
-          fines.map((fine) => (
+      {fines?.length > 0 ? (
+        <Grid container spacing={2}>
+          {fines.map((fine) => (
             <FineCard
               key={fine.id}
               memberId={fine.member?.id}
@@ -402,17 +399,17 @@ function FineList() {
               borrowingStatus={fine.borrowing?.status}
               openProcessPayment={() => openProcessPayment(fine.id)}
             />
-          ))
-        ) : (
-          <Box>
-            {!loadingAllFines ? (
-              <Typography variant="h3">Nothing to show</Typography>
-            ) : (
-              <Loading />
-            )}
-          </Box>
-        )}
-      </Grid>
+          ))}
+        </Grid>
+      ) : (
+        <Box>
+          {!loadingAllFines ? (
+            <Typography variant="h3">Nothing to show</Typography>
+          ) : (
+            <Loading />
+          )}
+        </Box>
+      )}
       {!loadingAllFines && fines?.length > 0 && (
         <Stack spacing={2} sx={{ mt: "auto" }}>
           <Pagination
