@@ -6,10 +6,6 @@ import {
   CardContent,
   CircularProgress,
   Container,
-  FormControl,
-  Input,
-  InputLabel,
-  styled,
   TextField,
   Typography,
 } from "@mui/material";
@@ -18,17 +14,7 @@ import React from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { validateOnlyNumbers } from "../../utils/validators";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
+import VisuallyHiddenInput from "../VisuallyHiddenInput";
 
 export default function BookForm(props) {
   var mimeSet = new Set(["image/png", "image/jpeg", "image/jpg"]);
@@ -96,23 +82,30 @@ export default function BookForm(props) {
   }, [props.book]);
   const hasUploadedFile = !!formik.values.image;
   return (
-      <Container maxWidth="sm" sx={{ py: 4 }}>
+    <Container maxWidth="sm" sx={{ py: 4 }}>
       <form onSubmit={formik.handleSubmit}>
-        <Card 
-          elevation={3} 
-          sx={{ 
-            borderRadius: 3, 
+        <Card
+          elevation={3}
+          sx={{
+            borderRadius: 3,
             overflow: "hidden",
-            backgroundColor: "background.paper"
+            backgroundColor: "background.paper",
           }}
           className="input-form"
         >
-          <CardContent sx={{ p: 4, display: "flex", flexDirection: "column", gap: 2.5 }}>
+          <CardContent
+            sx={{ p: 4, display: "flex", flexDirection: "column", gap: 2.5 }}
+          >
             {/* Form Title Heading */}
-            <Typography 
-              variant="h5" 
-              fontWeight="700" 
-              sx={{ textTransform: "uppercase", letterSpacing: 0.5, mb: 1, color: "text.primary" }}
+            <Typography
+              variant="h5"
+              fontWeight="700"
+              sx={{
+                textTransform: "uppercase",
+                letterSpacing: 0.5,
+                mb: 1,
+                color: "text.primary",
+              }}
             >
               {props.title}
             </Typography>
@@ -173,7 +166,9 @@ export default function BookForm(props) {
               type="text"
               value={formik.values.publisher}
               onChange={formik.handleChange}
-              error={formik.touched.publisher && Boolean(formik.errors.publisher)}
+              error={
+                formik.touched.publisher && Boolean(formik.errors.publisher)
+              }
               helperText={formik.touched.publisher && formik.errors.publisher}
               slotProps={{ inputLabel: { shrink: true } }}
             />
@@ -195,27 +190,46 @@ export default function BookForm(props) {
             />
 
             {/* File Upload Block Wrapper Zone */}
-            <Box sx={{ display: "flex", flexDirection: "column", gap: 0.5, mt: 0.5 }}>
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.5,
+                mt: 0.5,
+              }}
+            >
               <Button
                 component="label"
                 variant="outlined"
                 color={hasUploadedFile ? "success" : "primary"}
-                startIcon={hasUploadedFile ? <CheckCircleIcon /> : <CloudUploadIcon />}
-                sx={{ 
-                  borderRadius: 2, 
-                  textTransform: "none", 
-                  py: 1, 
+                startIcon={
+                  hasUploadedFile ? <CheckCircleIcon /> : <CloudUploadIcon />
+                }
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  py: 1,
                   borderStyle: hasUploadedFile ? "solid" : "dashed",
                   borderWidth: 2,
-                  "&:hover": { borderWidth: 2 }
+                  "&:hover": { borderWidth: 2 },
                 }}
               >
-                {hasUploadedFile ? "Cover Image Attached" : "Upload Cover Image"}
-                <VisuallyHiddenInput type="file" onChange={handleUpload} accept="image/*" />
+                {hasUploadedFile
+                  ? "Cover Image Attached"
+                  : "Upload Cover Image"}
+                <VisuallyHiddenInput
+                  type="file"
+                  onChange={handleUpload}
+                  accept="image/*"
+                />
               </Button>
-              
+
               {formik.touched.image && formik.errors.image && (
-                <Typography variant="caption" color="error.main" sx={{ pl: 1, mt: 0.5 }}>
+                <Typography
+                  variant="caption"
+                  color="error.main"
+                  sx={{ pl: 1, mt: 0.5 }}
+                >
                   {formik.errors.image}
                 </Typography>
               )}
@@ -228,12 +242,12 @@ export default function BookForm(props) {
               variant="contained"
               color="primary"
               size="large"
-              sx={{ 
-                borderRadius: 2, 
-                textTransform: "none", 
+              sx={{
+                borderRadius: 2,
+                textTransform: "none",
                 fontWeight: 600,
-                py: 1.2, 
-                mt: 1.5 
+                py: 1.2,
+                mt: 1.5,
               }}
             >
               {!props.loading ? (

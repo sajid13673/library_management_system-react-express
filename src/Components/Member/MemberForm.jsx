@@ -3,26 +3,21 @@ import React, { useEffect, useState } from "react";
 import {
   Card,
   Button,
-  FormControl,
-  Input,
-  InputLabel,
   Typography,
-  styled,
+  Container,
+  CardContent,
+  TextField,
+  Box,
 } from "@mui/material";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
-import { validateAdderess, validateEmail, validateOnlyNumbers } from "../../utils/validators";
+import {
+  validateAdderess,
+  validateEmail,
+  validateOnlyNumbers,
+} from "../../utils/validators";
+import CheckCircleIcon from "@mui/icons-material/CheckCircle";
+import VisuallyHiddenInput from "../VisuallyHiddenInput";
 
-const VisuallyHiddenInput = styled("input")({
-  clip: "rect(0 0 0 0)",
-  clipPath: "inset(50%)",
-  height: 1,
-  overflow: "hidden",
-  position: "absolute",
-  bottom: 0,
-  left: 0,
-  whiteSpace: "nowrap",
-  width: 1,
-});
 export default function MemberForm(props) {
   const [currentPhoneNumber, setCurrentPhoneNumber] = useState("");
   function handleUpload(e) {
@@ -97,89 +92,173 @@ export default function MemberForm(props) {
       setCurrentPhoneNumber(member.phoneNumber);
     }
   }, [props.member]);
+  const isAddMode = props.type === "add";
+  const hasUploadedFile = !!formik.values.image;
+
   return (
-    <form onSubmit={formik.handleSubmit}>
-      <Card sx={{ display: "flex", flexDirection: "column", gap: 2, p: 2 }}>
-        <Typography variant="h3" textTransform="uppercase">
-          {props.type} member
-        </Typography>
-        {props.type === "add" && (
-            <FormControl>
-              <InputLabel htmlFor="my-input">Email</InputLabel>
-              <Input
-                error={formik.errors.email}
+    <Container maxWidth="sm" sx={{ py: 4 }}>
+      <form onSubmit={formik.handleSubmit}>
+        <Card
+          elevation={3}
+          sx={{
+            borderRadius: 3,
+            backgroundColor: "background.paper",
+          }}
+        >
+          <CardContent
+            sx={{ p: 4, display: "flex", flexDirection: "column", gap: 2.5 }}
+          >
+            {/* Form Title Heading */}
+            <Typography
+              variant="h5"
+              fontWeight="700"
+              sx={{
+                textTransform: "uppercase",
+                letterSpacing: 0.5,
+                mb: 1,
+                color: "text.primary",
+              }}
+            >
+              {props.type} Member
+            </Typography>
+
+            {/* Email Field - Conditionally rendered only on account registration */}
+            {isAddMode && (
+              <TextField
+                fullWidth
+                variant="outlined"
+                size="small"
+                id="email"
                 name="email"
-                type="text"
-                aria-describedby="my-helper-text"
+                label="Email Address"
+                type="email"
                 value={formik.values.email}
                 onChange={formik.handleChange}
+                error={formik.touched.email && Boolean(formik.errors.email)}
+                helperText={formik.touched.email && formik.errors.email}
+                slotProps={{ inputLabel: { shrink: true } }}
               />
-              {formik.errors.email ? (
-                <div className="error">{formik.errors.email}</div>
-              ) : null}
-            </FormControl>
-        )}
-        <FormControl>
-          <InputLabel htmlFor="my-input">Full Name</InputLabel>
-          <Input
-            error={formik.errors.name}
-            name="name"
-            type="text"
-            aria-describedby="my-helper-text"
-            value={formik.values.name}
-            onChange={formik.handleChange}
-          />
-          {formik.errors.name ? (
-            <div className="error">{formik.errors.name}</div>
-          ) : null}
-        </FormControl>
-        <FormControl>
-          <InputLabel htmlFor="my-input">Phone Number</InputLabel>
-          <Input
-            error={formik.errors.phoneNumber}
-            name="phoneNumber"
-            type="text"
-            aria-describedby="my-helper-text"
-            value={formik.values.phoneNumber}
-            onChange={formik.handleChange}
-          />
-          {formik.errors.phoneNumber ? (
-            <div className="error">{formik.errors.phoneNumber}</div>
-          ) : null}
-        </FormControl>
-        <FormControl>
-          <InputLabel htmlFor="my-input">Address</InputLabel>
-          <Input
-            error={formik.errors.address}
-            name="address"
-            type="text"
-            aria-describedby="my-helper-text"
-            value={formik.values.address}
-            onChange={formik.handleChange}
-          />
-          {formik.errors.address ? (
-            <div className="error">{formik.errors.address}</div>
-          ) : null}
-        </FormControl>
-        <FormControl>
-          <Button
-            component="label"
-            role={undefined}
-            variant="contained"
-            tabIndex={-1}
-            startIcon={<CloudUploadIcon />}
-          >
-            Upload files
-            <VisuallyHiddenInput type="file" onChange={handleUpload} multiple />
-          </Button>
-          {formik.errors.image ? (
-            <div className="error">{formik.errors.image}</div>
-          ) : null}
-        </FormControl>
-        <Button type="submit" variant="contained" color="primary">
-          {props.type} member
-        </Button>
-      </Card>
-    </form>
+            )}
+
+            {/* Full Name Field Input */}
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              id="name"
+              name="name"
+              label="Full Name"
+              type="text"
+              value={formik.values.name}
+              onChange={formik.handleChange}
+              error={formik.touched.name && Boolean(formik.errors.name)}
+              helperText={formik.touched.name && formik.errors.name}
+              slotProps={{ inputLabel: { shrink: true } }}
+            />
+
+            {/* Phone Number Field Input */}
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              id="phoneNumber"
+              name="phoneNumber"
+              label="Phone Number"
+              type="tel"
+              value={formik.values.phoneNumber}
+              onChange={formik.handleChange}
+              error={
+                formik.touched.phoneNumber && Boolean(formik.errors.phoneNumber)
+              }
+              helperText={
+                formik.touched.phoneNumber && formik.errors.phoneNumber
+              }
+              slotProps={{ inputLabel: { shrink: true } }}
+            />
+
+            {/* Address Field Input */}
+            <TextField
+              fullWidth
+              variant="outlined"
+              size="small"
+              id="address"
+              name="address"
+              label="Home Address"
+              type="text"
+              multiline
+              rows={2} // Gives the user a cleaner multi-line textarea box for typing long addresses
+              value={formik.values.address}
+              onChange={formik.handleChange}
+              error={formik.touched.address && Boolean(formik.errors.address)}
+              helperText={formik.touched.address && formik.errors.address}
+              slotProps={{ inputLabel: { shrink: true } }}
+            />
+
+            {/* File Upload Block Wrapper Zone */}
+            <Box
+              sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 0.5,
+                mt: 0.5,
+              }}
+            >
+              <Button
+                component="label"
+                variant="outlined"
+                color={hasUploadedFile ? "success" : "primary"}
+                startIcon={
+                  hasUploadedFile ? <CheckCircleIcon /> : <CloudUploadIcon />
+                }
+                sx={{
+                  borderRadius: 2,
+                  textTransform: "none",
+                  py: 1,
+                  borderStyle: hasUploadedFile ? "solid" : "dashed",
+                  borderWidth: 2,
+                  "&:hover": { borderWidth: 2 },
+                }}
+              >
+                {hasUploadedFile
+                  ? "Profile Picture Attached"
+                  : "Upload Profile Picture"}
+                <VisuallyHiddenInput
+                  type="file"
+                  onChange={handleUpload}
+                  accept="image/*"
+                />
+              </Button>
+
+              {formik.touched.image && formik.errors.image && (
+                <Typography
+                  variant="caption"
+                  color="error.main"
+                  sx={{ pl: 1, mt: 0.5 }}
+                >
+                  {formik.errors.image}
+                </Typography>
+              )}
+            </Box>
+
+            {/* Submission Action Button */}
+            <Button
+              type="submit"
+              variant="contained"
+              color="primary"
+              size="large"
+              sx={{
+                borderRadius: 2,
+                textTransform: "capitalize",
+                fontWeight: 600,
+                py: 1.2,
+                mt: 1.5,
+              }}
+            >
+              {props.type} Member
+            </Button>
+          </CardContent>
+        </Card>
+      </form>
+    </Container>
   );
 }
