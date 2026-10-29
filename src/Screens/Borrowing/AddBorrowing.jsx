@@ -5,9 +5,12 @@ import {
   Card,
   CardActions,
   CardContent,
+  Chip,
   Divider,
   FormControl,
   Grid,
+  Paper,
+  Stack,
   TextField,
   Typography,
 } from "@mui/material";
@@ -19,11 +22,14 @@ import Loading from "../../Components/Loading";
 import useMembers from "../../Hooks/useMember";
 import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
+import CalendarMonthIcon from "@mui/icons-material/CalendarMonth";
+import AutoStoriesIcon from "@mui/icons-material/AutoStories";
+import PersonIcon from "@mui/icons-material/Person";
 
 function AddBorrowing() {
-  const {fetchData} = useApi([]);
-  const {members, getMembers} = useMembers({all: true});
-  const {getBooks} = useBooks();
+  const { fetchData } = useApi([]);
+  const { members, getMembers } = useMembers({ all: true });
+  const { getBooks } = useBooks();
   const location = useLocation();
   const navigate = useNavigate();
   const bookId = location.state.bookId;
@@ -51,7 +57,7 @@ function AddBorrowing() {
   };
   const [loading, setLoading] = React.useState(false);
   async function getBookById() {
-    await fetchData({method: "GET", endPoint: `/books/${bookId}`})
+    await fetchData({ method: "GET", endPoint: `/books/${bookId}` })
       .then((res) => {
         if (res.data.status) {
           setBook(res.data.data);
@@ -68,7 +74,7 @@ function AddBorrowing() {
         method: "POST",
         endPoint: `/borrowings`,
         data: formData,
-        headers: {'Content-Type' :'application/x-www-form-urlencoded'}
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
       })
         .then((res) => {
           if (res.status) {
@@ -92,24 +98,44 @@ function AddBorrowing() {
       return { ...prevFormData, dueDate: dueDate };
     });
   }, []);
-
   return (
-    <Box display="flex" justifyContent="center" alignItems="center" flex={1} p={1.5}>
+    <Box
+      display="flex"
+      justifyContent="center"
+      alignItems="center"
+      minHeight="100vh"
+      bgcolor="grey.50"
+      p={3}
+    >
       {loading ? (
         <Loading />
       ) : (
         <Card
-          maxWidth="sm"
-          sx={{ boxShadow: 2, borderRadius: 2, p: 2, maxWidth: "60rem" }}
+          sx={{
+            boxShadow: "0px 4px 20px rgba(0, 0, 0, 0.05)",
+            borderRadius: 3,
+            p: 1,
+            maxWidth: "55rem",
+            width: "100%",
+          }}
         >
           <CardContent>
-            <Typography variant="h3">ADD BORROWING</Typography>
-            <Divider flexItem />
-            <Grid container spacing={3}>
-              <Grid item xs={12} display="flex" mt={1}>
-                <FormControl
-                  sx={{ mx: "auto", width: { xs: "100%", sm: "80%" } }}
-                >
+            {/* Header Section */}
+            <Box mb={3}>
+              <Typography variant="h5" fontWeight="700" color="text.primary">
+                Add New Borrowing
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Assign a book to an active organization member.
+              </Typography>
+            </Box>
+
+            <Divider sx={{ mb: 4 }} />
+
+            <Grid container spacing={4}>
+              {/* Form & Member Selection */}
+              <Grid item xs={12}>
+                <FormControl fullWidth error={error}>
                   <Autocomplete
                     {...defaultProps}
                     id="controlled-demo"
@@ -119,172 +145,155 @@ function AddBorrowing() {
                       <TextField
                         {...params}
                         label="Select Member"
-                        variant="standard"
+                        variant="outlined"
+                        error={error}
+                        helperText={
+                          error ? "Please select a member to proceed" : ""
+                        }
                       />
                     )}
                   />
-                  {error && <div className="error">Please select a member</div>}
                 </FormControl>
               </Grid>
+
+              {/* Dynamic Visual Banner for Due Date */}
               <Grid item xs={12}>
-                <Typography variant="h5" align="center">
-                  DUE DATE: {moment(formData.dueDate).format("DD MMMM YYYY")}
-                </Typography>
-                <Divider sx={{ mt: 1 }} />
-              </Grid>
-              <Grid
-                item
-                xs={12}
-                sm={5}
-                display="grid"
-                gridTemplateColumns="repeat(12, 1fr)"
-              >
-                <Typography variant="h6" gridColumn="span 12">
-                  Book Details
-                </Typography>
-                <Typography
-                  gridColumn="span 4"
-                  variant="body1"
-                  color="textSecondary"
+                <Paper
+                  variant="outlined"
+                  sx={{
+                    p: 2,
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    gap: 1.5,
+                    bgcolor: "primary.ultraLight", // Fallback to 'action.hover' if ultraLight token isn't in your theme
+                    borderColor: "primary.light",
+                    borderRadius: 2,
+                  }}
                 >
-                  Title:
-                </Typography>
-                <Typography
-                  gridColumn="span 8"
-                  variant="body1"
-                  color="textSecondary"
-                >
-                  {book.title}
-                </Typography>
-                <Typography
-                  gridColumn="span 4"
-                  variant="body1"
-                  color="textSecondary"
-                >
-                  Author:
-                </Typography>
-                <Typography
-                  gridColumn="span 8"
-                  variant="body1"
-                  color="textSecondary"
-                >
-                  {book.author}
-                </Typography>
-                <Typography
-                  gridColumn="span 4"
-                  variant="body1"
-                  color="textSecondary"
-                >
-                  Publisher:
-                </Typography>
-                <Typography
-                  variant="body1"
-                  gridColumn="span 8"
-                  color="textSecondary"
-                >
-                  {book.publisher}
-                </Typography>
-                <Typography
-                  gridColumn="span 4"
-                  variant="body1"
-                  color="textSecondary"
-                >
-                  Year:
-                </Typography>
-                <Typography
-                  gridColumn="span 8"
-                  variant="body1"
-                  color="textSecondary"
-                >
-                  {book.year}
-                </Typography>
-              </Grid>
-              <Divider
-                orientation="vertical"
-                flexItem
-                sx={{ mx: "auto", mt: 2, display: { xs: "none", sm: "block" } }}
-              />
-              <Grid item xs={12} sm={5}>
-                <Typography variant="h6">Member Details</Typography>
-                {value !== null ? (
-                  <Grid display="grid" gridTemplateColumns="repeat(12, 1fr)">
-                    <Typography
-                      gridColumn="span 4"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      Name:
-                    </Typography>
-                    <Typography
-                      gridColumn="span 8"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      {value.name}
-                    </Typography>
-                    <Typography
-                      gridColumn="span 4"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      Number:
-                    </Typography>
-                    <Typography
-                      gridColumn="span 8"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      {value.phone_number}
-                    </Typography>
-                    <Typography
-                      gridColumn="span 4"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      Email:
-                    </Typography>
-                    <Typography
-                      gridColumn="span 8"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      {value.user.email}
-                    </Typography>
-                    <Typography
-                      gridColumn="span 4"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      Status:
-                    </Typography>
-                    <Typography
-                      gridColumn="span 8"
-                      variant="body1"
-                      color="textSecondary"
-                    >
-                      {value.status ? "Active" : "Inactive"}
-                    </Typography>
-                  </Grid>
-                ) : (
-                  <Typography variant="body1" color="textSecondary">
-                    Not Selected
+                  <CalendarMonthIcon color="primary" />
+                  <Typography
+                    variant="subtitle1"
+                    fontWeight="600"
+                    color="primary.dark"
+                  >
+                    Due Date: {moment(formData.dueDate).format("DD MMMM YYYY")}
                   </Typography>
-                )}
+                </Paper>
+              </Grid>
+
+              {/* Book Details Container */}
+              <Grid item xs={12} md={6}>
+                <Paper
+                  variant="outlined"
+                  sx={{ p: 2.5, borderRadius: 2, height: "100%" }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                    <AutoStoriesIcon fontSize="small" color="action" />
+                    <Typography variant="subtitle1" fontWeight="600">
+                      Book Details
+                    </Typography>
+                  </Stack>
+                  <Divider sx={{ mb: 2 }} />
+                  <Stack spacing={1.5}>
+                    <DetailRow label="Title" value={book.title} />
+                    <DetailRow label="Author" value={book.author} />
+                    <DetailRow label="Publisher" value={book.publisher} />
+                    <DetailRow label="Year" value={book.year} />
+                  </Stack>
+                </Paper>
+              </Grid>
+
+              {/* Member Details Container */}
+              <Grid item xs={12} md={6}>
+                <Paper
+                  variant="outlined"
+                  sx={{ p: 2.5, borderRadius: 2, height: "100%" }}
+                >
+                  <Stack direction="row" alignItems="center" spacing={1} mb={2}>
+                    <PersonIcon fontSize="small" color="action" />
+                    <Typography variant="subtitle1" fontWeight="600">
+                      Member Details
+                    </Typography>
+                  </Stack>
+                  <Divider sx={{ mb: 2 }} />
+                  {value !== null ? (
+                    <Stack spacing={1.5}>
+                      <DetailRow label="Name" value={value.name} />
+                      <DetailRow label="Number" value={value.phone_number} />
+                      <DetailRow label="Email" value={value.user.email} />
+                      <Box
+                        display="flex"
+                        justifyContent="between"
+                        alignItems="center"
+                      >
+                        <Typography
+                          variant="body2"
+                          color="text.secondary"
+                          sx={{ minWidth: 80 }}
+                        >
+                          Status:
+                        </Typography>
+                        <Chip
+                          label={value.status ? "Active" : "Inactive"}
+                          color={value.status ? "success" : "default"}
+                          size="small"
+                          variant="soft" // Fallback to 'filled' if soft variants are unconfigured
+                        />
+                      </Box>
+                    </Stack>
+                  ) : (
+                    <Box
+                      display="flex"
+                      justifyContent="center"
+                      alignItems="center"
+                      height="70%"
+                    >
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        fontStyle="italic"
+                      >
+                        No member selected yet
+                      </Typography>
+                    </Box>
+                  )}
+                </Paper>
               </Grid>
             </Grid>
           </CardContent>
-          <CardActions>
+
+          <CardActions sx={{ p: 2, justifyContent: "flex-end" }}>
             <Button
               onClick={handleSubmit}
               variant="contained"
               color="primary"
-              sx={{ mx: "auto" }}
+              size="large"
+              disableElevation
+              sx={{ px: 4, borderRadius: 2 }}
             >
-              Add Borrowing
+              Create Borrowing Record
             </Button>
           </CardActions>
         </Card>
       )}
+    </Box>
+  );
+}
+
+function DetailRow({ label, value }) {
+  return (
+    <Box display="flex" alignItems="flex-start">
+      <Typography
+        variant="body2"
+        color="text.secondary"
+        sx={{ minWidth: 80, pr: 1 }}
+      >
+        {label}:
+      </Typography>
+      <Typography variant="body2" fontWeight="500" color="text.primary">
+        {value || "—"}
+      </Typography>
     </Box>
   );
 }
