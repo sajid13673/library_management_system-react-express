@@ -54,23 +54,27 @@ function UserActiveBorrowings({ user }) {
           container
           spacing={2}
           sx={{
+            m: 0,
             display: "flex",
             flexGrow: 1,
             maxHeight: "26rem",
             overflowY: "auto",
-            pr: 0.5,
             // Custom modern micro-scrollbar setup
             "&::-webkit-scrollbar": { width: 5 },
             "&::-webkit-scrollbar-track": { background: "transparent" },
             "&::-webkit-scrollbar-thumb": {
               borderRadius: 2,
-              // backgroundColor: "action.selected",
             },
           }}
         >
           {borrowings.length > 0 ? (
             borrowings.map((borrowing) => (
-              <Grid item xs={12} key={borrowing.id}>
+              <Grid
+                item
+                xs={12}
+                key={borrowing.id}
+                sx={{ p: 2, alignContent: "center" }}
+              >
                 <Card
                   elevation={0}
                   sx={{
@@ -179,8 +183,7 @@ function UserActiveBorrowings({ user }) {
             <Grid item xs={12}>
               <Box
                 sx={{
-                  py: 6,
-                  px: 3,
+                  bgcolor: "red",
                   borderRadius: 2,
                   display: "flex",
                   flexDirection: "column",
