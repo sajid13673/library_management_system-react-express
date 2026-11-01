@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Box,
   Card,
@@ -10,112 +9,163 @@ import {
 } from "@mui/material";
 import moment from "moment";
 import BookIcon from "@mui/icons-material/Book";
+import InfoOutlinedIcon from "@mui/icons-material/InfoOutlined";
 
 function UserActiveBorrowings({ user }) {
-  console.log(user?.member?.borrowings);
+  const borrowings = user?.member?.borrowings || [];
 
   return (
-    <Card sx={[{ height: "100%" }, (theme) => theme.applyStyles('dark', {boxShadow: "0px 2px 5px rgba(61, 166, 236, 0.5)"})]} >
+    <Card
+      elevation={2}
+      sx={[
+        {
+          height: "100%",
+          borderRadius: 3,
+          display: "flex",
+          flexDirection: "column",
+        },
+        (theme) =>
+          theme.applyStyles("dark", {
+            boxShadow: "0px 4px 20px rgba(61, 166, 236, 0.15)",
+          }),
+      ]}
+    >
       <CardHeader
         title="Active Borrowings"
+        titleTypographyProps={{ variant: "subtitle1", fontWeight: 700 }}
         sx={[
           {
-            height: '1rem',
-            background: 'linear-gradient(45deg, rgba(25,118,220,1) 0%, rgba(23,210,252,1) 100%)',
+            py: 2,
+            px: 3,
+            background: "linear-gradient(45deg, #1976d2 0%, #17d2fc 100%)",
             color: "#fff",
           },
           (theme) =>
             theme.applyStyles("dark", {
-              background: "linear-gradient(45deg, rgba(8,75,148,1) 0%, rgba(17,153,184,1) 100%)",
+              background: "linear-gradient(45deg, #084b94 0%, #1199b8 100%)",
             }),
         ]}
       />
-      <CardContent>
+
+      <CardContent
+        sx={{ py: 2, flexGrow: 1, display: "flex", flexDirection: "column" }}
+      >
         <Grid
           container
-          spacing={1}
+          spacing={2}
           sx={{
-            maxHeight: "25rem",
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
+            display: "flex",
+            flexGrow: 1,
+            maxHeight: "26rem",
+            overflowY: "auto",
+            pr: 0.5,
+            // Custom modern micro-scrollbar setup
+            "&::-webkit-scrollbar": { width: 5 },
+            "&::-webkit-scrollbar-track": { background: "transparent" },
+            "&::-webkit-scrollbar-thumb": {
+              borderRadius: 2,
+              // backgroundColor: "action.selected",
             },
-            "-ms-overflow-style": "none",
-            "scrollbar-width": "none",
           }}
-          justifyContent="center"
         >
-          {user?.member?.borrowings.length > 0 ? (
-            user?.member?.borrowings.map((borrowing) => (
+          {borrowings.length > 0 ? (
+            borrowings.map((borrowing) => (
               <Grid item xs={12} key={borrowing.id}>
                 <Card
-                  sx={[
-                    {
-                      height: "100%",
-                    },
-                    {
-                      backgroundColor: "#C7E3FF",
-                    },
-                    (theme) =>
-                      theme.applyStyles("dark", {
-                        backgroundColor: "rgb(23, 70, 117)",
-                      }),
-                  ]}
-                  variant="filled"
+                  elevation={0}
+                  sx={{
+                    borderRadius: 2,
+                    backgroundColor: "action.hover",
+                    border: "1px solid",
+                    borderColor: "divider",
+                    transition: "transform 0.2s",
+                    "&:hover": { transform: "translateX(4px)" },
+                  }}
                 >
-                  <CardContent>
-                    <Box display="flex" alignItems="center" gap={1}>
-                      <BookIcon
-                        sx={(theme) => ({
-                          mr: 1,
-                          color: theme.palette.primary.main,
-                        })}
-                      />
-                      <Typography
-                        variant="h6"
-                        sx={(theme) => ({
-                          color: theme.palette.primary.main,
-                          fontWeight: "bold",
-                          textTransform: "capitalize",
-                        })}
-                      >
-                        {borrowing.book.title}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary" noWrap>
-                        by{" "}
-                        <Typography component="span" textTransform="capitalize">
-                          {borrowing.book.author}
+                  <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
+                    {/* Header Row: Icon & Metadata Info */}
+                    <Box
+                      display="flex"
+                      alignItems="flex-start"
+                      gap={1.5}
+                      mb={1.5}
+                    >
+                      <BookIcon color="primary" sx={{ mt: 0.25 }} />
+                      <Box sx={{ minWidth: 0, flexGrow: 1 }}>
+                        <Typography
+                          variant="body1"
+                          fontWeight="600"
+                          noWrap
+                          sx={{
+                            textTransform: "capitalize",
+                            color: "text.primary",
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {borrowing.book.title}
                         </Typography>
-                      </Typography>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          noWrap
+                          display="block"
+                          sx={{ textTransform: "capitalize" }}
+                        >
+                          by {borrowing.book.author}
+                        </Typography>
+                      </Box>
                     </Box>
 
-                    <Divider />
-                    <Box display="flex" flexDirection="column" mt={2}>
+                    <Divider sx={{ borderStyle: "dashed" }} />
+
+                    {/* Logistical Metrics Grid */}
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      gap={0.75}
+                      mt={1.5}
+                    >
                       <Box
                         display="flex"
                         justifyContent="space-between"
-                        gap={0.5}
-                        mb={1}
+                        alignItems="center"
                       >
-                        <Typography variant="body2">
-                          Borrowed Date :{" "}
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          fontWeight="500"
+                        >
+                          Borrowed Date
                         </Typography>
-                        <Typography variant="body2" color="textSecondary">
+                        <Typography
+                          variant="caption"
+                          fontWeight="600"
+                          color="text.primary"
+                        >
                           {moment(borrowing.created_at).format(
-                            "DD/MM/YYYY HH:mm"
+                            "DD MMM YYYY, hh:mm A",
                           )}
                         </Typography>
                       </Box>
                       <Box
                         display="flex"
                         justifyContent="space-between"
-                        gap={0.5}
-                        mb={1}
+                        alignItems="center"
                       >
-                        <Typography variant="body2">Due Date :</Typography>
-                        <Typography variant="body2" color="error">
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          fontWeight="500"
+                        >
+                          Due Date
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          fontWeight="600"
+                          color="error.main"
+                        >
                           {moment(borrowing.due_date).format(
-                            "DD/MM/YYYY HH:mm"
+                            "DD MMM YYYY, hh:mm A",
                           )}
                         </Typography>
                       </Box>
@@ -125,39 +175,42 @@ function UserActiveBorrowings({ user }) {
               </Grid>
             ))
           ) : (
-            <Grid item xs={12} sx={{ textAlign: "center" }}>
+            /* Illustrative Empty State Alternative */
+            <Grid item xs={12}>
               <Box
-                sx={[
-                  (theme) => ({
-                    backgroundColor: "#f0f0f0",
-                    padding: 3,
-                    borderRadius: 1,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    minHeight: "100px",
-                    color: theme.palette.text.secondary,
-                  }),
-                  (theme) =>
-                    theme.applyStyles("dark", {
-                      backgroundColor: "rgb(23, 70, 117)",
-                      color: "#fff",
-                    }),
-                ]}
+                sx={{
+                  py: 6,
+                  px: 3,
+                  borderRadius: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1.5,
+                  border: "1px dashed",
+                  borderColor: "divider",
+                  backgroundColor: "background.default",
+                  color: "text.secondary",
+                  textAlign: "center",
+                }}
               >
+                <InfoOutlinedIcon
+                  sx={{ fontSize: 32, color: "text.disabled" }}
+                />
                 <Typography
-                  variant="h6"
-                  sx={[
-                    (theme) => ({
-                      color: theme.palette.text.secondary,
-                    }),
-                    (theme) =>
-                      theme.applyStyles("dark", {
-                        color: "#fff",
-                      }),
-                  ]}
+                  variant="subtitle2"
+                  fontWeight="600"
+                  color="text.primary"
                 >
-                  No active borrowings
+                  No Active Borrowings
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ maxWidth: 220 }}
+                >
+                  Your account currently has no pending book returns or active
+                  transactions.
                 </Typography>
               </Box>
             </Grid>
