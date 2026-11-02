@@ -59,6 +59,11 @@ function UserActiveBorrowings({ user }) {
             flexGrow: 1,
             maxHeight: "26rem",
             overflowY: "auto",
+            // Smooth glassy/blurry fade out effect at the top and bottom edges
+            maskImage:
+              "linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)",
             // Custom modern micro-scrollbar setup
             "&::-webkit-scrollbar": { width: 5 },
             "&::-webkit-scrollbar-track": { background: "transparent" },
