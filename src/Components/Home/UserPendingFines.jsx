@@ -46,12 +46,13 @@ function UserPendingFines({ fines = [] }) {
       />
 
       <CardContent
-        sx={{ p: 3, flexGrow: 1, display: "flex", flexDirection: "column" }}
+        sx={{ py: 2, flexGrow: 1, display: "flex", flexDirection: "column" }}
       >
         <Grid
           container
           spacing={2}
           sx={{
+            m: 0,
             maxHeight: "26rem",
             overflowY: "auto",
             pr: 0.5,
@@ -59,17 +60,22 @@ function UserPendingFines({ fines = [] }) {
               "linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)",
             WebkitMaskImage:
               "linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)",
+            // Custom modern micro-scrollbar setup
             "&::-webkit-scrollbar": { width: 5 },
             "&::-webkit-scrollbar-track": { background: "transparent" },
             "&::-webkit-scrollbar-thumb": {
               borderRadius: 2,
-              backgroundColor: "action.selected",
             },
           }}
         >
           {fines.length > 0 ? (
             fines.map((fine) => (
-              <Grid item xs={12} key={fine.id}>
+              <Grid
+                item
+                xs={12}
+                key={fine.id}
+                sx={{ p: 1, pb: 2, alignContent: "center" }}
+              >
                 <Card
                   elevation={0}
                   sx={[
