@@ -25,6 +25,7 @@ import {
 import Layout from "../Layout";
 import FineList from "../../Screens/FineList";
 import Settings from "../../Screens/Settings";
+import MemberDetailsPage from "../../Screens/Member/MemberDetails";
 
 function App() {
   const [loading, setLoading] = React.useState(false);
@@ -210,6 +211,14 @@ function App() {
                 element={
                   <Layout>
                     <FineList />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/member-details/:id"
+                element={
+                  <Layout>
+                    <MemberDetailsPage />
                   </Layout>
                 }
               />
