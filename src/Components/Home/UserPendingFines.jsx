@@ -4,142 +4,212 @@ import {
   Card,
   CardContent,
   CardHeader,
+  Divider,
   Grid,
   Typography,
 } from "@mui/material";
 import BookIcon from "@mui/icons-material/Book";
+import PriceCheckIcon from "@mui/icons-material/PriceCheck";
 
-function UserPendingFines({ fines }) {
+function UserPendingFines({ fines = [] }) {
   return (
-    <Card sx={[{  boxShadow: 3, height: "100%" }, (theme) => theme.applyStyles('dark', {boxShadow: "0px 2px 5px rgba(238, 96, 68, 0.5)"})]}>
-      <CardHeader
-        title="pending fines"
-        sx={[
-          (theme) => ({
-            height: '1rem',
-            background: 'linear-gradient(45deg, rgba(255,30,17,1) 4%, rgba(255,140,54,1) 45%)',
-            color: "#fff",
-            padding: theme.spacing(2),
+    <Card
+      elevation={2}
+      sx={[
+        {
+          height: "100%",
+          borderRadius: 3,
+          display: "flex",
+          flexDirection: "column",
+        },
+        (theme) =>
+          theme.applyStyles("dark", {
+            boxShadow: "0px 4px 20px rgba(238, 96, 68, 0.15)",
           }),
+      ]}
+    >
+      <CardHeader
+        title="Pending Fines"
+        titleTypographyProps={{ variant: "subtitle1", fontWeight: 700 }}
+        sx={[
+          {
+            py: 2,
+            px: 3,
+            background: "linear-gradient(45deg, #ff1e11 4%, #ff8c36 45%)",
+            color: "#fff",
+          },
           (theme) =>
             theme.applyStyles("dark", {
-              background: "linear-gradient(45deg, rgba(152,43,43,1) 18%, rgba(196,108,42,1) 51%)",
+              background: "linear-gradient(45deg, #982b2b 18%, #c46c28 51%)",
             }),
         ]}
       />
-      <CardContent>
+
+      <CardContent
+        sx={{ py: 2, flexGrow: 1, display: "flex", flexDirection: "column" }}
+      >
         <Grid
           container
-          spacing={1}
-          justifyContent="center"
+          spacing={2}
           sx={{
-            maxHeight: "25rem",
-            overflowY: "scroll",
-            "&::-webkit-scrollbar": {
-              display: "none",
+            m: 0,
+            maxHeight: "26rem",
+            overflowY: "auto",
+            pr: 0.5,
+            maskImage:
+              "linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)",
+            WebkitMaskImage:
+              "linear-gradient(to bottom, transparent 0%, black 8%, black 92%, transparent 100%)",
+            // Custom modern micro-scrollbar setup
+            "&::-webkit-scrollbar": { width: 5 },
+            "&::-webkit-scrollbar-track": { background: "transparent" },
+            "&::-webkit-scrollbar-thumb": {
+              borderRadius: 2,
             },
-            "-ms-overflow-style": "none",
-            "scrollbar-width": "none", 
           }}
         >
-          {fines?.length > 0 ? (
+          {fines.length > 0 ? (
             fines.map((fine) => (
-              <Grid item xs={12} key={fine.id}>
+              <Grid
+                item
+                xs={12}
+                key={fine.id}
+                sx={{ p: 1, pb: 2, alignContent: "center" }}
+              >
                 <Card
+                  elevation={0}
                   sx={[
                     {
-                      backgroundColor: "#ffd7d7",
-                      height: "100%",
+                      borderRadius: 2,
+                      backgroundColor: "action.hover",
+                      border: "1px solid",
+                      borderColor: "divider",
+                      borderLeft: "4px solid",
+                      borderLeftColor: "error.light",
+                      transition: "transform 0.2s",
+                      "&:hover": { transform: "translateX(4px)" },
                     },
                     (theme) =>
                       theme.applyStyles("dark", {
-                        background: "#5f1111",
+                        borderLeftColor: "error.main",
                       }),
                   ]}
-                  variant="filled"
                 >
-                  <CardContent>
-                    <Box display="flex" alignItems="center" gap={1}>
-                      <BookIcon
-                        sx={(theme) => ({
-                          mr: 1,
-                          color: theme.palette.primary.main,
-                        })}
-                      />
-                      <Typography
-                        variant="h6"
-                        sx={(theme) => ({
-                          color: theme.palette.primary.main,
-                          fontWeight: "bold",
-                        })}
-                      >
-                        {fine.borrowing.book.title}
-                      </Typography>
-                      <Typography variant="body2" color="textSecondary">
-                        by {fine.borrowing.book.author}
-                      </Typography>
+                  <CardContent sx={{ p: 2, "&:last-child": { pb: 2 } }}>
+                    {/* Header Row: Book Details */}
+                    <Box
+                      display="flex"
+                      alignItems="flex-start"
+                      gap={1.5}
+                      mb={1.5}
+                    >
+                      <BookIcon color="error" sx={{ mt: 0.25 }} />
+                      <Box sx={{ minWidth: 0, flexGrow: 1 }}>
+                        <Typography
+                          variant="body1"
+                          fontWeight="600"
+                          noWrap
+                          sx={{
+                            textTransform: "capitalize",
+                            color: "text.primary",
+                            lineHeight: 1.3,
+                          }}
+                        >
+                          {fine.borrowing.book.title}
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          noWrap
+                          display="block"
+                        >
+                          by {fine.borrowing.book.author}
+                        </Typography>
+                      </Box>
                     </Box>
 
-                    <Box sx={{ textAlign: "center", mt: 1 }}>
-                      <Typography variant="body2" color="text.secondary">
-                        Total Amount
-                      </Typography>
-                      <Typography
-                        variant="h5"
-                        component="div"
-                        color="error"
-                        sx={[
-                          { fontWeight: "bold" },
-                          (theme) =>
-                            theme.applyStyles("dark", {
-                              color: theme.palette.error.main, 
-                            }),
-                        ]}
-                      >
-                        ${fine.amount}
-                      </Typography>
-                      <Typography variant="body2" color="text.secondary">
-                        for {fine.days} {fine.days === 1 ? "day" : "days"}
-                      </Typography>
+                    <Divider sx={{ borderStyle: "dashed" }} />
+
+                    {/* Balanced Financial Logistics Row */}
+                    <Box
+                      display="flex"
+                      justifyContent="space-between"
+                      alignItems="center"
+                      mt={1.5}
+                    >
+                      <Box>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          display="block"
+                        >
+                          Overdue Duration
+                        </Typography>
+                        <Typography
+                          variant="caption"
+                          fontWeight="600"
+                          color="text.primary"
+                        >
+                          {fine.days} {fine.days === 1 ? "day" : "days"}
+                        </Typography>
+                      </Box>
+                      <Box sx={{ textAlign: "right" }}>
+                        <Typography
+                          variant="caption"
+                          color="text.secondary"
+                          display="block"
+                        >
+                          Fine Accrued
+                        </Typography>
+                        <Typography
+                          variant="subtitle1"
+                          fontWeight="800"
+                          color="error.main"
+                          sx={{ lineHeight: 1.2 }}
+                        >
+                          ${fine.amount}
+                        </Typography>
+                      </Box>
                     </Box>
                   </CardContent>
                 </Card>
               </Grid>
             ))
           ) : (
-            <Grid item xs={12} sx={{ textAlign: "center" }}>
+            /* Clean Empty State */
+            <Grid item xs={12}>
               <Box
-                sx={[
-                  (theme) => ({
-                    backgroundColor: "#f0f0f0",
-                    padding: theme.spacing(3),
-                    borderRadius: 1,
-                    display: "flex",
-                    justifyContent: "center",
-                    alignItems: "center",
-                    minHeight: "100px",
-                    color: theme.palette.text.secondary,
-                  }),
-                  (theme) =>
-                    theme.applyStyles("dark", {
-                      backgroundColor: "rgb(40, 40, 40)", 
-                      color: "#fff",
-                    }),
-                ]}
+                sx={{
+                  py: 6,
+                  px: 3,
+                  borderRadius: 2,
+                  display: "flex",
+                  flexDirection: "column",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  gap: 1.5,
+                  border: "1px dashed",
+                  borderColor: "divider",
+                  backgroundColor: "background.default",
+                  color: "text.secondary",
+                  textAlign: "center",
+                }}
               >
+                <PriceCheckIcon sx={{ fontSize: 32, color: "success.main" }} />
                 <Typography
-                  variant="h6"
-                  sx={[
-                    (theme) => ({
-                      color: theme.palette.text.secondary,
-                    }),
-                    (theme) =>
-                      theme.applyStyles("dark", {
-                        color: "#fff",
-                      }),
-                  ]}
+                  variant="subtitle2"
+                  fontWeight="600"
+                  color="text.primary"
                 >
-                  No active borrowings
+                  No Pending Fines
+                </Typography>
+                <Typography
+                  variant="caption"
+                  color="text.secondary"
+                  sx={{ maxWidth: 220 }}
+                >
+                  Your account is in good standing. There are no outstanding
+                  overdue fees.
                 </Typography>
               </Box>
             </Grid>

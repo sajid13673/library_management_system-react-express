@@ -8,15 +8,13 @@ import {
   Container,
   Grid,
   Typography,
-  InputBase,
-  IconButton,
 } from "@mui/material";
 import Loading from "../../Components/Loading";
 import useBooks from "../../Hooks/useBook";
 import useApi from "../../Hooks/useApi";
-import SearchIcon from "@mui/icons-material/Search";
 import { API_CONFIG } from "../../config/api";
 import CustomSelect from "../../Components/CustomSelect";
+import SearchBar from "../../Components/SearchBar";
 
 export default function BookList() {
   const {
@@ -62,7 +60,7 @@ export default function BookList() {
   const handleSearchChange = (event) => {
     setSearchTerm(event.target.value);
   };
-  const handleSearch = (e) => {
+  const handleSearchSubmit = (e) => {
     e.preventDefault();
     setPage(1);
     getBooks();
@@ -100,29 +98,13 @@ export default function BookList() {
               lablel={"Sort By"}
             />
           )}
-          <Box
-            component="form"
-            onSubmit={handleSearch}
-            noValidate
-            sx={{
-              display: "flex",
-              flexDirection: "row",
-              width: "10rem",
-              ml: "auto",
-              mr: 3,
-            }}
-          >
-            <InputBase
-              sx={{ ml: 1, flex: 1 }}
-              placeholder="Search"
-              inputProps={{ "aria-label": "search google maps" }}
-              onChange={handleSearchChange}
-              value={searchTerm}
-            />
-            <IconButton type="submit" sx={{ p: "10px" }} aria-label="search">
-              <SearchIcon />
-            </IconButton>
-          </Box>
+          <SearchBar
+            value={searchTerm}
+            onChange={handleSearchChange}
+            onSubmit={handleSearchSubmit}
+            placeholder="Search books..."
+            sx={{ ml: "auto", mr: 3 }}
+          />
         </Box>
       )}
       {data.length > 0 ? (
