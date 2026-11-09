@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Avatar,
   Box,
@@ -19,6 +18,7 @@ import {
 import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
+import { API_CONFIG } from "../../config/api";
 
 function MembersTable({
   members,
@@ -28,6 +28,7 @@ function MembersTable({
   handleStatusChange,
   toggleLoading,
 }) {
+  const baseUrl = API_CONFIG.baseUrl;
 
   return (
     <TableContainer
@@ -94,7 +95,7 @@ function MembersTable({
                     minWidth={160}
                   >
                     <Avatar
-                      src={row?.image?.url || undefined}
+                      src={baseUrl+row?.image?.url || undefined}
                       alt={row.name}
                       sx={{ width: 40, height: 40 }}
                     >
