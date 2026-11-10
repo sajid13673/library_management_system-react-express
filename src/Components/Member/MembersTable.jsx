@@ -3,6 +3,7 @@ import {
   Box,
   Chip,
   IconButton,
+  Link,
   Paper,
   Switch,
   Table,
@@ -19,6 +20,7 @@ import EditOutlinedIcon from "@mui/icons-material/EditOutlined";
 import DeleteOutlineIcon from "@mui/icons-material/DeleteOutline";
 import MenuBookOutlinedIcon from "@mui/icons-material/MenuBookOutlined";
 import { API_CONFIG } from "../../config/api";
+import { Link as RouterLink } from "react-router-dom";
 
 function MembersTable({
   members,
@@ -95,20 +97,27 @@ function MembersTable({
                     minWidth={160}
                   >
                     <Avatar
-                      src={baseUrl+row?.image?.url || undefined}
+                      src={baseUrl + row?.image?.url || undefined}
                       alt={row.name}
                       sx={{ width: 40, height: 40 }}
                     >
                       {row.name?.charAt(0)?.toUpperCase()}
                     </Avatar>
-
-                    <Typography
+                    <Link
+                      component={RouterLink}
+                      to={`/member-details/${row.id}`} // 👈 Adjust path matching your route config
                       variant="body2"
                       fontWeight={600}
-                      whiteSpace="nowrap"
+                      underline="hover"
+                      sx={{
+                        whiteSpace: "nowrap",
+                        color: "text.primary", // Keeps typography matching row styles
+                        cursor: "pointer",
+                        "&:hover": { color: "primary.main" }, // Smooth visual feedback on hover
+                      }}
                     >
                       {row.name}
-                    </Typography>
+                    </Link>
                   </Box>
                 </TableCell>
 
