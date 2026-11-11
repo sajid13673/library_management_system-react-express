@@ -21,6 +21,7 @@ import PersonIcon from "@mui/icons-material/Person";
 import noImagePic from "../../images/no_image.jpg";
 import useApi from "../../Hooks/useApi";
 import Loading from "../../Components/Loading";
+import { API_CONFIG } from "../../config/api";
 
 // Define schema types matching your database entities
 
@@ -32,6 +33,7 @@ export default function MemberDetailsPage() {
   const [member, setMember] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const baseUrl = API_CONFIG.baseUrl;
 
   useEffect(() => {
     const fetchMemberDetails = async () => {
@@ -122,7 +124,7 @@ export default function MemberDetailsPage() {
             >
               <Avatar
                 alt={member.name}
-                src={member.image || noImagePic}
+                src={baseUrl + member.image?.url || noImagePic}
                 fallback={PersonIcon}
                 sx={{
                   width: 150,
@@ -220,7 +222,7 @@ export default function MemberDetailsPage() {
                       whiteSpace: "nowrap",
                     }}
                   >
-                    {member.email}
+                    {member.user?.email}
                   </Typography>
                 </Box>
               </Grid>
