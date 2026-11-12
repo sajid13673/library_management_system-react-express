@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import BookCard from "../../Components/Book/BookCard";
 import {
@@ -26,12 +26,14 @@ export default function BookList() {
   const [page, setPage] = useState(1);
   const [perPage, setPerPage] = useState(12);
   const [orderBy, setOrderBy] = useState("createdAt-desc");
+  const [filter, setFilter] = useState("all");
   const [searchTerm, setSearchTerm] = useState("");
   const { books, error, getBooks, loading } = useBooks(
     page,
     perPage,
     orderBy,
     searchTerm,
+    filter,
   );
   const data = Array.from(books?.data || []);
   const totalPages = books?.totalPages || 1;
@@ -82,21 +84,33 @@ export default function BookList() {
   return (
     <Box p={3} flex={1} display="flex" flexDirection="column" gap={2}>
       {!loading && (
-        <Box display="flex">
+        <Box display="flex" gap={2}>
           {data.length > 0 && (
-            <CustomSelect
-              value={orderBy}
-              onChange={(val) => setOrderBy(val)}
-              options={[
-                { value: "createdAt-desc", label: "New to old" },
-                { value: "createdAt-asc", label: "Old to new" },
-                { value: "title-asc", label: "Title ascending" },
-                { value: "title-desc", label: "Title descending" },
-                { value: "year-desc", label: "Year descending" },
-                { value: "year-asc", label: "Year ascending" },
-              ]}
-              lablel={"Sort By"}
-            />
+            <>
+              <CustomSelect
+                value={orderBy}
+                onChange={(val) => setOrderBy(val)}
+                options={[
+                  { value: "createdAt-desc", label: "New to old" },
+                  { value: "createdAt-asc", label: "Old to new" },
+                  { value: "title-asc", label: "Title ascending" },
+                  { value: "title-desc", label: "Title descending" },
+                  { value: "year-desc", label: "Year descending" },
+                  { value: "year-asc", label: "Year ascending" },
+                ]}
+                label={"Sort By"}
+              />
+              <CustomSelect
+                value={filter}
+                onChange={(val) => setFilter(val)}
+                options={[
+                  { value: "all", label: "All" },
+                  { value: "Available", label: "Available" },
+                  { value: "unavailable", label: "Unavailable" },
+                ]}
+                label={"Filter"}
+              />
+            </>
           )}
           <SearchBar
             value={searchTerm}
