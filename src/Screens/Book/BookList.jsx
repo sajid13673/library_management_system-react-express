@@ -105,7 +105,7 @@ export default function BookList() {
                 onChange={(val) => setFilter(val)}
                 options={[
                   { value: "all", label: "All" },
-                  { value: "Available", label: "Available" },
+                  { value: "available", label: "Available" },
                   { value: "unavailable", label: "Unavailable" },
                 ]}
                 label={"Filter"}
