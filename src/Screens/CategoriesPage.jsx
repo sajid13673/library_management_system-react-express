@@ -17,6 +17,7 @@ import {
   IconButton,
   Tooltip,
   Stack,
+  Pagination,
 } from "@mui/material";
 import AddIcon from "@mui/icons-material/Add";
 import EditIcon from "@mui/icons-material/Edit";
@@ -45,10 +46,18 @@ export default function CategoriesPage() {
   const [editingId, setEditingId] = useState(null);
   const [editingName, setEditingName] = useState("");
 
+  const totalPages = categoriesData?.totalPages || 1;
+  const [page, setPage] = useState(1);
+  const perPage = 3;
+
+  const handlePageChange = (e, value) => {
+    setPage(value);
+  };
+
   const getCategories = async () => {
     await fetchCategories({
       method: "GET",
-      endPoint: `/categories`,
+      endPoint: `/categories?page=${page}&perPage=${perPage}`,
     });
   };
 
@@ -81,7 +90,7 @@ export default function CategoriesPage() {
 
   useEffect(() => {
     getCategories();
-  }, []);
+  }, [page]);
   return (
     <Container maxWidth="md" sx={{ py: 4 }}>
       <Typography variant="h5" fontWeight={700} sx={{ mb: 3 }}>
@@ -156,6 +165,7 @@ export default function CategoriesPage() {
           minHeight: 350,
           display: "flex",
           flexDirection: "column",
+          mb:2
         }}
       >
         <Table>
@@ -283,6 +293,14 @@ export default function CategoriesPage() {
           </TableBody>
         </Table>
       </TableContainer>
+      <Stack spacing={2} sx={{ mt: "auto" }}>
+        <Pagination
+          count={totalPages}
+          page={page}
+          color="primary"
+          onChange={handlePageChange}
+        />
+      </Stack>
     </Container>
   );
 }
