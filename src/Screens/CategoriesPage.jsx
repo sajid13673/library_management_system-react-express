@@ -25,6 +25,7 @@ import DeleteForeverIcon from "@mui/icons-material/DeleteForever";
 import CheckIcon from "@mui/icons-material/Check";
 import CloseIcon from "@mui/icons-material/Close";
 import useApi from "../Hooks/useApi";
+import Loading from "../Components/Loading";
 
 export default function CategoriesPage() {
   const {
@@ -155,152 +156,198 @@ export default function CategoriesPage() {
         </CardContent>
       </Card>
 
-      <TableContainer
-        component={Paper}
-        elevation={0}
-        sx={{
-          border: "1px solid",
-          borderColor: "divider",
-          borderRadius: 3,
-          minHeight: 350,
-          display: "flex",
-          flexDirection: "column",
-          mb:2
-        }}
-      >
-        <Table>
-          <TableHead sx={{ backgroundColor: "action.hover" }}>
-            <TableRow>
-              <TableCell sx={{ fontWeight: 700, width: "15%" }}>ID</TableCell>
-              <TableCell sx={{ fontWeight: 700 }}>Category Name</TableCell>
-              <TableCell align="right" sx={{ fontWeight: 700, width: "25%" }}>
-                Actions
-              </TableCell>
-            </TableRow>
-          </TableHead>
-
-          <TableBody>
-            {categoriesData.data?.length > 0 ? (
-              categoriesData.data.map((category) => {
-                const isEditing = editingId === category.id;
-
-                return (
-                  <TableRow
-                    key={category.id}
-                    hover
-                    sx={{ "&:last-child td, &:last-child th": { border: 0 } }}
+      {categoriesData?.data?.length > 0 && !categoryLoading ? (
+        <>
+          <TableContainer
+            component={Paper}
+            elevation={0}
+            sx={{
+              border: "1px solid",
+              borderColor: "divider",
+              borderRadius: 3,
+              minHeight: 350,
+              display: "flex",
+              flexDirection: "column",
+              mb: 2,
+            }}
+          >
+            <Table>
+              <TableHead sx={{ backgroundColor: "action.hover" }}>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 700, width: "15%" }}>
+                    ID
+                  </TableCell>
+                  <TableCell sx={{ fontWeight: 700 }}>Category Name</TableCell>
+                  <TableCell
+                    align="right"
+                    sx={{ fontWeight: 700, width: "25%" }}
                   >
-                    <TableCell>
-                      <Typography
-                        variant="body2"
-                        color="text.secondary"
-                        fontWeight={600}
+                    Actions
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+
+              <TableBody>
+                {categoriesData.data?.length > 0 ? (
+                  categoriesData.data.map((category) => {
+                    const isEditing = editingId === category.id;
+
+                    return (
+                      <TableRow
+                        key={category.id}
+                        hover
+                        sx={{
+                          "&:last-child td, &:last-child th": { border: 0 },
+                        }}
                       >
-                        #{category.id}
+                        <TableCell>
+                          <Typography
+                            variant="body2"
+                            color="text.secondary"
+                            fontWeight={600}
+                          >
+                            #{category.id}
+                          </Typography>
+                        </TableCell>
+
+                        {/* Name Column (Toggles between text and inline input) */}
+                        <TableCell>
+                          {isEditing ? (
+                            <TextField
+                              size="small"
+                              value={editingName}
+                              onChange={(e) => setEditingName(e.target.value)}
+                              autoFocus
+                              onKeyDown={(e) => {
+                                if (e.key === "Enter")
+                                  handleSaveRename(category.id);
+                                if (e.key === "Escape") cancelEditing();
+                              }}
+                              sx={{
+                                "& .MuiOutlinedInput-root": {
+                                  borderRadius: 1.5,
+                                },
+                              }}
+                            />
+                          ) : (
+                            <Typography variant="body2" fontWeight={500}>
+                              {category.name}
+                            </Typography>
+                          )}
+                        </TableCell>
+
+                        {/* Actions Column */}
+                        <TableCell align="right">
+                          {isEditing ? (
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              justifyContent="flex-end"
+                            >
+                              <Tooltip title="Save">
+                                <IconButton
+                                  size="small"
+                                  color="success"
+                                  onClick={() => handleSaveRename(category.id)}
+                                >
+                                  <CheckIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="Cancel">
+                                <IconButton
+                                  size="small"
+                                  color="error"
+                                  onClick={cancelEditing}
+                                >
+                                  <CloseIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                            </Stack>
+                          ) : (
+                            <Stack
+                              direction="row"
+                              spacing={1}
+                              justifyContent="flex-end"
+                            >
+                              <Tooltip title="Rename">
+                                <IconButton
+                                  size="small"
+                                  color="primary"
+                                  onClick={() => startEditing(category)}
+                                >
+                                  <EditIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                              <Tooltip title="Delete">
+                                <IconButton
+                                  size="small"
+                                  color="error"
+                                  onClick={() =>
+                                    handleDeleteCategory(category.id)
+                                  }
+                                >
+                                  <DeleteForeverIcon fontSize="small" />
+                                </IconButton>
+                              </Tooltip>
+                            </Stack>
+                          )}
+                        </TableCell>
+                      </TableRow>
+                    );
+                  })
+                ) : (
+                  <TableRow>
+                    <TableCell colSpan={3} align="center" sx={{ py: 8 }}>
+                      <Typography variant="body2" color="text.secondary">
+                        No categories found. Add one above to get started.
                       </Typography>
                     </TableCell>
-
-                    {/* Name Column (Toggles between text and inline input) */}
-                    <TableCell>
-                      {isEditing ? (
-                        <TextField
-                          size="small"
-                          value={editingName}
-                          onChange={(e) => setEditingName(e.target.value)}
-                          autoFocus
-                          onKeyDown={(e) => {
-                            if (e.key === "Enter")
-                              handleSaveRename(category.id);
-                            if (e.key === "Escape") cancelEditing();
-                          }}
-                          sx={{
-                            "& .MuiOutlinedInput-root": { borderRadius: 1.5 },
-                          }}
-                        />
-                      ) : (
-                        <Typography variant="body2" fontWeight={500}>
-                          {category.name}
-                        </Typography>
-                      )}
-                    </TableCell>
-
-                    {/* Actions Column */}
-                    <TableCell align="right">
-                      {isEditing ? (
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          justifyContent="flex-end"
-                        >
-                          <Tooltip title="Save">
-                            <IconButton
-                              size="small"
-                              color="success"
-                              onClick={() => handleSaveRename(category.id)}
-                            >
-                              <CheckIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Cancel">
-                            <IconButton
-                              size="small"
-                              color="error"
-                              onClick={cancelEditing}
-                            >
-                              <CloseIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        </Stack>
-                      ) : (
-                        <Stack
-                          direction="row"
-                          spacing={1}
-                          justifyContent="flex-end"
-                        >
-                          <Tooltip title="Rename">
-                            <IconButton
-                              size="small"
-                              color="primary"
-                              onClick={() => startEditing(category)}
-                            >
-                              <EditIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete">
-                            <IconButton
-                              size="small"
-                              color="error"
-                              onClick={() => handleDeleteCategory(category.id)}
-                            >
-                              <DeleteForeverIcon fontSize="small" />
-                            </IconButton>
-                          </Tooltip>
-                        </Stack>
-                      )}
-                    </TableCell>
                   </TableRow>
-                );
-              })
-            ) : (
-              <TableRow>
-                <TableCell colSpan={3} align="center" sx={{ py: 8 }}>
-                  <Typography variant="body2" color="text.secondary">
-                    No categories found. Add one above to get started.
-                  </Typography>
-                </TableCell>
-              </TableRow>
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <Stack spacing={2} sx={{ mt: "auto" }}>
-        <Pagination
-          count={totalPages}
-          page={page}
-          color="primary"
-          onChange={handlePageChange}
-        />
-      </Stack>
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <Stack spacing={2} sx={{ mt: "auto" }}>
+            <Pagination
+              count={totalPages}
+              page={page}
+              color="primary"
+              onChange={handlePageChange}
+            />
+          </Stack>
+        </>
+      ) : (
+        <>
+          {!categoryLoading && !categoryError ? (
+            <Typography variant="h3">Nothing to show</Typography>
+          ) : categoryError ? (
+            <Card
+              sx={{
+                p: 3,
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+                alignItems: "center",
+              }}
+            >
+              <Typography
+                color={"error"}
+                fontSize={25}
+                fontWeight={"bold"}
+                sx={{ textAlign: "center" }}
+                mb={2}
+              >
+                Something went wrong
+              </Typography>
+              <Button onClick={getCategories} variant="outlined">
+                Try Again
+              </Button>
+            </Card>
+          ) : (
+            <Loading />
+          )}
+        </>
+      )}
     </Container>
   );
 }
