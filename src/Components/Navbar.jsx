@@ -31,7 +31,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       transform: "translateX(22px)",
       "& .MuiSwitch-thumb:before": {
         backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-          "#fff"
+          "#fff",
         )}" d="M4.2 2.5l-.7 1.8-1.8.7 1.8.7.7 1.8.6-1.8L6.7 5l-1.9-.7-.6-1.8zm15 8.3a6.7 6.7 0 11-6.6-6.6 5.8 5.8 0 006.6 6.6z"/></svg>')`,
       },
       "& + .MuiSwitch-track": {
@@ -57,7 +57,7 @@ const MaterialUISwitch = styled(Switch)(({ theme }) => ({
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",
       backgroundImage: `url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" height="20" width="20" viewBox="0 0 20 20"><path fill="${encodeURIComponent(
-        "#fff"
+        "#fff",
       )}" d="M9.305 1.667V3.75h1.389V1.667h-1.39zm-4.707 1.95l-.982.982L5.09 6.072l.982-.982-1.473-1.473zm10.802 0L13.927 5.09l.982.982 1.473-1.473-.982-.982zM10 5.139a4.872 4.872 0 00-4.862 4.86A4.872 4.872 0 0010 14.862 4.872 4.872 0 0014.86 10 4.872 4.872 0 0010 5.139zm0 1.389A3.462 3.462 0 0113.471 10a3.462 3.462 0 01-3.473 3.472A3.462 3.462 0 016.527 10 3.462 3.462 0 0110 6.528zM1.665 9.305v1.39h2.083v-1.39H1.666zm14.583 0v1.39h2.084v-1.39h-2.084zM5.09 13.928L3.616 15.4l.982.982 1.473-1.473-.982-.982zm9.82 0l-.982.982 1.473 1.473.982-.982-1.473-1.473zM9.305 16.25v2.083h1.389V16.25h-1.39z"/></svg>')`,
     },
     ...theme.applyStyles("dark", {
@@ -82,10 +82,17 @@ function Navbar(props) {
 
   const pages =
     user.role === "admin"
-      ? ["book list", "member list", "add book", "borrowing list", "fine list"]
+      ? [
+          "book list",
+          "member list",
+          "add book",
+          "borrowing list",
+          "fine list",
+          "categories",
+        ]
       : ["book list", "my borrowings"];
   const navigateToPage = (page) => {
-      navigate("/" + page.split(" ").join("-"));
+    navigate("/" + page.split(" ").join("-"));
   };
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -95,7 +102,6 @@ function Navbar(props) {
   };
 
   const handleCloseNavMenu = (page) => {
-    
     setAnchorElNav(null);
     if (page) {
       navigateToPage(page);
@@ -114,9 +120,9 @@ function Navbar(props) {
     }
     setAnchorElUser(null);
   };
-async function handleLogout() {
-  await logout();
-}
+  async function handleLogout() {
+    await logout();
+  }
   return (
     <AppBar
       position="static"
@@ -124,10 +130,10 @@ async function handleLogout() {
         {
           background:
             "linear-gradient(45deg, rgba(25,118,220,1) 0%, rgba(112,217,241,1) 45%, rgba(0,207,255,1) 98%)",
-            height: 45,
-            display: 'flex',
-            justifyContent:'center',
-            py:1
+          height: 45,
+          display: "flex",
+          justifyContent: "center",
+          py: 1,
         },
         (theme) =>
           theme.applyStyles("dark", {
@@ -139,7 +145,12 @@ async function handleLogout() {
       <Container maxWidth="xl">
         <Toolbar disableGutters>
           <LocalLibraryIcon
-            sx={{ display: { xs: "none", md: "flex" }, mr: 1, width: 20, height: 20 }}
+            sx={{
+              display: { xs: "none", md: "flex" },
+              mr: 1,
+              width: 20,
+              height: 20,
+            }}
           />
           <Typography
             variant="h6"
@@ -185,7 +196,7 @@ async function handleLogout() {
                 horizontal: "left",
               }}
               open={Boolean(anchorElNav)}
-              onClose={()=>handleCloseNavMenu(null)}
+              onClose={() => handleCloseNavMenu(null)}
               sx={{ display: { xs: "block", md: "none" } }}
             >
               {pages.map((page) => (
@@ -196,7 +207,12 @@ async function handleLogout() {
             </Menu>
           </Box>
           <LocalLibraryIcon
-            sx={{ display: { xs: "flex", md: "none" }, mr: 1, width: 20, height: 20  }}
+            sx={{
+              display: { xs: "flex", md: "none" },
+              mr: 1,
+              width: 20,
+              height: 20,
+            }}
           />
           <Typography
             variant="h5"
@@ -223,7 +239,13 @@ async function handleLogout() {
               <Button
                 key={page}
                 onClick={() => handleCloseNavMenu(page)}
-                sx={{ my: 2, color: "white", display: "block", fontSize: 12, fontWeight: 'bold' }}
+                sx={{
+                  my: 2,
+                  color: "white",
+                  display: "block",
+                  fontSize: 12,
+                  fontWeight: "bold",
+                }}
               >
                 {page}
               </Button>
@@ -240,8 +262,12 @@ async function handleLogout() {
           />
           <Box sx={{ flexGrow: 0 }}>
             <Tooltip title="Open settings">
-              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0}}>
-                <Avatar sx={{ p: 0, height: 35, width:35 }} alt="Remy Sharp" src="/static/images/avatar/2.jpg" />
+              <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                <Avatar
+                  sx={{ p: 0, height: 35, width: 35 }}
+                  alt="Remy Sharp"
+                  src="/static/images/avatar/2.jpg"
+                />
               </IconButton>
             </Tooltip>
             <Menu

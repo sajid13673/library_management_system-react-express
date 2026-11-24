@@ -49,7 +49,7 @@ export default function CategoriesPage() {
 
   const totalPages = categoriesData?.totalPages || 1;
   const [page, setPage] = useState(1);
-  const perPage = 3;
+  const perPage = 15;
 
   const handlePageChange = (e, value) => {
     setPage(value);
