@@ -10,15 +10,25 @@ import {
   Typography,
 } from "@mui/material";
 import { useFormik } from "formik";
-import React from "react";
+import React, { useEffect } from "react";
 import CloudUploadIcon from "@mui/icons-material/CloudUpload";
 import { validateOnlyNumbers } from "../../utils/validators";
 import CheckCircleIcon from "@mui/icons-material/CheckCircle";
 import VisuallyHiddenInput from "../VisuallyHiddenInput";
+import { Autocomplete, Checkbox, Chip } from "@mui/material";
+import CheckBoxOutlineBlankIcon from "@mui/icons-material/CheckBoxOutlineBlank";
+import CheckBoxIcon from "@mui/icons-material/CheckBox";
+import useCategories from "../../Hooks/useCategories";
+
+const icon = <CheckBoxOutlineBlankIcon fontSize="small" />;
+const checkedIcon = <CheckBoxIcon fontSize="small" />;
 
 export default function BookForm(props) {
   var mimeSet = new Set(["image/png", "image/jpeg", "image/jpg"]);
   const [currentYear, SetCurrentYear] = React.useState("");
+  const { categories, error, getCategories, loading } = useCategories({
+    noPaginate: true,
+  });
   function handleUpload(e) {
     e.preventDefault();
     const file = e.target.files[0];
@@ -54,6 +64,17 @@ export default function BookForm(props) {
         errors.image = "Please select a PNG, JPG and JPEG file";
       }
     }
+    if (!values.categories || values.categories.length === 0) {
+      errors.categories = "Please select at least one category";
+    }
+
+    // Update your existing image validation check to this:
+    if (values.image && values.image instanceof File) {
+      let imageType = values.image.type;
+      if (!mimeSet.has(imageType)) {
+        errors.image = "Please select a PNG, JPG and JPEG file";
+      }
+    }
     return errors;
   };
   const formik = useFormik({
@@ -62,15 +83,17 @@ export default function BookForm(props) {
       author: "",
       publisher: "",
       year: "",
+      categories: [],
       image: "",
     },
     validate: validate,
     onSubmit: (values) => {
       console.log(values);
+
       props.handleSubmit(values);
     },
   });
-  React.useEffect(() => {
+  useEffect(() => {
     if (props.book) {
       formik.setFieldValue("title", props.book.title);
       formik.setFieldValue("author", props.book.author);
@@ -78,8 +101,24 @@ export default function BookForm(props) {
       formik.setFieldValue("year", props.book.year);
       formik.setFieldValue("image", props.book.image);
       SetCurrentYear(props.book.year);
+
+      if (Array.isArray(props.book.categories)) {
+        const existingIds = props.book.categories.map((cat) =>
+          typeof cat === "object" && cat !== null ? cat._id || cat.id : cat,
+        );
+        formik.setFieldValue("categories", existingIds);
+      }
     }
   }, [props.book]);
+
+  useEffect(() => {
+    getCategories();
+  }, []);
+
+  const availableCategories = categories?.data || [];
+  const selectedCategoryObjects = availableCategories.filter((cat) =>
+    formik.values.categories.includes(cat._id || cat.id),
+  );
   const hasUploadedFile = !!formik.values.image;
   return (
     <Container maxWidth="sm" sx={{ py: 4 }}>
@@ -187,6 +226,75 @@ export default function BookForm(props) {
               error={formik.touched.year && Boolean(formik.errors.year)}
               helperText={formik.touched.year && formik.errors.year}
               slotProps={{ inputLabel: { shrink: true } }}
+            />
+
+            <Autocomplete
+              multiple
+              size="small"
+              id="categories"
+              options={availableCategories}
+              disableCloseOnSelect
+              value={selectedCategoryObjects}
+              getOptionLabel={(option) => option.name || ""}
+              isOptionEqualToValue={(option, value) =>
+                (option._id || option.id) === (value._id || value.id)
+              }
+              onChange={(_, newValue) => {
+                const selectedIds = newValue.map((item) => item._id || item.id);
+                formik.setFieldValue("categories", selectedIds);
+              }}
+              onBlur={() => formik.setFieldTouched("categories", true)}
+              renderOption={(props, option, { selected }) => {
+                const { key, ...optionProps } = props;
+                return (
+                  <li key={key} {...optionProps}>
+                    <Checkbox
+                      icon={icon}
+                      checkedIcon={checkedIcon}
+                      style={{ marginRight: 8 }}
+                      checked={selected}
+                    />
+                    {option.name}
+                  </li>
+                );
+              }}
+              renderTags={(value, getTagProps) =>
+                value.map((option, index) => {
+                  const { key, ...tagProps } = getTagProps({ index });
+                  return (
+                    <Chip
+                      key={key}
+                      label={option.name}
+                      size="small"
+                      color="primary"
+                      variant="outlined"
+                      {...tagProps}
+                    />
+                  );
+                })
+              }
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  label="Categories"
+                  placeholder={
+                    selectedCategoryObjects.length === 0
+                      ? "Select categories..."
+                      : ""
+                  }
+                  error={
+                    formik.touched.categories &&
+                    Boolean(formik.errors.categories)
+                  }
+                  helperText={
+                    formik.touched.categories && formik.errors.categories
+                  }
+                  slotProps={{
+                    ...params.slotProps,
+                    inputLabel: { shrink: true },
+                  }}
+                />
+              )}
             />
 
             {/* File Upload Block Wrapper Zone */}

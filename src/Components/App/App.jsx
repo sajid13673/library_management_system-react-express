@@ -26,6 +26,7 @@ import Layout from "../Layout";
 import FineList from "../../Screens/FineList";
 import Settings from "../../Screens/Settings";
 import MemberDetailsPage from "../../Screens/Member/MemberDetails";
+import CategoriesPage from "../../Screens/CategoriesPage";
 
 function App() {
   const [loading, setLoading] = React.useState(false);
@@ -219,6 +220,14 @@ function App() {
                 element={
                   <Layout>
                     <MemberDetailsPage />
+                  </Layout>
+                }
+              />
+              <Route
+                path="/categories"
+                element={
+                  <Layout>
+                    <CategoriesPage />
                   </Layout>
                 }
               />
